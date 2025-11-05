@@ -1,0 +1,143 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2025-11-05 11:18:11.127576",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "wo_entry_section",
+        "supplier_name",
+        "amc",
+        "wo_date",
+        "for",
+        "wo_details_entry_section",
+        "our_enquiry_ref",
+        "ref_your_qtn_date",
+        "contact_person",
+        "ccc",
+        "gl_no",
+        "ccn",
+        "terms_of_payment",
+        "work_order_for",
+        "note",
+        "description_section",
+        "description"
+    ],
+    "fields": [
+        {
+            "fieldname": "wo_entry_section",
+            "fieldtype": "Section Break",
+            "label": "WO Entry"
+        },
+        {
+            "fieldname": "supplier_name",
+            "fieldtype": "Link",
+            "label": "Supplier Name",
+            "options": "Supplier"
+        },
+        {
+            "fieldname": "amc",
+            "fieldtype": "Select",
+            "label": "AMC",
+            "options": "Yes\nNo"
+        },
+        {
+            "fieldname": "wo_date",
+            "fieldtype": "Data",
+            "label": "Wo Date"
+        },
+        {
+            "fieldname": "for",
+            "fieldtype": "Small Text",
+            "label": "For"
+        },
+        {
+            "fieldname": "wo_details_entry_section",
+            "fieldtype": "Section Break",
+            "label": "WO Details Entry"
+        },
+        {
+            "fieldname": "our_enquiry_ref",
+            "fieldtype": "Small Text",
+            "label": "Our Enquiry Ref"
+        },
+        {
+            "fieldname": "ref_your_qtn_date",
+            "fieldtype": "Data",
+            "label": "Ref Your Qtn Date"
+        },
+        {
+            "fieldname": "contact_person",
+            "fieldtype": "Small Text",
+            "label": "Contact Person"
+        },
+        {
+            "fieldname": "ccc",
+            "fieldtype": "Date",
+            "label": "CCC"
+        },
+        {
+            "fieldname": "gl_no",
+            "fieldtype": "Link",
+            "label": "Gl No",
+            "options": "GL Entry"
+        },
+        {
+            "fieldname": "ccn",
+            "fieldtype": "Data",
+            "label": "CCN"
+        },
+        {
+            "fieldname": "terms_of_payment",
+            "fieldtype": "Small Text",
+            "label": "Terms Of Payment"
+        },
+        {
+            "fieldname": "work_order_for",
+            "fieldtype": "Small Text",
+            "label": "Work Order For"
+        },
+        {
+            "fieldname": "note",
+            "fieldtype": "Small Text",
+            "label": "Note"
+        },
+        {
+            "fieldname": "description_section",
+            "fieldtype": "Section Break",
+            "label": "Description"
+        },
+        {
+            "fieldname": "description",
+            "fieldtype": "Table",
+            "label": "Description",
+            "options": "Work Order Description"
+        }
+    ],
+    "grid_page_length": 50,
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2025-11-05 11:46:03.980370",
+    "modified_by": "Administrator",
+    "module": "Po Wo Pr",
+    "name": "Work-Orders",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

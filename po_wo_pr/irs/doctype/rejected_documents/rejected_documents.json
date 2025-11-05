@@ -1,0 +1,151 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "creation": "2025-11-04 12:43:32.591616",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "entered_details_section",
+  "inward_id",
+  "name1",
+  "column_break_zppz",
+  "inward_date",
+  "cityvillage",
+  "student_details_section",
+  "district",
+  "present",
+  "column_break_ixpo",
+  "taluka",
+  "study_year",
+  "office_remarks_section",
+  "reason",
+  "enter_by",
+  "column_break_wqog",
+  "remark",
+  "entry_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Data",
+   "label": "Project"
+  },
+  {
+   "fieldname": "entered_details_section",
+   "fieldtype": "Section Break",
+   "label": "Entered Details"
+  },
+  {
+   "fieldname": "inward_id",
+   "fieldtype": "Data",
+   "label": "Inward ID"
+  },
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "column_break_zppz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "inward_date",
+   "fieldtype": "Datetime",
+   "label": "Inward Date"
+  },
+  {
+   "fieldname": "cityvillage",
+   "fieldtype": "Data",
+   "label": "City/Village"
+  },
+  {
+   "fieldname": "student_details_section",
+   "fieldtype": "Section Break",
+   "label": "Student Details"
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "label": "District"
+  },
+  {
+   "fieldname": "present",
+   "fieldtype": "Data",
+   "label": "Present"
+  },
+  {
+   "fieldname": "column_break_ixpo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "taluka",
+   "fieldtype": "Data",
+   "label": "Taluka"
+  },
+  {
+   "fieldname": "study_year",
+   "fieldtype": "Int",
+   "label": "Study Year"
+  },
+  {
+   "fieldname": "office_remarks_section",
+   "fieldtype": "Section Break",
+   "label": "Office Remarks"
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason"
+  },
+  {
+   "fieldname": "enter_by",
+   "fieldtype": "Link",
+   "label": "Enter By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_wqog",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "entry_date",
+   "fieldtype": "Data",
+   "label": "Entry Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-04 12:57:38.590920",
+ "modified_by": "Administrator",
+ "module": "IRS",
+ "name": "Rejected Documents",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
