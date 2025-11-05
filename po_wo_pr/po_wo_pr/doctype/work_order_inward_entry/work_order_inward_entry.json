@@ -7,7 +7,7 @@
  "field_order": [
   "wo_inward_entry_section",
   "supplier_name",
-  "wo_no"
+  "work_order_no"
  ],
  "fields": [
   {
@@ -16,22 +16,23 @@
    "label": "WO Inward Entry"
   },
   {
+   "fetch_from": "work_order_no.supplier_name",
    "fieldname": "supplier_name",
    "fieldtype": "Link",
    "label": "Supplier Name",
    "options": "Supplier"
   },
   {
-   "fieldname": "wo_no",
+   "fieldname": "work_order_no",
    "fieldtype": "Link",
-   "label": "WO NO",
+   "label": "Work order No",
    "options": "Work-Orders"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-05 12:39:43.424041",
+ "modified": "2025-11-05 14:41:38.354029",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work Order Inward Entry",

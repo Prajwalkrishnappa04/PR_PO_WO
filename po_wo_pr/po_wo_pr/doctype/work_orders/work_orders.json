@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:MF/IND/{#####}/{FY}",
  "creation": "2025-11-05 11:18:11.127576",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -55,7 +56,7 @@
   },
   {
    "fieldname": "wo_date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Wo Date",
    "reqd": 1
@@ -184,10 +185,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-05 12:55:16.673398",
+ "modified": "2025-11-05 14:46:21.229289",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work-Orders",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
