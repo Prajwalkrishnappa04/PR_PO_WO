@@ -7,7 +7,16 @@
  "field_order": [
   "wo_inward_entry_section",
   "supplier_name",
-  "work_order_no"
+  "work_order_no",
+  "amc",
+  "wo_date",
+  "invoice_no",
+  "inward_date",
+  "remarks",
+  "section_break_abuh",
+  "material",
+  "pending_quantity",
+  "quantity"
  ],
  "fields": [
   {
@@ -26,12 +35,61 @@
    "fieldtype": "Link",
    "label": "Work order No",
    "options": "Work-Orders"
+  },
+  {
+   "fetch_from": "work_order_no.amc",
+   "fieldname": "amc",
+   "fieldtype": "Select",
+   "label": "AMC",
+   "options": "Yes\nNo",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "work_order_no.wo_date",
+   "fieldname": "wo_date",
+   "fieldtype": "Date",
+   "label": "WO Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_no",
+   "fieldtype": "Data",
+   "label": "Invoice No"
+  },
+  {
+   "fieldname": "inward_date",
+   "fieldtype": "Date",
+   "label": "Inward Date"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_abuh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "material",
+   "fieldtype": "Data",
+   "label": "Material"
+  },
+  {
+   "fieldname": "pending_quantity",
+   "fieldtype": "Data",
+   "label": "Pending Quantity"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Data",
+   "label": "Quantity"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-05 15:22:04.237313",
+ "modified": "2025-11-05 15:35:28.398236",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work Order Inward Entry",
