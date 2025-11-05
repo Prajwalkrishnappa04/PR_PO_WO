@@ -8,8 +8,8 @@
  "field_order": [
   "item_code",
   "uom",
-  "rate",
   "order_quantity",
+  "rate",
   "amount",
   "column_break_wlep",
   "description",
@@ -52,23 +52,27 @@
    "label": "Sub Description 5"
   },
   {
+   "fetch_from": "item_code.stock_uom",
    "fieldname": "uom",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "UOM",
-   "options": "UOM"
+   "options": "UOM",
+   "reqd": 1
   },
   {
    "fieldname": "order_quantity",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Order Quantity"
+   "label": "Order Quantity",
+   "reqd": 1
   },
   {
    "fieldname": "rate",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Rate"
+   "label": "Rate",
+   "reqd": 1
   },
   {
    "fieldname": "amount",
@@ -86,14 +90,15 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Item Code",
-   "options": "Item"
+   "options": "Item",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-11-05 15:51:37.059574",
+ "modified": "2025-11-05 15:58:37.431612",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work Order Description",
