@@ -208,6 +208,16 @@ doctype_js = {
 
 # User Data Protection
 # --------------------
+fixtures = [
+    {
+        "doctype": "Property Setter",
+        "filters": {
+            "doc_type": ["in", [
+                "Item"
+            ]]
+        }
+    }
+]
 
 # user_data_fields = [
 # 	{
