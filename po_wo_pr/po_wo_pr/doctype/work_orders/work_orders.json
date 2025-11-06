@@ -81,7 +81,7 @@
   },
   {
    "fieldname": "ref_your_qtn_date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "Ref Your Qtn Date"
   },
   {
@@ -91,8 +91,9 @@
   },
   {
    "fieldname": "ccc",
-   "fieldtype": "Date",
-   "label": "CCC"
+   "fieldtype": "Link",
+   "label": "CCC",
+   "options": "Cost Center"
   },
   {
    "fieldname": "gl_no",
@@ -101,9 +102,11 @@
    "options": "GL Entry"
   },
   {
+   "fetch_from": "ccc.cost_center_name",
    "fieldname": "ccn",
    "fieldtype": "Data",
-   "label": "CCN"
+   "label": "CCN",
+   "read_only": 1
   },
   {
    "fieldname": "terms_of_payment",
@@ -200,7 +203,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-05 15:53:02.040708",
+ "modified": "2025-11-06 15:50:58.977614",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work-Orders",
