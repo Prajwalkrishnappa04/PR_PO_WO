@@ -6,13 +6,14 @@
  "engine": "InnoDB",
  "field_order": [
   "wo_inward_entry_section",
-  "supplier_name",
   "work_order_no",
-  "amc",
   "wo_date",
-  "invoice_no",
-  "inward_date",
   "remarks",
+  "column_break_aogh",
+  "supplier_name",
+  "amc",
+  "inward_date",
+  "invoice_no",
   "section_break_abuh",
   "material",
   "pending_quantity",
@@ -84,12 +85,16 @@
    "fieldname": "quantity",
    "fieldtype": "Data",
    "label": "Quantity"
+  },
+  {
+   "fieldname": "column_break_aogh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-05 15:35:28.398236",
+ "modified": "2025-11-07 11:53:42.896477",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work Order Inward Entry",

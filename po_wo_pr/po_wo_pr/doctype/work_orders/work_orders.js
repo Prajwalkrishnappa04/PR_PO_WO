@@ -114,5 +114,21 @@ frappe.ui.form.on("Work-Orders", {
 
     revised_value(frm) {
         calculate_taxes(frm);
+    },
+    refresh(frm) {
+        if (!frm.doc.ref_your_qtn_date) {
+            frm.set_value("ref_your_qtn_date", frappe.datetime.get_today());
+        }
+        frm.add_custom_button(
+            "Work Inwards",
+            () => {
+                frappe.new_doc("Work Order Inward Entry", {
+                    work_order_no: frm.doc.name
+                });
+            },
+            "Create"
+        );
+
     }
 });
+

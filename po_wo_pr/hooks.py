@@ -44,7 +44,8 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-    "Purchase Order" : "public/js/purchase_order.js"
+    "Purchase Order" : "public/js/purchase_order.js",
+    "Item" : "public/js/item_master.js"
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -208,16 +209,17 @@ doctype_js = {
 
 # User Data Protection
 # --------------------
-# fixtures = [
-#     {
-#         "doctype": "Property Setter",
-#         "filters": {
-#             "doc_type": ["in", [
-#                 "Item"
-#             ]]
-#         }
-#     }
-# ]
+fixtures = [
+    {
+        "doctype": "Property Setter",
+        "filters": {
+            "doc_type": ["in", [
+                "Item"
+            ]],
+            "field_name":["in",["item_code"]]
+        }
+    }
+]
 
 # user_data_fields = [
 # 	{
