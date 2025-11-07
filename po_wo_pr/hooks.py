@@ -41,6 +41,9 @@ app_license = "mit"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
+doctype_list_js = {
+    "Inward Document": "public/js/inward_list.js"
+}
 
 # include js in doctype views
 doctype_js = {

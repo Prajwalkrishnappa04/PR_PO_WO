@@ -6,11 +6,13 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "inward",
   "date",
   "place",
   "to",
   "project",
   "doc_no",
+  "url",
   "entry_by",
   "column_break_bebl",
   "meduium",
@@ -26,6 +28,7 @@
    "label": "Date"
   },
   {
+   "fetch_from": "inward.place",
    "fieldname": "place",
    "fieldtype": "Data",
    "label": "Place"
@@ -36,6 +39,7 @@
    "label": "To"
   },
   {
+   "fetch_from": "inward.project",
    "fieldname": "project",
    "fieldtype": "Data",
    "label": "Project"
@@ -56,16 +60,19 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "inward.medium",
    "fieldname": "meduium",
    "fieldtype": "Data",
    "label": "Meduium"
   },
   {
+   "fetch_from": "inward.subject",
    "fieldname": "subject",
    "fieldtype": "Data",
    "label": "Subject"
   },
   {
+   "fetch_from": "inward.concern_person",
    "fieldname": "concern_persion",
    "fieldtype": "Data",
    "label": "Concern Persion"
@@ -79,12 +86,24 @@
    "fieldname": "remaks",
    "fieldtype": "Small Text",
    "label": "Remaks"
+  },
+  {
+   "fieldname": "inward",
+   "fieldtype": "Link",
+   "label": "Inward",
+   "options": "Inward Document"
+  },
+  {
+   "default": "https://trackcourier.io/track-and-trace/tirupati-courier/",
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "URL"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-04 12:20:57.670303",
+ "modified": "2025-11-07 16:32:25.285962",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
