@@ -39,8 +39,9 @@
   },
   {
    "fieldname": "project",
-   "fieldtype": "Data",
-   "label": "Project"
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
   },
   {
    "fieldname": "application_status",
@@ -73,13 +74,15 @@
   },
   {
    "fieldname": "maa_code",
-   "fieldtype": "Data",
-   "label": "Maa Code"
+   "fieldtype": "Link",
+   "label": "Maa Code",
+   "options": "Student"
   },
   {
    "fieldname": "medium",
-   "fieldtype": "Data",
-   "label": "Medium"
+   "fieldtype": "Link",
+   "label": "Medium",
+   "options": "Type of Postage Master"
   },
   {
    "fieldname": "subject",
@@ -105,7 +108,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-04 12:03:10.187519",
+ "modified": "2025-11-11 11:05:35.467425",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",

@@ -6,4 +6,10 @@ from frappe.model.document import Document
 
 
 class OutwardDocuments(Document):
-	pass
+	def save_entry_By(self):
+		if not self.entry_by:
+			self.entry_by = frappe.session.user
+
+	#before save hook
+	def before_save(self):
+		self.save_entry_By()
