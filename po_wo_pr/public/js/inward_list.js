@@ -20,7 +20,8 @@ frappe.listview_settings['Inward Document'] = {
                     {
                         label: "Postal Service URL",
                         fieldname: "postal_url",
-                        fieldtype: "Data"
+                        fieldtype: "Data",
+                        default: "https://trackcourier.io/track-and-trace/tirupati-courier/",
                     },
                     {
                         label: "Postal Date",
