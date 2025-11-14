@@ -41,9 +41,9 @@
   {
    "fetch_from": "inward.project",
    "fieldname": "project",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Project",
-   "options": "Project"
+   "options": "Udaan - Application\nUdaan - Result\nUdaan - Documents\nVidya - Application\nVidya - Documents\nVidya - Cheque\nVidya - Acknowledgement\nMedical Application\nDisha\nAccounts & Admin\nGMB Documents\nBill\nMagazines\nSOW\nOther\nKEN\nUdaan - Cheque\nParvarish(PD Camp) - Confirmation\nParvarish(PD Camp) - Document\nUdaan - Cheque Acknowledgement\nUdaan - Medical Cheque\nComunity Cheque\nVidya\nUdaan\nParvarish(PD Camp) - Report\nFinancial Aid - Application\nParvarish\nUnnati\nIT\nLakshya"
   },
   {
    "fieldname": "doc_no",
@@ -64,9 +64,9 @@
   {
    "fetch_from": "inward.medium",
    "fieldname": "meduium",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Meduium",
-   "options": "Type of Postage Master"
+   "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
   },
   {
    "fetch_from": "inward.subject",
@@ -106,7 +106,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-11 11:09:03.442948",
+ "modified": "2025-11-14 10:14:36.175155",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
