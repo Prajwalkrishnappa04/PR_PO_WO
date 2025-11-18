@@ -29,8 +29,9 @@
   },
   {
    "fieldname": "place",
-   "fieldtype": "Data",
-   "label": "Place"
+   "fieldtype": "Link",
+   "label": "Place",
+   "options": "Town Village"
   },
   {
    "fieldname": "sender",
@@ -39,14 +40,17 @@
   },
   {
    "fieldname": "project",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Project",
-   "options": "Udaan - Application\nUdaan - Result\nUdaan - Documents\nVidya - Application\nVidya - Documents\nVidya - Cheque\nVidya - Acknowledgement\nMedical Application\nDisha\nAccounts & Admin\nGMB Documents\nBill\nMagazines\nSOW\nOther\nKEN\nUdaan - Cheque\nParvarish(PD Camp) - Confirmation\nParvarish(PD Camp) - Document\nUdaan - Cheque Acknowledgement\nUdaan - Medical Cheque\nComunity Cheque\nVidya\nUdaan\nParvarish(PD Camp) - Report\nFinancial Aid - Application\nParvarish\nUnnati\nIT\nLakshya"
+   "options": "Project"
   },
   {
+   "depends_on": "eval:doc.project",
    "fieldname": "application_status",
-   "fieldtype": "Data",
-   "label": "Application Status"
+   "fieldtype": "Select",
+   "label": "Application Status",
+   "options": "NA\nPending\nAccept\nReject"
   },
   {
    "fieldname": "entry_by",
@@ -93,13 +97,15 @@
   {
    "fieldname": "concern_person",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Concern Person",
    "options": "User"
   },
   {
    "fieldname": "handover_to",
-   "fieldtype": "Data",
-   "label": "Handover To"
+   "fieldtype": "Link",
+   "label": "Handover To",
+   "options": "User"
   },
   {
    "fieldname": "remarks",
@@ -110,7 +116,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-14 10:10:57.574478",
+ "modified": "2025-11-18 16:41:42.517795",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
