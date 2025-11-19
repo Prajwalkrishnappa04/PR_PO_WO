@@ -68,10 +68,11 @@
   {
    "depends_on": "eval:doc.reference_case",
    "fieldname": "refered_by",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Refered By",
+   "link_filters": "[[\"Reference\",\"disabled\",\"=\",0]]",
    "mandatory_depends_on": "eval:doc.reference_case",
-   "options": "--Other--\nShri Bapuji\nDr. Maganbhai Sohagiya\nDr. Prafullbhai Shah\nShri Sanjaybhai Shah\nShri Patel Sir\nShri Devrajbhai\nShri Jivanbhai Nada\nShri Vallabhbhai Ramani\nG.M.B.College Staff\nShri Babubhai Bhaliya\nVapi Office / Amit Mehta\nShri Manubhai Mehta\nShri Ghanshyambhai / Shri Rameshbhai\nShri Kalubhai Bilakhia\nShri Ramjibhai Navadiya\nShri Balvantbhai Masarani\nDushyantbhai (Hari Om Medical)\nDharmendra Vasavada\nRahimbhai Saiyad\nBilakhia Family\nShri Barkatbhai Lakhani\nEx. G.M.Bilakhia Students"
+   "options": "Reference"
   },
   {
    "fieldname": "column_break_leyt",
@@ -116,7 +117,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-18 16:41:42.517795",
+ "modified": "2025-11-19 14:25:44.303514",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
