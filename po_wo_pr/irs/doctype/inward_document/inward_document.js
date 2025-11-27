@@ -19,12 +19,6 @@ frappe.ui.form.on("Inward Document", {
                         title: "Add Interview Details",
                         fields: [
                             {
-                                fieldname: "name",
-                                label: "Candidate Name",
-                                fieldtype: "Data",
-                                reqd: 1
-                            },
-                            {
                                 fieldname: "gender",
                                 label: "Gender",
                                 fieldtype: "Select",
@@ -54,10 +48,11 @@ frappe.ui.form.on("Inward Document", {
                                 args: {
                                     doc: {
                                         doctype: "Student",
-                                        student_name: values.name,
+                                        student_name: frm.doc.sender,
                                         gender: values.gender,
                                         interview_place: values.interview_place,
-                                        maa_branch: employee_branch
+                                        maa_branch: employee_branch,
+                                        application_receive_date: frm.doc.date
                                     }
                                 },
                                 callback(res) {
@@ -66,10 +61,7 @@ frappe.ui.form.on("Inward Document", {
 
                                         frm.save();
 
-                                        frappe.msgprint(`
-                                            Student Created: <b>${res.message.name}</b><br>
-                                            Maa Code Updated in Inward Document
-                                        `);
+                                        frappe.msgprint("Student Entry Created");
 
                                         d.hide();
                                     }

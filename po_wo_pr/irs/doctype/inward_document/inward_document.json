@@ -36,7 +36,9 @@
   {
    "fieldname": "sender",
    "fieldtype": "Data",
-   "label": "Sender"
+   "in_list_view": 1,
+   "label": "Sender",
+   "reqd": 1
   },
   {
    "fieldname": "project",
@@ -117,7 +119,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-19 14:25:44.303514",
+ "modified": "2025-11-27 19:39:53.862482",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
