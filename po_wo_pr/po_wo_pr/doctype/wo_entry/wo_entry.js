@@ -1,5 +1,3 @@
-// ---------------- CHILD TABLE CALCULATION ---------------- //
-
 frappe.ui.form.on("Work Order Description", {
     order_quantity(frm, cdt, cdn) {
         calculate_amount(frm, cdt, cdn);
@@ -13,7 +11,7 @@ function calculate_amount(frm, cdt, cdn) {
     let row = frappe.get_doc(cdt, cdn);
 
     frappe.model.set_value(cdt, cdn, "amount",
-        (row.order_quantity || 0) * (row.rate || 0)
+        flt(row.order_quantity) * flt(row.rate)
     );
 
     calculate_total_amount(frm);
@@ -22,7 +20,7 @@ function calculate_amount(frm, cdt, cdn) {
 function calculate_total_amount(frm) {
     let total_amount = 0;
     (frm.doc.description || []).forEach(row => {
-        total_amount += row.amount || 0;
+        total_amount += flt(row.amount);
     });
 
     frm.set_value("total_value", total_amount);
@@ -30,19 +28,21 @@ function calculate_total_amount(frm) {
 }
 
 
+
 // ---------------- DISCOUNT LOGIC ---------------- //
 
 function calculate_discount_value(frm) {
     if (frm._updating_discount_value) return;
 
-    let total = frm.doc.total_value || 0;
-    let percentage = frm.doc.discounted_percentage_ || 0;
+    let total = flt(frm.doc.total_value);
+    let percentage = flt(frm.doc.discounted_percentage_);
 
-    frm._updating_discount_percentage = true;
+    frm._updating_discount_value = true;
+
     frappe.model.set_value(frm.doc.doctype, frm.doc.name,
-        "discounted_value", (total * percentage) / 100
+        "discounted_value", total * percentage / 100
     ).then(() => {
-        frm._updating_discount_percentage = false;
+        frm._updating_discount_value = false;
         calculate_grand_total(frm);
     });
 }
@@ -50,47 +50,53 @@ function calculate_discount_value(frm) {
 function calculate_discount_percentage(frm) {
     if (frm._updating_discount_percentage) return;
 
-    let total = frm.doc.total_value || 0;
-    let value = frm.doc.discounted_value || 0;
+    let total = flt(frm.doc.total_value);
+    let value = flt(frm.doc.discounted_value);
 
-    frm._updating_discount_value = true;
+    frm._updating_discount_percentage = true;
+
     frappe.model.set_value(frm.doc.doctype, frm.doc.name,
-        "discounted_percentage_", (value / total) * 100
+        "discounted_percentage_", total ? (value / total) * 100 : 0
     ).then(() => {
-        frm._updating_discount_value = false;
+        frm._updating_discount_percentage = false;
         calculate_grand_total(frm);
     });
 }
 
 
-// ---------------- GRAND TOTAL (AFTER DISCOUNT) ---------------- //
 
 function calculate_grand_total(frm) {
-    let total = frm.doc.total_value || 0;
-    let discount = frm.doc.discounted_value || 0;
+    let total = flt(frm.doc.total_value);
+    let discount = flt(frm.doc.discounted_value);
+
     frm.set_value("revised_value", total - discount);
 
-    calculate_taxes(frm);   // 👈 calculate all taxes
+    calculate_taxes(frm);
 }
 
-
-// ---------------- TAX CALCULATIONS ---------------- //
-
 function calculate_taxes(frm) {
-    let taxable = frm.doc.revised_value || 0;
+    if (frm._updating_taxes) return;
 
-    let cgst = taxable * (frm.doc.cgst_ || 0) / 100;
-    let sgst = taxable * (frm.doc.sgst_ || 0) / 100;
-    let igst = taxable * (frm.doc.igst_ || 0) / 100;
+    frm._updating_taxes = true;
 
-    frm.set_value("final_amount", taxable + cgst + sgst + igst);
+    let taxable = flt(frm.doc.revised_value);
+
+    let cgst = taxable * flt(frm.doc.cgst_) / 100;
+    let sgst = taxable * flt(frm.doc.sgst_) / 100;
+    let igst = taxable * flt(frm.doc.igst_) / 100;
+    let fright = flt(frm.doc.freight) || 0
+    let final = taxable + cgst + sgst + igst + fright;
+
+    frm.set_value("final_amount", final);
+
+    frm._updating_taxes = false;
 }
 
 
 
 // ---------------- FORM TRIGGERS ---------------- //
 
-frappe.ui.form.on("Work-Orders", {
+frappe.ui.form.on("WO Entry", {
 
     discounted_percentage_(frm) {
         calculate_discount_value(frm);
@@ -111,14 +117,15 @@ frappe.ui.form.on("Work-Orders", {
     igst_(frm) {
         calculate_taxes(frm);
     },
-
-    revised_value(frm) {
+    freight(frm) {
         calculate_taxes(frm);
     },
+
     refresh(frm) {
         if (!frm.doc.ref_your_qtn_date) {
             frm.set_value("ref_your_qtn_date", frappe.datetime.get_today());
         }
+
         frm.add_custom_button(
             "Work Inwards",
             () => {
@@ -128,7 +135,5 @@ frappe.ui.form.on("Work-Orders", {
             },
             "Create"
         );
-
     }
 });
-

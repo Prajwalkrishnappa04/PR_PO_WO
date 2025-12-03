@@ -58,6 +58,7 @@
    "options": "Yes\nNo"
   },
   {
+   "default": "Today",
    "fieldname": "wo_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -87,8 +88,9 @@
   },
   {
    "fieldname": "contact_person",
-   "fieldtype": "Data",
-   "label": "Contact Person"
+   "fieldtype": "Link",
+   "label": "Contact Person",
+   "options": "Employee"
   },
   {
    "fieldname": "ccc",
@@ -158,6 +160,7 @@
    "label": "Discounted Value"
   },
   {
+   "description": "After Discount",
    "fieldname": "revised_value",
    "fieldtype": "Currency",
    "label": "Revised Value",
@@ -205,10 +208,10 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-07 12:07:03.954194",
+ "modified": "2025-12-03 15:00:18.467351",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
- "name": "Work-Orders",
+ "name": "WO Entry",
  "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [

@@ -35,7 +35,7 @@
    "fieldname": "work_order_no",
    "fieldtype": "Link",
    "label": "Work order No",
-   "options": "Work-Orders"
+   "options": "WO Entry"
   },
   {
    "fetch_from": "work_order_no.amc",
@@ -94,7 +94,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-07 11:53:42.896477",
+ "modified": "2025-12-03 15:01:20.036257",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Work Order Inward Entry",
