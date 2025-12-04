@@ -6,4 +6,8 @@ from frappe.model.document import Document
 
 
 class WorkOrderEntry(Document):
-	pass
+	def before_insert(self):
+		if self.description:
+			first_data = self.description[0].item_group
+			self.item_group = first_data
+		
