@@ -1,3 +1,12 @@
+// Copyright (c) 2025, Hybrowlabs and contributors
+// For license information, please see license.txt
+
+// frappe.ui.form.on("Work Order Entry", {
+// 	refresh(frm) {
+
+// 	},
+// });
+
 frappe.ui.form.on("Work Order Description", {
     order_quantity(frm, cdt, cdn) {
         calculate_amount(frm, cdt, cdn);
@@ -96,7 +105,7 @@ function calculate_taxes(frm) {
 
 // ---------------- FORM TRIGGERS ---------------- //
 
-frappe.ui.form.on("WO Entry", {
+frappe.ui.form.on("Work Order Entry", {
 
     discounted_percentage_(frm) {
         calculate_discount_value(frm);

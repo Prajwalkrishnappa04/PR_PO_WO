@@ -1,9 +1,9 @@
 frappe.ui.form.on("Purchase Order", {
     refresh(frm) {
         frm.add_custom_button(
-            "Work-Orders",
+            "Work Order Entry",
             () => {
-                frappe.new_doc("Work-Orders", {
+                frappe.new_doc("Work Order Entry", {
                     purchase_order: frm.doc.name
                 });
             },

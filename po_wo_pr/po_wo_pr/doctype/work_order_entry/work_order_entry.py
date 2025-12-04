@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class WorkOrders(Document):
+class WorkOrderEntry(Document):
 	pass

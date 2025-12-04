@@ -1,0 +1,235 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:MF/IND/{#####}/{FY}",
+    "creation": "2025-11-05 11:18:11.127576",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "wo_entry_section",
+        "supplier_name",
+        "for",
+        "column_break_bpbv",
+        "wo_date",
+        "amc",
+        "wo_details_entry_section",
+        "our_enquiry_ref",
+        "ccc",
+        "ccn",
+        "note",
+        "column_break_thuk",
+        "ref_your_qtn_date",
+        "contact_person",
+        "terms_of_payment",
+        "gl_no",
+        "work_order_for",
+        "description_section",
+        "description",
+        "tax_section",
+        "total_value",
+        "discounted_percentage_",
+        "discounted_value",
+        "revised_value",
+        "final_amount",
+        "column_break_ikfm",
+        "cgst_",
+        "sgst_",
+        "igst_",
+        "freight"
+    ],
+    "fields": [
+        {
+            "fieldname": "wo_entry_section",
+            "fieldtype": "Section Break",
+            "label": "WO Entry"
+        },
+        {
+            "fieldname": "supplier_name",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Supplier Name",
+            "options": "Supplier",
+            "reqd": 1
+        },
+        {
+            "fieldname": "amc",
+            "fieldtype": "Select",
+            "label": "AMC",
+            "options": "Yes\nNo"
+        },
+        {
+            "default": "Today",
+            "fieldname": "wo_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "Wo Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "for",
+            "fieldtype": "Data",
+            "label": "For"
+        },
+        {
+            "fieldname": "wo_details_entry_section",
+            "fieldtype": "Section Break",
+            "label": "WO Details Entry"
+        },
+        {
+            "fieldname": "our_enquiry_ref",
+            "fieldtype": "Link",
+            "label": "Our Enquiry Ref",
+            "options": "Enquiry Ref"
+        },
+        {
+            "fieldname": "ref_your_qtn_date",
+            "fieldtype": "Date",
+            "label": "Ref Your Qtn Date"
+        },
+        {
+            "fieldname": "contact_person",
+            "fieldtype": "Link",
+            "label": "Contact Person",
+            "options": "Employee"
+        },
+        {
+            "fieldname": "ccc",
+            "fieldtype": "Link",
+            "label": "Cost Center Code",
+            "options": "Cost Center"
+        },
+        {
+            "fieldname": "gl_no",
+            "fieldtype": "Link",
+            "label": "Gl No",
+            "options": "GL Entry"
+        },
+        {
+            "fetch_from": "ccc.cost_center_name",
+            "fieldname": "ccn",
+            "fieldtype": "Data",
+            "label": "Cost Center Number",
+            "read_only": 1
+        },
+        {
+            "fieldname": "terms_of_payment",
+            "fieldtype": "Link",
+            "label": "Terms Of Payment",
+            "options": "Payment Term"
+        },
+        {
+            "fieldname": "work_order_for",
+            "fieldtype": "Data",
+            "label": "Work Order For"
+        },
+        {
+            "fieldname": "note",
+            "fieldtype": "Small Text",
+            "label": "Note"
+        },
+        {
+            "fieldname": "description_section",
+            "fieldtype": "Section Break",
+            "label": "Description"
+        },
+        {
+            "fieldname": "description",
+            "fieldtype": "Table",
+            "label": "Description",
+            "options": "Work Order Description"
+        },
+        {
+            "fieldname": "tax_section",
+            "fieldtype": "Section Break",
+            "label": "Tax"
+        },
+        {
+            "fieldname": "total_value",
+            "fieldtype": "Currency",
+            "label": "Total Value",
+            "read_only": 1
+        },
+        {
+            "fieldname": "discounted_percentage_",
+            "fieldtype": "Float",
+            "label": "Discounted Percentage %"
+        },
+        {
+            "fieldname": "discounted_value",
+            "fieldtype": "Float",
+            "label": "Discounted Value"
+        },
+        {
+            "description": "After Discount",
+            "fieldname": "revised_value",
+            "fieldtype": "Currency",
+            "label": "Revised Value",
+            "read_only": 1
+        },
+        {
+            "fieldname": "cgst_",
+            "fieldtype": "Float",
+            "label": "CGST %"
+        },
+        {
+            "fieldname": "sgst_",
+            "fieldtype": "Float",
+            "label": "SGST %"
+        },
+        {
+            "fieldname": "igst_",
+            "fieldtype": "Float",
+            "label": "IGST %"
+        },
+        {
+            "fieldname": "freight",
+            "fieldtype": "Float",
+            "label": "Freight"
+        },
+        {
+            "fieldname": "final_amount",
+            "fieldtype": "Currency",
+            "label": "Final Amount",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_bpbv",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "column_break_thuk",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "column_break_ikfm",
+            "fieldtype": "Column Break"
+        }
+    ],
+    "grid_page_length": 50,
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2025-12-03 15:00:18.467351",
+    "modified_by": "Administrator",
+    "module": "Po Wo Pr",
+    "name": "Work Order Entry",
+    "naming_rule": "Expression",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
