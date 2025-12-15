@@ -153,6 +153,14 @@ doctype_js = {
 
 # Scheduled Tasks
 # ---------------
+# scheduler_events = {
+#     "cron": {
+#         "* * * * *": [
+#             "po_wo_pr.api.get_biomatric_data_every_minute.import_today_biometric_data"
+#         ]
+#     }
+# }
+
 
 # scheduler_events = {
 # 	"all": [
