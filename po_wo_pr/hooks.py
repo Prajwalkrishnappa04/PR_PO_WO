@@ -229,6 +229,15 @@ fixtures = [
             ]],
             "field_name":["in",["item_code"]]
         }
+    },
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["name", "in", [
+                "Employee-custom_project"
+            ]
+            ]
+        ]
     }
 ]
 
