@@ -234,7 +234,7 @@ fixtures = [
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
-                "Employee-custom_project"
+                "Employee-custom_project","Employee-custom_insurance_policy_"
             ]
             ]
         ]
