@@ -224,17 +224,20 @@ fixtures = [
     {
         "doctype": "Property Setter",
         "filters": {
-            "doc_type": ["in", [
-                "Item"
-            ]],
-            "field_name":["in",["item_code"]]
+            "name":["in",["Employee-main-field_order","Employee-custom_shift_issuer-hidden",
+            "Employee-shift_request_approver-hidden","Employee-custom_attendance_exception-hidden",
+            "Employee-custom_allow_mobile_checkin-hidden","Employee-department-hidden","Item-item_code-hidden","Employee-main-field_order",
+            "Employee-micr_code-hidden","Employee-iban-hidden","Employee-ctc-hidden","Employee-custom_esic_number-hidden","Employee Education-main-field_order",
+            "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
+            "Employee-old_parent-hidden",
+            ]]
         }
     },
     {
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
-                "Employee-custom_project","Employee-custom_insurance_policy_"
+                "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel"
             ]
             ]
         ]
