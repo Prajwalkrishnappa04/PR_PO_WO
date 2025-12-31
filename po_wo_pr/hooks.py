@@ -224,7 +224,7 @@ fixtures = [
     {
         "doctype": "Property Setter",
         "filters": {
-            "name":["in",["Employee-main-field_order","Employee-custom_shift_issuer-hidden",
+            "name":["in",["Employee-custom_shift_issuer-hidden",
             "Employee-shift_request_approver-hidden","Employee-custom_attendance_exception-hidden",
             "Employee-custom_allow_mobile_checkin-hidden","Employee-department-hidden","Item-item_code-hidden","Employee-main-field_order",
             "Employee-micr_code-hidden","Employee-iban-hidden","Employee-ctc-hidden","Employee-custom_esic_number-hidden","Employee Education-main-field_order",
