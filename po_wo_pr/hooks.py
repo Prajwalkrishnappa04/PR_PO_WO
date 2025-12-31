@@ -229,7 +229,7 @@ fixtures = [
             "Employee-custom_allow_mobile_checkin-hidden","Employee-department-hidden","Item-item_code-hidden","Employee-main-field_order",
             "Employee-micr_code-hidden","Employee-iban-hidden","Employee-ctc-hidden","Employee-custom_esic_number-hidden","Employee Education-main-field_order",
             "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
-            "Employee-old_parent-hidden",
+            "Employee-old_parent-hidden","Employee Internal Work History-department-hidden"
             ]]
         }
     },
@@ -237,7 +237,7 @@ fixtures = [
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
-                "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel"
+                "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work"
             ]
             ]
         ]
