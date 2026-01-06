@@ -135,9 +135,9 @@ doctype_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee"
+}
 
 # Document Events
 # ---------------
