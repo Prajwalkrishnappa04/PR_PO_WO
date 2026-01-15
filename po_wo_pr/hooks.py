@@ -231,7 +231,9 @@ fixtures = [
             "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
             "Employee-old_parent-hidden","Employee Internal Work History-department-hidden","Material Request Item-gst_hsn_code-hidden","Material Request Item-conversion_factor-req",
             "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden"
-            "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden"
+            "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
+            "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
+            "Supplier Quotation Item-manufacture_details-hidden"
 
             ]]
         }
