@@ -334,5 +334,53 @@
   "property_type": "Check",
   "row_name": null,
   "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Material Request",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "scan_barcode",
+  "is_system_generated": 0,
+  "modified": "2026-01-15 19:02:18.242423",
+  "module": "Po Wo Pr",
+  "name": "Material Request-scan_barcode-hidden",
+  "property": "hidden",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Material Request Item",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "manufacture_details",
+  "is_system_generated": 0,
+  "modified": "2026-01-15 19:10:10.141315",
+  "module": "Po Wo Pr",
+  "name": "Material Request Item-manufacture_details-hidden",
+  "property": "hidden",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Material Request Item",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "rate",
+  "is_system_generated": 0,
+  "modified": "2026-01-15 19:12:45.070689",
+  "module": "Po Wo Pr",
+  "name": "Material Request Item-rate-hidden",
+  "property": "hidden",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
  }
 ]
