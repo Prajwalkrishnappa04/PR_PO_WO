@@ -48,7 +48,8 @@ doctype_list_js = {
 # include js in doctype views
 doctype_js = {
     "Purchase Order" : "public/js/purchase_order.js",
-    "Item" : "public/js/item_master.js"
+    "Item" : "public/js/item_master.js",
+    "Request for Quotation": "public/js/request_quotation.js"
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -243,7 +244,7 @@ fixtures = [
         "filters": [
             ["name", "in", [
                 "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work",
-                "Employee Internal Work History-custom_work_description"
+                "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare"
             ]
             ]
         ]
