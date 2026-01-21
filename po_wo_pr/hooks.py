@@ -142,15 +142,20 @@ override_doctype_class = {
 
 # Document Events
 # ---------------
-# Hook on document methods and events
+# Hook on# Document Events
+# ---------------
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Loan": {
+		"on_submit": "po_wo_pr.api.setup.update_employee_loan_balance",
+		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance",
+		"on_update_after_submit": "po_wo_pr.api.setup.update_employee_loan_balance"
+	},
+	"Loan Repayment": {
+		"on_submit": "po_wo_pr.api.setup.update_employee_loan_balance",
+		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -244,7 +249,8 @@ fixtures = [
         "filters": [
             ["name", "in", [
                 "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work",
-                "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare"
+                "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
+                "Employee-custom_total_loan_balance","Employee-custom_documents_for_verification"
             ]
             ]
         ]
