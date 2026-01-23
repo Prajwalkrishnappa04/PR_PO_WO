@@ -239,7 +239,8 @@ fixtures = [
             "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden"
             "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
             "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
-            "Supplier Quotation Item-manufacture_details-hidden"
+            "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-main-field_order","Purchase Order-shipping_rule-hidden"
+            ,"Purchase Order-incoterm-hidden","Supplier Quotation-ignore_pricing_rule-hidden"
 
             ]]
         }
@@ -250,7 +251,7 @@ fixtures = [
             ["name", "in", [
                 "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work",
                 "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
-                "Employee-custom_total_loan_balance","Employee-custom_documents_for_verification"
+                "Employee-custom_total_loan_balance","Employee-custom_documents_for_verification","Employee-custom_reporting_manager"
             ]
             ]
         ]
