@@ -1,6 +1,8 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "field:project_name",
  "creation": "2026-01-21 19:49:50.473084",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,16 +13,18 @@
   {
    "fieldname": "project_name",
    "fieldtype": "Data",
-   "label": "Project Name"
+   "label": "Project Name",
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-21 19:52:23.309408",
+ "modified": "2026-01-23 13:00:40.537622",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Maa Prioject",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
