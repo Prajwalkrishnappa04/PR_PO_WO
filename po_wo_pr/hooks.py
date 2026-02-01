@@ -240,7 +240,7 @@ fixtures = [
             "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
             "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
             "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-main-field_order","Purchase Order-shipping_rule-hidden"
-            ,"Purchase Order-incoterm-hidden","Supplier Quotation-ignore_pricing_rule-hidden"
+            ,"Purchase Order-incoterm-hidden","Supplier Quotation-ignore_pricing_rule-hidden","Employee External Work History-company_name-label","Employee External Work History-contact-label"
 
             ]]
         }
