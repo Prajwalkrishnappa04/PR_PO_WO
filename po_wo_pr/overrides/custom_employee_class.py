@@ -7,9 +7,9 @@ class CustomEmployee(Employee):
     def validate(self):
         super(CustomEmployee, self).validate()
         self.set_total_loan_balance()
-
-    def before_save(self):
         self.ensure_mandatory_documents()
+
+
 
     def set_total_loan_balance(self):
         loans = frappe.get_all("Loan", filters={
@@ -27,13 +27,13 @@ class CustomEmployee(Employee):
         self.custom_total_loan_balance = total_balance
 
     def ensure_mandatory_documents(self):
-        required = ["Aadhaar", "PAN Card"]
+        required = ["Aadhaar", "PAN Card", "Driving Licence"]
 
         existing = []
         if self.get("custom_documents_for_verification"):
             for d in self.get("custom_documents_for_verification"):
-                if d.document_name:
-                    existing.append(d.document_name)
+                if d.document:
+                    existing.append(d.document)
 
         for doc in required:
             if doc not in existing:
