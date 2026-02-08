@@ -7,7 +7,6 @@ class CustomEmployee(Employee):
     def validate(self):
         super(CustomEmployee, self).validate()
         self.set_total_loan_balance()
-        self.ensure_mandatory_documents()
 
 
 
@@ -25,18 +24,3 @@ class CustomEmployee(Employee):
         
         # We'll use the fieldname custom_total_loan_balance to follow Frappe's best practices for custom fields
         self.custom_total_loan_balance = total_balance
-
-    def ensure_mandatory_documents(self):
-        required = ["Aadhaar", "PAN Card", "Driving Licence"]
-
-        existing = []
-        if self.get("custom_documents_for_verification"):
-            for d in self.get("custom_documents_for_verification"):
-                if d.document:
-                    existing.append(d.document)
-
-        for doc in required:
-            if doc not in existing:
-                self.append("custom_documents_for_verification", {
-                    "document_name": doc
-                })
