@@ -254,8 +254,8 @@ fixtures = [
             ["name", "in", [
                 "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work",
                 "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
-                "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","custom_office_document","custom_academic_documents_list"
-                "Material Request-custom_maa_project","Employee-custom_personal_document"
+                "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","custom_office_document","custom_academic_documents_list",
+                "Material Request-custom_maa_project","Employee-custom_personal_document","custom_maa_foundation_experience"
             ]
             ]
         ]
