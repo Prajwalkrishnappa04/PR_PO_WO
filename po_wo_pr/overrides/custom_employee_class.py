@@ -9,6 +9,7 @@ class CustomEmployee(EmployeeMaster):
         super(CustomEmployee, self).validate()
         self.update_custom_loan_fields()
         self.calculate_maa_foundation_experience()
+        self.calculate_external_work_experience()
 
 
 
@@ -16,8 +17,7 @@ class CustomEmployee(EmployeeMaster):
         loans = frappe.get_all("Loan", filters={
             "applicant_type": "Employee",
             "applicant": self.name,
-            "docstatus": 1,
-            "status": ["in", ["Sanctioned", "Closed"]]
+            "docstatus": 1
         }, fields=["total_payment", "total_amount_paid"])
         
         total_loan_amount = 0
@@ -47,6 +47,21 @@ class CustomEmployee(EmployeeMaster):
             
             experience_str = f"{years}year {months}month, {days}days"
             self.custom_maa_foundation_experience = experience_str
+
+    def calculate_external_work_experience(self):
+        for row in self.external_work_history:
+            if row.custom_from_datee and row.custom_to_datee:
+                from_date = getdate(row.custom_from_datee)
+                to_date = getdate(row.custom_to_datee)
+                diff = relativedelta(to_date, from_date)
+                
+                years = diff.years
+                months = diff.months
+                days = diff.days
+                
+                experience_str = f"{years} Year(s) {months} Month(s) {days} Day(s)"
+                row.total_experience = experience_str
+
 
 @frappe.whitelist()
 def update_employee_loan_data(employee):

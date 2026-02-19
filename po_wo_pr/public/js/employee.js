@@ -4,14 +4,10 @@ frappe.ui.form.on('Employee', {
 
         (frm.doc.internal_work_history || []).forEach(row => {
             if (row.to_date !== today) {
-                frappe.model.set_value(
-                    row.doctype,
-                    row.name,
-                    'to_date',
-                    today
-                );
+                frappe.model.set_value(row.doctype, row.name, 'to_date', today);
             }
         });
+        frm.refresh_field('internal_work_history');
 
         calculate_experience(frm);
 
