@@ -14,6 +14,23 @@ frappe.ui.form.on('Employee', {
         });
 
         calculate_experience(frm);
+
+        if (!frm.is_new()) {
+            frappe.call({
+                method: 'po_wo_pr.overrides.custom_employee_class.update_employee_loan_data',
+                args: {
+                    employee: frm.doc.name
+                },
+                callback: function (r) {
+                    if (r.message) {
+                        // Update values directly on frm.doc to avoid marking form dirty
+                        // Backend already saves via frappe.db.set_value
+                        Object.assign(frm.doc, r.message);
+                        frm.refresh_fields();
+                    }
+                }
+            });
+        }
     },
 
     date_of_joining(frm) {
