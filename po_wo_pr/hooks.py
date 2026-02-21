@@ -243,7 +243,9 @@ fixtures = [
             "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-main-field_order","Purchase Order-shipping_rule-hidden"
             ,"Purchase Order-incoterm-hidden","Supplier Quotation-ignore_pricing_rule-hidden","Employee External Work History-company_name-label","Employee External Work History-contact-label",
             "Purchase Receipt-incoterm-hidden","Purchase Invoice-incoterm-hidden","Supplier Quotation-incoterm-hidden","Purchase Receipt-shipping_col-hidden","Supplier Quotation-column_break_34-hidden",
-            "Purchase Invoice-column_break_58-hidden","Purchase Receipt-scan_barcode-hidden","Purchase Invoice-scan_barcode-hidden"
+            "Purchase Invoice-column_break_58-hidden","Purchase Receipt-scan_barcode-hidden","Purchase Invoice-scan_barcode-hidden","Purchase Receipt-main-field_order","Purchase Receipt-shipping_rule-hidden",
+            "Purchase Receipt-raw_material_details-hidden","Purchase Invoice-shipping_rule-hidden","Purchase Invoice-main-field_order","Purchase Invoice-raw_materials_supplied-hidden","Supplier Quotation-shipping_rule-hidden",
+            
 
             ]]
         }

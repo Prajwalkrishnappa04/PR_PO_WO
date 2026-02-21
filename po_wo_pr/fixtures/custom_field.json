@@ -941,7 +941,7 @@
   "insert_after": "custom_academic_documents_list",
   "is_system_generated": 0,
   "is_virtual": 0,
-  "label": "Loan",
+  "label": "Document",
   "length": 0,
   "link_filters": null,
   "mandatory_depends_on": null,
