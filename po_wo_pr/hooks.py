@@ -245,7 +245,9 @@ fixtures = [
             "Purchase Receipt-incoterm-hidden","Purchase Invoice-incoterm-hidden","Supplier Quotation-incoterm-hidden","Purchase Receipt-shipping_col-hidden","Supplier Quotation-column_break_34-hidden",
             "Purchase Invoice-column_break_58-hidden","Purchase Receipt-scan_barcode-hidden","Purchase Invoice-scan_barcode-hidden","Purchase Receipt-main-field_order","Purchase Receipt-shipping_rule-hidden",
             "Purchase Receipt-raw_material_details-hidden","Purchase Invoice-shipping_rule-hidden","Purchase Invoice-main-field_order","Purchase Invoice-raw_materials_supplied-hidden","Supplier Quotation-shipping_rule-hidden",
-            
+            "Material Request-set_from_warehouse-default","Quotation-scan_barcode-hidden","Quotation-incoterm-hidden","Item-gst_hsn_code-default","Supplier Quotation-place_of_supply-hidden",
+            "Supplier Quotation-accounting_dimensions_section-hidden","Purchase Order-place_of_supply-hidden","Purchase Order-scan_barcode-hidden",
+            "Purchase Order-ignore_pricing_rule-hidden",
 
             ]]
         }
@@ -258,7 +260,7 @@ fixtures = [
                 "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
                 "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","Employee-custom_office_document","Employee-custom_academic_documents_list",
                 "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
-                "Employee-custom_remaining_amount"
+                "Employee-custom_remaining_amount","Material Request-custom_person_responsible"
             ]
             ]
         ]
