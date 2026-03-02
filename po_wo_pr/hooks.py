@@ -240,7 +240,7 @@ fixtures = [
             "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden"
             "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
             "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
-            "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-main-field_order","Purchase Order-shipping_rule-hidden"
+            "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-shipping_rule-hidden"
             ,"Purchase Order-incoterm-hidden","Supplier Quotation-ignore_pricing_rule-hidden","Employee External Work History-company_name-label","Employee External Work History-contact-label",
             "Purchase Receipt-incoterm-hidden","Purchase Invoice-incoterm-hidden","Supplier Quotation-incoterm-hidden","Purchase Receipt-shipping_col-hidden","Supplier Quotation-column_break_34-hidden",
             "Purchase Invoice-column_break_58-hidden","Purchase Receipt-scan_barcode-hidden","Purchase Invoice-scan_barcode-hidden","Purchase Receipt-main-field_order","Purchase Receipt-shipping_rule-hidden",
@@ -248,7 +248,11 @@ fixtures = [
             "Material Request-set_from_warehouse-default","Quotation-scan_barcode-hidden","Quotation-incoterm-hidden","Item-gst_hsn_code-default","Supplier Quotation-place_of_supply-hidden",
             "Supplier Quotation-accounting_dimensions_section-hidden","Purchase Order-place_of_supply-hidden","Purchase Order-scan_barcode-hidden","Material Request Item-accounting_dimensions_section-hidden",
             "Purchase Order-ignore_pricing_rule-hidden","Material Request Item-actual_qty-hidden","Material Request Item-projected_qty-hidden","Material Request Item-min_order_qty-hidden","Material Request Item-accounting_details_section-hidden",
-            "Material Request Item-page_break-hidden","Request for Quotation Item-section_break_24-hidden","Purchase Order Item-manufacture_details-hidden",
+            "Material Request Item-page_break-hidden","Request for Quotation Item-section_break_24-hidden","Purchase Order Item-manufacture_details-hidden","Supplier Quotation Item-ad_sec_break-hidden","Supplier Quotation Item-section_break_44-hidden",
+            "Material Request-set_from_warehouse-default","Material Request-tc_name-default","Request for Quotation Item-image_view-hidden","Request for Quotation Item-section_break_23-hidden","Request for Quotation Item-warehouse-default",
+            "Request for Quotation-incoterm-hidden","Request for Quotation-tc_name-default","Supplier Quotation-main-field_order","Supplier Quotation-named_place-hidden","Purchase Order-set_warehouse-default","Purchase Order-main-field_order","Purchase Order-tc_name-default",
+            "Purchase Order Item-warehouse-default","Purchase Receipt Item-warehouse-default","Purchase Receipt Item-manufacture_details-hidden","Purchase Receipt-place_of_supply-hidden","Purchase Receipt-apply_putaway_rule-hidden","Purchase Receipt-is_subcontracted-hidden",
+            "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Invoice-set_warehouse-default",
 
 
             ]]
@@ -262,7 +266,7 @@ fixtures = [
                 "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
                 "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","Employee-custom_office_document","Employee-custom_academic_documents_list",
                 "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
-                "Employee-custom_remaining_amount","Material Request-custom_person_responsible"
+                "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included"
             ]
             ]
         ]
