@@ -246,8 +246,10 @@ fixtures = [
             "Purchase Invoice-column_break_58-hidden","Purchase Receipt-scan_barcode-hidden","Purchase Invoice-scan_barcode-hidden","Purchase Receipt-main-field_order","Purchase Receipt-shipping_rule-hidden",
             "Purchase Receipt-raw_material_details-hidden","Purchase Invoice-shipping_rule-hidden","Purchase Invoice-main-field_order","Purchase Invoice-raw_materials_supplied-hidden","Supplier Quotation-shipping_rule-hidden",
             "Material Request-set_from_warehouse-default","Quotation-scan_barcode-hidden","Quotation-incoterm-hidden","Item-gst_hsn_code-default","Supplier Quotation-place_of_supply-hidden",
-            "Supplier Quotation-accounting_dimensions_section-hidden","Purchase Order-place_of_supply-hidden","Purchase Order-scan_barcode-hidden",
-            "Purchase Order-ignore_pricing_rule-hidden",
+            "Supplier Quotation-accounting_dimensions_section-hidden","Purchase Order-place_of_supply-hidden","Purchase Order-scan_barcode-hidden","Material Request Item-accounting_dimensions_section-hidden",
+            "Purchase Order-ignore_pricing_rule-hidden","Material Request Item-actual_qty-hidden","Material Request Item-projected_qty-hidden","Material Request Item-min_order_qty-hidden","Material Request Item-accounting_details_section-hidden",
+            "Material Request Item-page_break-hidden","Request for Quotation Item-section_break_24-hidden","Purchase Order Item-manufacture_details-hidden",
+
 
             ]]
         }
