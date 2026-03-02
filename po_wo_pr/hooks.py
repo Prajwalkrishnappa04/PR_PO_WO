@@ -252,7 +252,8 @@ fixtures = [
             "Material Request-set_from_warehouse-default","Material Request-tc_name-default","Request for Quotation Item-image_view-hidden","Request for Quotation Item-section_break_23-hidden","Request for Quotation Item-warehouse-default",
             "Request for Quotation-incoterm-hidden","Request for Quotation-tc_name-default","Supplier Quotation-main-field_order","Supplier Quotation-named_place-hidden","Purchase Order-set_warehouse-default","Purchase Order-main-field_order","Purchase Order-tc_name-default",
             "Purchase Order Item-warehouse-default","Purchase Receipt Item-warehouse-default","Purchase Receipt Item-manufacture_details-hidden","Purchase Receipt-place_of_supply-hidden","Purchase Receipt-apply_putaway_rule-hidden","Purchase Receipt-is_subcontracted-hidden",
-            "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Invoice-set_warehouse-default",
+            "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Invoice-set_warehouse-default","Purchase Order-tc_name-default","Purchase Order-payment_terms_template-default","Purchase Invoice-tc_name-default","Purchase Invoice-payment_terms_template-default",
+            
 
 
             ]]
