@@ -253,7 +253,7 @@ fixtures = [
             "Request for Quotation-incoterm-hidden","Request for Quotation-tc_name-default","Supplier Quotation-main-field_order","Supplier Quotation-named_place-hidden","Purchase Order-set_warehouse-default","Purchase Order-main-field_order","Purchase Order-tc_name-default",
             "Purchase Order Item-warehouse-default","Purchase Receipt Item-warehouse-default","Purchase Receipt Item-manufacture_details-hidden","Purchase Receipt-place_of_supply-hidden","Purchase Receipt-apply_putaway_rule-hidden","Purchase Receipt-is_subcontracted-hidden",
             "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Invoice-set_warehouse-default","Purchase Order-tc_name-default","Purchase Order-payment_terms_template-default","Purchase Invoice-tc_name-default","Purchase Invoice-payment_terms_template-default",
-            
+            "Expense Claim-department-hidden","Expense Claim-main-field_order"
 
 
             ]]
@@ -267,7 +267,8 @@ fixtures = [
                 "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
                 "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","Employee-custom_office_document","Employee-custom_academic_documents_list",
                 "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
-                "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included"
+                "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included","Expense Claim-custom_maa_project",
+                
             ]
             ]
         ]
