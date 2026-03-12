@@ -9,7 +9,7 @@ class CustomEmployee(EmployeeMaster):
         super(CustomEmployee, self).validate()
         self.update_custom_loan_fields()
         self.calculate_maa_foundation_experience()
-        self.calculate_external_work_experience()
+        # self.calculate_external_work_experience()
 
 
 
