@@ -5490,29 +5490,7 @@
    "row_name": null,
    "value": "1"
   },
-  {
-   "_assign": null,
-   "_comments": null,
-   "_liked_by": null,
-   "_user_tags": null,
-   "creation": "2025-10-28 17:33:39.244289",
-   "default_value": null,
-   "doc_type": "Employee",
-   "docstatus": 0,
-   "doctype_or_field": "DocField",
-   "field_name": "naming_series",
-   "idx": 0,
-   "is_system_generated": 1,
-   "modified": "2026-03-15 14:18:24.613119",
-   "modified_by": "Administrator",
-   "module": null,
-   "name": "Employee-naming_series-default",
-   "owner": "Administrator",
-   "property": "default",
-   "property_type": "Text",
-   "row_name": null,
-   "value": "37.###"
-  },
+ 
   {
    "_assign": null,
    "_comments": null,
@@ -5536,29 +5514,7 @@
    "row_name": null,
    "value": "1"
   },
-  {
-   "_assign": null,
-   "_comments": null,
-   "_liked_by": null,
-   "_user_tags": null,
-   "creation": "2025-10-28 17:33:39.189224",
-   "default_value": null,
-   "doc_type": "Employee",
-   "docstatus": 0,
-   "doctype_or_field": "DocField",
-   "field_name": "naming_series",
-   "idx": 0,
-   "is_system_generated": 1,
-   "modified": "2026-03-15 14:18:24.659906",
-   "modified_by": "Administrator",
-   "module": null,
-   "name": "Employee-naming_series-options",
-   "owner": "Administrator",
-   "property": "options",
-   "property_type": "Text",
-   "row_name": null,
-   "value": "37.###"
-  },
+ 
   {
    "_assign": null,
    "_comments": null,
