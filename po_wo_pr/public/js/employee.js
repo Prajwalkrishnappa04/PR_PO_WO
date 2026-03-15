@@ -27,7 +27,21 @@ frappe.ui.form.on('Employee', {
             });
         }
     },
-
+    custom_same_as_current(frm){
+        if(frm.doc.custom_same_as_current){
+            frm.set_value("permanent_address",frm.doc.current_address)
+            frm.set_value("custom_permanent_area",frm.doc.custom_current_area)
+            frm.set_value("custom_permanent_pincode",frm.doc.custom_current_pincode)
+            frm.set_value("custom_permanent_state",frm.doc.custom_current_state)
+        }
+        else{
+            frm.set_value("permanent_address",null)
+            frm.set_value("custom_permanent_area",null)
+            frm.set_value("custom_permanent_pincode",null)
+            frm.set_value("custom_permanent_state",null)
+        }
+    }
+,
     date_of_joining(frm) {
         calculate_experience(frm);
     }
