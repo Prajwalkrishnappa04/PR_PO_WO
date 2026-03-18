@@ -1,13 +1,17 @@
 frappe.ui.form.on('Employee', {
-    refresh(frm) {
-        const today = frappe.datetime.get_today();
+      onload_post_render(frm) {
+                apply_exit_tab_visibility(frm);
 
-        (frm.doc.internal_work_history || []).forEach(row => {
-            if (row.to_date !== today) {
-                frappe.model.set_value(row.doctype, row.name, 'to_date', today);
-            }
-        });
-        frm.refresh_field('internal_work_history');
+    },
+    refresh(frm) {
+                apply_exit_tab_visibility(frm);
+
+        // (frm.doc.internal_work_history || []).forEach(row => {
+        //     if (row.to_date !== today) {
+        //         frappe.model.set_value(row.doctype, row.name, 'to_date', today);
+        //     }
+        // });
+        // frm.refresh_field('internal_work_history');
 
         calculate_experience(frm);
         if (!frm.is_new()) {
@@ -188,4 +192,16 @@ function calculate_total_internal_experience(frm) {
     });
 
     frm.set_value("custom_total_internal_work_history", total.toFixed(2) + " years");
+}
+function apply_exit_tab_visibility(frm) {
+    frappe.call({
+        method: 'po_wo_pr.overrides.custom_employee_class.check_hr_role',
+        callback: function (r) {
+            const is_hr = r.message;  // true or false from server
+
+            // ✅ Official Frappe API — most reliable way to hide/show a tab
+            frm.set_df_property("exit", "hidden", is_hr ? 0 : 1);
+            frm.refresh_field("exit");
+        }
+    });
 }

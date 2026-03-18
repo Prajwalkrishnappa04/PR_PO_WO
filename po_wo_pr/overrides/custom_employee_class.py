@@ -100,3 +100,15 @@ def update_employee_loan_data(employee):
         "custom_remaining_amount": remaining_amount,
         "custom_maa_foundation_experience": experience_str
     }
+
+
+
+import frappe
+
+@frappe.whitelist()
+def check_hr_role():
+    """Returns True if current user has HR Manager or HR User role"""
+    allowed_roles = {"HR Manager", "HR User", "System Manager"}
+    user_roles = set(frappe.get_roles(frappe.session.user))
+    print("user roles------========================113-",user_roles,"len",len(user_roles))
+    return bool(allowed_roles & user_roles)

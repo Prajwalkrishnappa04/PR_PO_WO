@@ -9,7 +9,8 @@
   "section_break_y8eg",
   "gl_name",
   "gl_description",
-  "gl_account_no"
+  "gl_account_no",
+  "custom_type_of_expenses"
  ],
  "fields": [
   {
@@ -35,13 +36,18 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "GL Account No"
+  },
+  {
+   "fieldname": "custom_type_of_expenses",
+   "fieldtype": "Data",
+   "label": "Cost center Details"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-16 21:09:47.563081",
+ "modified": "2026-03-18 10:53:22.627789",
  "modified_by": "Administrator",
  "module": "Po Wo Pr",
  "name": "Cost center Details",
