@@ -11,7 +11,33 @@ frappe.ui.form.on("Request for Quotation", {
                 render_comparison(frm, r.message || {});
             }
         });
+        
+        frappe.call({
+            method: "po_wo_pr.api.request_for_quotation_data.get_any_supplier_qs",
+            args: { rfq_name: frm.doc.name },
+            callback: function(r) {
+                let has_sq = r.message && r.message != 0 ? true : false;
+                console.log("has_sq:", has_sq);
+
+                setTimeout(function() {
+                    // Exact selector based on your DOM structure
+                    let $tab = $(frm.wrapper)
+                        .find('button.nav-link[data-fieldname="custom_tab_2"]')
+                        .closest('li.nav-item');
+
+                    console.log("tab li found:", $tab.length); // must be 1
+
+                    if (!has_sq) {
+                        $tab.hide();
+                    } else {
+                        $tab.show();
+                    }
+                }, 500);
+            }
+        });
+                
     }
+    
 });
 
 function render_comparison(frm, data) {

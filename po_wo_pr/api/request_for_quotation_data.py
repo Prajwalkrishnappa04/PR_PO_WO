@@ -74,3 +74,14 @@ def get_supplier_quotation_comparison(rfq_name):
             data[row.item_code]["rates"][supplier] = row.rate
 
     return {"items": data, "suppliers": all_suppliers}
+
+
+@frappe.whitelist()
+def get_any_supplier_qs(rfq_name):
+    print("81===============")
+    supplier_qs_found = frappe.db.exists(
+        "Supplier Quotation Item",
+        {"request_for_quotation": rfq_name}  
+    )
+    print("supplier_qs_found=============",supplier_qs_found)
+    return 1 if supplier_qs_found else 0  
