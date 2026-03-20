@@ -51,7 +51,9 @@ doctype_js = {
     "Item" : "public/js/item_master.js",
     "Request for Quotation": "public/js/request_quotation.js",
     "Employee": "public/js/employee.js",
-    "Cost Center":"public/js/cost_center.js"
+    "Cost Center":"public/js/cost_center.js",
+    "Shift Assignment":"public/js/shift_assignment.js",
+    "Material Request":"public/js/material_request.js"
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
