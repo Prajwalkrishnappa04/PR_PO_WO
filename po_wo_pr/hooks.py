@@ -266,7 +266,13 @@ fixtures = [
             # "Supplier Quotation Item-stock_uom-hidden",
             # "Purchase Receipt Item-stock_uom-reqd",
             # "Purchase Receipt Item-stock_uom-hidden"
-
+            "Supplier Quotation Item-base_amount-hidden",
+            "Supplier Quotation Item-base_rate-hidden",
+            "Purchase Order Item-stock_uom-hidden",
+            "Purchase Order Item-base_rate-hidden",
+            "Purchase Order Item-base_amount-hidden",
+            "Purchase Receipt Item-base_amount-hidden",
+            "Purchase Receipt Item-base_rate-hidden"
             ]]
         }
     },
