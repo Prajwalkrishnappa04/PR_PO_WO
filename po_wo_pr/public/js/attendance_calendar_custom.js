@@ -11,9 +11,7 @@ const setup_custom_attendance_calendar = () => {
 			start: "attendance_date",
 			end: "attendance_date",
 			id: "name",
-			title: "title",
-			allDay: "allDay"
-			// Removed color: "color" to avoid database values overriding this logic
+			title: "employee_name", // Changed from "title" to "employee_name" to ensure standard field is used
 		},
 
 		get_css_class: function (data) {
@@ -30,6 +28,7 @@ const setup_custom_attendance_calendar = () => {
 		},
 
 		options: {
+			editable: false, // Prevent dragging and changing the date
 			header: {
 				left: "prev,next today",
 				center: "title",
