@@ -1,3 +1,5 @@
+console.log("Custom Attendance Calendar Loaded");
+
 frappe.views.calendar["Attendance"] = {
 	field_map: {
 		start: "attendance_date",
@@ -9,14 +11,14 @@ frappe.views.calendar["Attendance"] = {
 	},
 
 	get_css_class: function (data) {
-		if (data.doctype === "Holiday") return "blue"; // 'info' is not a standard color name
+		if (data.doctype === "Holiday") return "blue";
 
 		if (data.doctype === "Attendance") {
-			if (data.status === "Absent") return "danger"; // Red
-			if (data.status === "Half Day") return "yellow"; // Yellow
-			if (data.status === "Present") return "success"; // Green
-			if (data.status === "On Leave") return "gray"; // 'secondary' is not a standard color name
-			if (data.status === "Work From Home") return "purple"; // 'primary' is not a standard color name
+			if (data.status === "Absent") return "danger";
+			if (data.status === "Half Day") return "yellow";
+			if (data.status === "Present") return "success";
+			if (data.status === "On Leave") return "gray";
+			if (data.status === "Work From Home") return "purple";
 			return "success";
 		}
 	},
