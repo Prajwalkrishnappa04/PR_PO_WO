@@ -1,7 +1,7 @@
-console.log("Custom Attendance Calendar Load Attempt (v7)...");
+console.log("Custom Attendance Calendar Load Attempt (v8)...");
 
 const setup_custom_attendance_calendar = () => {
-	console.log("Applying Custom Attendance Calendar Configuration (v7)");
+	console.log("Applying Custom Attendance Calendar Configuration (v8)");
 
 	frappe.views.calendar["Attendance"] = Object.assign(
 		frappe.views.calendar["Attendance"] || {},
@@ -38,7 +38,17 @@ const setup_custom_attendance_calendar = () => {
 						right: "month",
 					},
 
+					// ✅ FIX: Proper date parsing so events don't stack on today
 					eventRender: function (event, element) {
+
+						if (event.start && typeof event.start === "string") {
+							event.start = frappe.datetime.str_to_obj(event.start);
+						}
+						if (event.end && typeof event.end === "string") {
+							event.end = frappe.datetime.str_to_obj(event.end);
+						}
+
+						// color logic (unchanged)
 						if (event.className) {
 							element.removeClass("red yellow green gray purple blue");
 
@@ -53,7 +63,7 @@ const setup_custom_attendance_calendar = () => {
 					eventAfterAllRender: function () {
 						render_attendance_legend();
 						inject_attendance_styles();
-						hide_default_legend(); // ✅ added
+						hide_default_legend();
 					}
 				}
 			),
@@ -62,7 +72,7 @@ const setup_custom_attendance_calendar = () => {
 		}
 	);
 
-	console.log("Configuration Applied Successfully (v7)");
+	console.log("Configuration Applied Successfully (v8)");
 };
 
 
@@ -78,7 +88,7 @@ $(document).on('page-change', function () {
 });
 
 
-// ✅ Your custom legend (UNCHANGED)
+// ✅ Custom legend (unchanged)
 function render_attendance_legend() {
 	if ($('.attendance-calendar-legend').length) return;
 
@@ -102,7 +112,7 @@ function render_attendance_legend() {
 }
 
 
-// ✅ Hide default Frappe legend
+// ✅ Hide default legend
 function hide_default_legend() {
 	$('.calendar-legend').hide();
 }
@@ -115,7 +125,7 @@ function inject_attendance_styles() {
 	const style_html = `
 		<style id="attendance-calendar-styles">
 
-		/* ===== EVENT COLORS ===== */
+		/* EVENT COLORS */
 		.fc .fc-event.red { background:#dc3545 !important; border-color:#dc3545 !important; color:#fff !important; }
 		.fc .fc-event.green { background:#28a745 !important; border-color:#28a745 !important; color:#fff !important; }
 		.fc .fc-event.yellow { background:#ffc107 !important; border-color:#ffc107 !important; color:#000 !important; }
@@ -123,7 +133,7 @@ function inject_attendance_styles() {
 		.fc .fc-event.purple { background:#6f42c1 !important; border-color:#6f42c1 !important; color:#fff !important; }
 		.fc .fc-event.blue { background:#007bff !important; border-color:#007bff !important; color:#fff !important; }
 
-		/* ===== HEADER ===== */
+		/* HEADER */
 		.fc-toolbar {
 			background:#007bff !important;
 			color:#fff !important;
@@ -146,7 +156,7 @@ function inject_attendance_styles() {
 			background:#004494 !important;
 		}
 
-		/* ===== DAY HEADER ===== */
+		/* DAY HEADER */
 		.fc-day-header {
 			background:#f1f3f5 !important;
 			font-weight:600;
