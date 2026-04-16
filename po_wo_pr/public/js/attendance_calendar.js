@@ -5,17 +5,18 @@ frappe.views.calendar["Attendance"] = {
 		id: "name",
 		title: "title",
 		allDay: "allDay",
+		color: "color",
 	},
 
 	get_css_class: function (data) {
-		if (data.doctype === "Holiday") return "info";
+		if (data.doctype === "Holiday") return "blue"; // 'info' is not a standard color name
 
 		if (data.doctype === "Attendance") {
-			if (data.status === "Absent") return "danger";
-			if (data.status === "Half Day") return "warning";
-			if (data.status === "Present") return "success";
-			if (data.status === "On Leave") return "secondary";
-			if (data.status === "Work From Home") return "primary";
+			if (data.status === "Absent") return "danger"; // Red
+			if (data.status === "Half Day") return "yellow"; // Yellow
+			if (data.status === "Present") return "success"; // Green
+			if (data.status === "On Leave") return "gray"; // 'secondary' is not a standard color name
+			if (data.status === "Work From Home") return "purple"; // 'primary' is not a standard color name
 			return "success";
 		}
 	},
@@ -65,12 +66,12 @@ function render_attendance_legend() {
 			</div>
 
 			<div style="display:flex;align-items:center;gap:8px;">
-				<span style="width:14px;height:14px;border-radius:50%;background:#007bff;"></span>
+				<span style="width:14px;height:14px;border-radius:50%;background:#6f42c1;"></span>
 				<span style="font-weight:500;">Work From Home</span>
 			</div>
 
 			<div style="display:flex;align-items:center;gap:8px;">
-				<span style="width:14px;height:14px;border-radius:50%;background:#17a2b8;"></span>
+				<span style="width:14px;height:14px;border-radius:50%;background:#007bff;"></span>
 				<span style="font-weight:500;">Holiday</span>
 			</div>
 
