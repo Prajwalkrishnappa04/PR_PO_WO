@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/po_wo_pr/css/po_wo_pr.css"
-app_include_js = "/assets/po_wo_pr/js/attendance_calendar_custom.js"
+# app_include_js = "/assets/po_wo_pr/js/attendance_calendar_custom.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/po_wo_pr/css/po_wo_pr.css"
@@ -58,7 +58,7 @@ doctype_js = {
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"Attendance" : "public/js/attendance_calendar_custom.js"}
+doctype_calendar_js = {"Attendance" : "public/js/attendance_calendar_custom.js"}
 
 # Svg Icons
 # ------------------

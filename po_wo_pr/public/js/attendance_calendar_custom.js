@@ -1,28 +1,31 @@
-console.log("Custom Attendance Calendar Load Attempt...");
+console.log("Custom Attendance Calendar Load Attempt (v3)...");
 
 const setup_custom_attendance_calendar = () => {
-	console.log("Applying Custom Attendance Calendar Configuration");
+	console.log("Applying Custom Attendance Calendar Configuration (v3)");
 	
+	// Clear any existing configuration first
+	delete frappe.views.calendar["Attendance"];
+
 	frappe.views.calendar["Attendance"] = {
 		field_map: {
 			start: "attendance_date",
 			end: "attendance_date",
 			id: "name",
 			title: "title",
-			allDay: "allDay",
-			color: "color",
+			allDay: "allDay"
+			// Removed color: "color" to avoid database values overriding this logic
 		},
 
 		get_css_class: function (data) {
 			if (data.doctype === "Holiday") return "blue";
 
 			if (data.doctype === "Attendance") {
-				if (data.status === "Absent") return "danger";
+				if (data.status === "Absent") return "red";
 				if (data.status === "Half Day") return "yellow";
-				if (data.status === "Present") return "success";
+				if (data.status === "Present") return "green";
 				if (data.status === "On Leave") return "gray";
 				if (data.status === "Work From Home") return "purple";
-				return "success";
+				return "green";
 			}
 		},
 
@@ -40,12 +43,13 @@ const setup_custom_attendance_calendar = () => {
 
 		get_events_method: "hrms.hr.doctype.attendance.attendance.get_events",
 	};
+	console.log("Configuration Applied Successfully (v3)");
 };
 
 // Apply immediately
 setup_custom_attendance_calendar();
 
-// Also apply on route change to ensure it stays active
+// Re-apply on every page change to ensure it wins against core scripts
 $(document).on('page-change', function() {
 	if (frappe.get_route()[0] === 'List' && frappe.get_route()[1] === 'Attendance') {
 		setup_custom_attendance_calendar();
