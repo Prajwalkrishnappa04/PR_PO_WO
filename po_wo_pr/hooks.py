@@ -159,6 +159,9 @@ doc_events = {
 	"Loan Repayment": {
 		"on_submit": "po_wo_pr.api.setup.update_employee_loan_balance",
 		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance"
+	},
+	"Attendance": {
+		"validate": "po_wo_pr.api.attendance_utils.update_custom_work_hours"
 	}
 }
 
