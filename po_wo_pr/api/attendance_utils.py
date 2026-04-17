@@ -28,6 +28,26 @@ def format_decimal_to_time(decimal_hours):
     except Exception:
         return "00:00:00"
 
+def update_custom_exact_time(doc, method=None):
+    if doc.time:
+        # doc.time is a datetime object or string, frappe.utils.get_time returns a time object or string
+        from frappe.utils import get_time
+        doc.custom_exact_time = get_time(doc.time)
+    else:
+        doc.custom_exact_time = None
+
+def sync_old_checkin_times():
+    from frappe.utils import get_time
+    checkins = frappe.get_all("Employee Checkin", filters={"custom_exact_time": ["is", "not set"]}, fields=["name", "time"])
+    count = 0
+    for c in checkins:
+        if c.time:
+            frappe.db.set_value("Employee Checkin", c.name, "custom_exact_time", get_time(c.time), update_modified=False)
+            count += 1
+    
+    frappe.db.commit()
+    return f"Synced {count} records."
+
 def update_all_attendance_work_hours():
     records = frappe.get_all("Attendance", filters={"working_hours": [">", 0]}, fields=["name", "working_hours", "custom_work_hours"])
     count = 0
