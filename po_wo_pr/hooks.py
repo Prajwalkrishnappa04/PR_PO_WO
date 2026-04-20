@@ -162,7 +162,10 @@ doc_events = {
 		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance"
 	},
 	"Attendance": {
-		"validate": "po_wo_pr.api.attendance_utils.update_custom_work_hours"
+		"validate": [
+			"po_wo_pr.api.attendance_utils.update_custom_work_hours",
+			"po_wo_pr.api.attendance_utils.update_attendance_exact_times"
+		]
 	},
 	"Employee Checkin": {
 		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time"
@@ -293,7 +296,8 @@ fixtures = [
                 "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","Employee-custom_office_document","Employee-custom_academic_documents_list",
                 "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
                 "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included","Expense Claim-custom_maa_project","Attendance-custom_work_hours",
-                "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch"
+                "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
+                "Attendance-custom_exact_in_time",
                 
             ]
             ]

@@ -10,6 +10,22 @@ frappe.ui.form.on('Attendance', {
         } else {
             frm.set_value('custom_work_hours', '');
         }
+    },
+    in_time: function(frm) {
+        if (frm.doc.in_time) {
+            let time = frm.doc.in_time.split(" ")[1];
+            frm.set_value('custom_exact_in_time', time);
+        } else {
+            frm.set_value('custom_exact_in_time', '');
+        }
+    },
+    out_time: function(frm) {
+        if (frm.doc.out_time) {
+            let time = frm.doc.out_time.split(" ")[1];
+            frm.set_value('custom_exact_out_time', time);
+        } else {
+            frm.set_value('custom_exact_out_time', '');
+        }
     }
 });
 
