@@ -30,19 +30,29 @@ def format_decimal_to_time(decimal_hours):
 
 def update_custom_exact_time(doc, method=None):
     if doc.time:
-        # doc.time is a datetime object or string, frappe.utils.get_time returns a time object or string
-        from frappe.utils import get_time
+        # doc.time is a datetime object or string
+        from frappe.utils import get_time, getdate
         doc.custom_exact_time = get_time(doc.time)
+        doc.custom_exact_date = getdate(doc.time)
     else:
         doc.custom_exact_time = None
+        doc.custom_exact_date = None
 
 def sync_old_checkin_times():
-    from frappe.utils import get_time
-    checkins = frappe.get_all("Employee Checkin", filters={"custom_exact_time": ["is", "not set"]}, fields=["name", "time"])
+    from frappe.utils import get_time, getdate
+    # To get records where EITHER is missing:
+    checkins = frappe.get_all("Employee Checkin", or_filters=[
+        ["custom_exact_time", "is", "not set"],
+        ["custom_exact_date", "is", "not set"]
+    ], fields=["name", "time"])
+    
     count = 0
     for c in checkins:
         if c.time:
-            frappe.db.set_value("Employee Checkin", c.name, "custom_exact_time", get_time(c.time), update_modified=False)
+            frappe.db.set_value("Employee Checkin", c.name, {
+                "custom_exact_time": get_time(c.time),
+                "custom_exact_date": getdate(c.time)
+            }, update_modified=False)
             count += 1
     
     frappe.db.commit()

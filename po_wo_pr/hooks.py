@@ -54,7 +54,8 @@ doctype_js = {
     "Cost Center":"public/js/cost_center.js",
     "Shift Assignment":"public/js/shift_assignment.js",
     "Material Request":"public/js/material_request.js",
-    "Attendance": "public/js/attendance.js"
+    "Attendance": "public/js/attendance.js",
+    "Employee Checkin": "public/js/employee_checkin.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -292,7 +293,7 @@ fixtures = [
                 "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","Employee-custom_office_document","Employee-custom_academic_documents_list",
                 "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
                 "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included","Expense Claim-custom_maa_project","Attendance-custom_work_hours",
-                "Employee Checkin-custom_exact_time",
+                "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date",
                 
             ]
             ]
