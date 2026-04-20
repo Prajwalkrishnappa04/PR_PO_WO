@@ -7,4 +7,4 @@
 po_wo_pr.patches.create_dashboard_workspace
 po_wo_pr.patches.sync_attendance_work_hours
 po_wo_pr.patches.sync_employee_checkin_times #2026-04-17 --006
-
+po_wo_pr.patches.sync_attendance_times #2026-04-20 --007
