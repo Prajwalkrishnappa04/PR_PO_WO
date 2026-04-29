@@ -284,7 +284,9 @@ fixtures = [
             "Purchase Order Item-base_rate-hidden",
             "Purchase Order Item-base_amount-hidden",
             "Purchase Receipt Item-base_amount-hidden",
-            "Purchase Receipt Item-base_rate-hidden"
+            "Purchase Receipt Item-base_rate-hidden",
+            "Leave Application-half_day-hidden",
+            "Leave Application-employee-ignore_user_permissions",
             ]]
         }
     },
