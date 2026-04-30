@@ -286,7 +286,8 @@ fixtures = [
             "Purchase Receipt Item-base_amount-hidden",
             "Purchase Receipt Item-base_rate-hidden",
             "Leave Application-half_day-hidden",
-            "Leave Application-employee-ignore_user_permissions",
+            "Employee-custom_attach_aadhar-hidden",
+            "Employee-main-field_order",
             ]]
         }
     },
