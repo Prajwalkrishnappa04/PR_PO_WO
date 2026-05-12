@@ -56,7 +56,9 @@ doctype_js = {
     "Shift Assignment":"public/js/shift_assignment.js",
     "Material Request":"public/js/material_request.js",
     "Attendance": "public/js/attendance.js",
-    "Employee Checkin": "public/js/employee_checkin.js"
+    "Employee Checkin": "public/js/employee_checkin.js",
+    "Supplier Quotation": "public/js/supplier_quotation.js",
+    "Purchase Receipt": "public/js/purchase_receipt.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
