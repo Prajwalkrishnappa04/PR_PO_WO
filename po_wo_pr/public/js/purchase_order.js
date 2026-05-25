@@ -4,7 +4,10 @@ frappe.ui.form.on("Purchase Order", {
             "Work Order Entry",
             () => {
                 frappe.new_doc("Work Order Entry", {
-                    purchase_order: frm.doc.name
+                    supplier_name: frm.doc.supplier,
+                    wo_date: frm.doc.transaction_date,
+                    ccc: frm.doc.cost_center,
+                    gl_no: frm.doc.custom_gl_code
                 });
             },
             "Create"

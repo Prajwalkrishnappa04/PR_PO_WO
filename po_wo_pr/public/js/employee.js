@@ -6,12 +6,11 @@ frappe.ui.form.on('Employee', {
     refresh(frm) {
                 apply_exit_tab_visibility(frm);
 
-        // (frm.doc.internal_work_history || []).forEach(row => {
-        //     if (row.to_date !== today) {
-        //         frappe.model.set_value(row.doctype, row.name, 'to_date', today);
-        //     }
-        // });
-        // frm.refresh_field('internal_work_history');
+        let today = frappe.datetime.get_today();
+        (frm.doc.internal_work_history || []).forEach(row => {
+            row.to_date = today;
+        });
+        frm.refresh_field('internal_work_history');
 
         calculate_experience(frm);
         if (!frm.is_new()) {

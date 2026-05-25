@@ -172,6 +172,12 @@ doc_events = {
 	},
 	"Employee Checkin": {
 		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time"
+	},
+	"Purchase Receipt": {
+		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields"
+	},
+	"Purchase Order": {
+		"autoname": "po_wo_pr.api.setup.set_purchase_order_name"
 	}
 }
 
@@ -291,6 +297,8 @@ fixtures = [
             "Leave Application-half_day-hidden",
             "Employee-custom_attach_aadhar-hidden",
             "Employee-main-field_order",
+            "Attendance Request-half_day-hidden",
+            "Employee-custom_head_quarter_city-hidden"
             ]]
         }
     },
@@ -305,7 +313,7 @@ fixtures = [
                 "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included","Expense Claim-custom_maa_project","Attendance-custom_work_hours",
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
                 "Attendance-custom_exact_in_time","Asset-custom_custodian_name","Asset-department-hidden","Asset-custom_asset_status","Asset-custom_supplier_name","Asset-custom_asset_id",
-                "Asset-custom_note"
+                "Asset-custom_note","Purchase Receipt-custom_purchase_order_number","Purchase Receipt-custom_purchase_order_date","Purchase Receipt-custom_sales_invoice_number","Purchase Receipt-custom_sales_invoice_date"
                 
             ]
             ]
