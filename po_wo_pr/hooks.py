@@ -301,7 +301,8 @@ fixtures = [
             "Employee-main-field_order",
             "Attendance Request-half_day-hidden",
             "Employee-custom_head_quarter_city-hidden",
-            "Purchase Order Item-gst_details_section-hidden"
+            "Purchase Order Item-gst_details_section-hidden",
+            "Purchase Order Item-references_section-hidden"
             ]]
         }
     },
