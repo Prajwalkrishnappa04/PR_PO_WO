@@ -1,3 +1,17 @@
+frappe.ui.form.on("Purchase Order Item", {
+    item_code(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        if (!row.item_code || !frm.doc.supplier) return;
+        frappe.call({
+            method: "po_wo_pr.api.setup.get_last_ordered_rate",
+            args: { item_code: row.item_code, supplier: frm.doc.supplier },
+            callback(r) {
+                frappe.model.set_value(cdt, cdn, "custom_last_ordered_rate", r.message || 0);
+            }
+        });
+    }
+});
+
 frappe.ui.form.on("Purchase Order", {
     refresh(frm) {
         frm.add_custom_button(

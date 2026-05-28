@@ -174,7 +174,9 @@ doc_events = {
 		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time"
 	},
 	"Purchase Receipt": {
-		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields"
+		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields",
+		"on_submit": "po_wo_pr.api.setup.update_po_received_qty",
+		"on_cancel": "po_wo_pr.api.setup.update_po_received_qty"
 	},
 	"Purchase Order": {
 		"autoname": "po_wo_pr.api.setup.set_purchase_order_name"
@@ -315,8 +317,9 @@ fixtures = [
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
                 "Attendance-custom_exact_in_time","Asset-custom_custodian_name","Asset-department-hidden","Asset-custom_asset_status","Asset-custom_supplier_name","Asset-custom_asset_id",
                 "Asset-custom_note","Purchase Receipt-custom_purchase_order_number","Purchase Receipt-custom_purchase_order_date","Purchase Receipt-custom_sales_invoice_number","Purchase Receipt-custom_sales_invoice_date",
-                "Material Request-custom_person_responsible"
-                
+                "Material Request-custom_person_responsible",
+                "Purchase Order Item-custom_last_ordered_rate",
+                "Purchase Order-custom_received_qty"
             ]
             ]
         ]
