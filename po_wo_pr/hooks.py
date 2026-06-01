@@ -218,9 +218,11 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "po_wo_pr.event.get_events"
-# }
+override_whitelisted_methods = {
+	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt": "po_wo_pr.overrides.purchase_order.make_purchase_receipt",
+	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice",
+	"erpnext.stock.doctype.purchase_receipt.purchase_receipt.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice_from_receipt",
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -320,7 +322,26 @@ fixtures = [
             ]
             ]
         ]
+    },
+    {
+        "dt": "Print Format",
+        "filters": [
+            ["name", "in", [
+                "Maa Supplier Quotation PF","Maa Foundation Purchase Receipt","Maa Foundation Purchase Invoice"
+            ]
+            ]
+        ]
+    },
+    {
+        "dt": "Translation",
+        "filters": [
+            ["name", "in", [
+                "traaki182s"
+            ]
+            ]
+        ]
     }
+
 ]
 
 # user_data_fields = [
@@ -357,4 +378,3 @@ fixtures = [
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
