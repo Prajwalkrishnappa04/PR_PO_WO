@@ -312,17 +312,11 @@ fixtures = [
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
-                "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work",
-                "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
-                "Employee-custom_total_loan_balance","Employee-custom_office_document","Employee-custom_academic_documents_list",
-                "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
-                "Employee-custom_remaining_amount","Material Request-custom_for","Purchase Order Item-custom_gst_included","Expense Claim-custom_maa_project","Attendance-custom_work_hours",
+                "Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
+                "Expense Claim-custom_maa_project","Attendance-custom_work_hours",
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
                 "Attendance-custom_exact_in_time","Asset-custom_custodian_name","Asset-department-hidden","Asset-custom_asset_status","Asset-custom_supplier_name","Asset-custom_asset_id",
-                "Asset-custom_note","Purchase Receipt-custom_purchase_order_number","Purchase Receipt-custom_purchase_order_date","Purchase Receipt-custom_sales_invoice_number","Purchase Receipt-custom_sales_invoice_date",
-                "Material Request-custom_person_responsible",
-                "Purchase Order Item-custom_last_ordered_rate",
-                "Purchase Order-custom_received_qty"
+                "Asset-custom_note"
             ]
             ]
         ]
