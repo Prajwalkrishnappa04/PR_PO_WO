@@ -40,6 +40,30 @@ frappe.ui.form.on("Request for Quotation", {
     
 });
 
+frappe.ui.form.on("Request for Quotation Supplier", {
+    custom_print(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        if (!frm.doc.name || !row.supplier) return;
+
+        const url = frappe.urllib.get_full_url(
+            "/printview?" +
+            new URLSearchParams({
+                doctype: frm.doc.doctype,
+                name: frm.doc.name,
+                format: "Maa Request for Quotation P.Format",
+                supplier: row.supplier,
+                letterhead: frm.doc.letter_head || "",
+                no_letterhead: frm.doc.letter_head ? 0 : 1
+            }).toString()
+        );
+        const print_window = window.open(url, "_blank");
+
+        if (!print_window) {
+            frappe.msgprint(__("Please enable pop-ups"));
+        }
+    }
+});
+
 function render_comparison(frm, data) {
     const field = frm.fields_dict.custom_compare;
 

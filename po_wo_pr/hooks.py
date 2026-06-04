@@ -155,6 +155,9 @@ override_doctype_class = {
 # ---------------
 
 doc_events = {
+	"Request for Quotation": {
+		"before_print": "po_wo_pr.api.request_for_quotation_data.set_supplier_for_print"
+	},
 	"Loan": {
 		"on_submit": "po_wo_pr.api.setup.update_employee_loan_balance",
 		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance",
@@ -325,7 +328,7 @@ fixtures = [
         "dt": "Print Format",
         "filters": [
             ["name", "in", [
-                "Maa Supplier Quotation PF","Maa Foundation Purchase Receipt","Maa Foundation Purchase Invoice"
+                "Maa Supplier Quotation PF","Maa Foundation Purchase Receipt","Maa Foundation Purchase Invoice","Maa Request for Quotation P.Format"
             ]
             ]
         ]
