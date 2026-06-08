@@ -18,11 +18,9 @@ def create_employee_custom_fields():
     frappe.db.commit()
 
 def set_purchase_order_name(doc, method=None):
-    item_group = "MISC"
-    if doc.items:
-        item_group = (doc.items[0].item_group or "MISC").strip().replace(" ", "-")
-
-    series = f"MF/IND/{item_group}/.#####./.FY."
+    series = doc.naming_series or "MF/IND/CPX/.#####./.FY"
+    if series.endswith("/.FY"):
+        series = f"{series}."
     doc.name = make_autoname(series, doc=doc)
 
 

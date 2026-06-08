@@ -328,7 +328,7 @@ fixtures = [
         "dt": "Print Format",
         "filters": [
             ["name", "in", [
-                "Maa Supplier Quotation PF","Maa Foundation Purchase Receipt","Maa Foundation Purchase Invoice","Maa Request for Quotation P.Format"
+                "Maa Supplier Quotation PF","Maa Foundation Purchase Receipt","Maa Foundation Purchase Invoice","Maa Request for Quotation P.Format","Maa Material Request PF","Maa Foundation Purchase Order"
             ]
             ]
         ]
