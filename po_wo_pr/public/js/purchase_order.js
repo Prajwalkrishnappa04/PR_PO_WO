@@ -258,8 +258,8 @@ frappe.ui.form.on("Purchase Order", {
             },
             "Create"
         );
-
-        if (frm.doc.name) {
+        
+        if (!frm.is_new()) {
             frappe.call({
                 method: "po_wo_pr.api.setup.get_purchase_order_rfq_supplier_comparison",
                 args: {
