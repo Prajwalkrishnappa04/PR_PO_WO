@@ -246,19 +246,6 @@ function render_po_comparison(frm, data) {
 }
 frappe.ui.form.on("Purchase Order", {
     refresh(frm) {
-        frm.add_custom_button(
-            "Work Order Entry",
-            () => {
-                frappe.new_doc("Work Order Entry", {
-                    supplier_name: frm.doc.supplier,
-                    wo_date: frm.doc.transaction_date,
-                    ccc: frm.doc.cost_center,
-                    gl_no: frm.doc.custom_gl_code
-                });
-            },
-            "Create"
-        );
-        
         if (!frm.is_new()) {
             frappe.call({
                 method: "po_wo_pr.api.setup.get_purchase_order_rfq_supplier_comparison",

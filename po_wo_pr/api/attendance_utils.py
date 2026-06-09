@@ -1,4 +1,5 @@
 import frappe
+from frappe.utils import date_diff, get_datetime, get_time, getdate
 
 def update_custom_work_hours(doc, method=None):
     if doc.working_hours:
@@ -39,7 +40,6 @@ def update_custom_exact_time(doc, method=None):
         doc.custom_exact_date = None
 
 def update_attendance_exact_times(doc, method=None):
-    from frappe.utils import get_time
     if doc.in_time:
         doc.custom_exact_in_time = get_time(doc.in_time)
     else:
@@ -83,7 +83,6 @@ def update_all_attendance_work_hours():
     return f"Updated {count} records."
 
 def sync_attendance_exact_times():
-    from frappe.utils import get_time
     # To get records where EITHER is missing:
     attendance_records = frappe.get_all("Attendance", or_filters=[
         ["custom_exact_in_time", "is", "not set"],
@@ -104,3 +103,85 @@ def sync_attendance_exact_times():
     
     frappe.db.commit()
     return f"Synced {count} Attendance records."
+
+
+def apply_attendance_request_times(doc, method=None):
+    if doc.reason != "On Duty":
+        return
+
+    in_time = _get_request_datetime(doc, "custom_in_time")
+    out_time = _get_request_datetime(doc, "custom_out_time")
+
+    if not in_time and not out_time:
+        return
+
+    request_days = date_diff(doc.to_date, doc.from_date) + 1
+    for day in range(request_days):
+        attendance_date = frappe.utils.add_days(doc.from_date, day)
+        attendance_name = frappe.db.exists(
+            "Attendance",
+            {
+                "employee": doc.employee,
+                "attendance_date": attendance_date,
+                "docstatus": ("!=", 2),
+            },
+        )
+
+        if not attendance_name:
+            continue
+
+        updates = {"attendance_request": doc.name}
+
+        if in_time and getdate(in_time) == getdate(attendance_date):
+            updates["in_time"] = in_time
+            if _has_attendance_field("custom_exact_in_time"):
+                updates["custom_exact_in_time"] = get_time(in_time)
+
+        if out_time and getdate(out_time) == getdate(attendance_date):
+            updates["out_time"] = out_time
+            if _has_attendance_field("custom_exact_out_time"):
+                updates["custom_exact_out_time"] = get_time(out_time)
+
+        _set_working_hours(attendance_name, updates)
+
+        if len(updates) > 1:
+            frappe.db.set_value("Attendance", attendance_name, updates, update_modified=False)
+
+
+def _get_request_datetime(doc, fieldname):
+    if not doc.meta.has_field(fieldname) or not doc.get(fieldname):
+        return None
+
+    try:
+        return get_datetime(doc.get(fieldname))
+    except Exception:
+        return None
+
+
+def _has_attendance_field(fieldname):
+    return frappe.get_meta("Attendance").has_field(fieldname)
+
+
+def _set_working_hours(attendance_name, updates):
+    in_time = updates.get("in_time")
+    out_time = updates.get("out_time")
+
+    if not in_time or not out_time:
+        existing_in_time, existing_out_time = frappe.db.get_value(
+            "Attendance",
+            attendance_name,
+            ["in_time", "out_time"],
+        )
+        in_time = in_time or existing_in_time
+        out_time = out_time or existing_out_time
+
+    if not in_time or not out_time:
+        return
+
+    working_hours = (get_datetime(out_time) - get_datetime(in_time)).total_seconds() / 3600
+    if working_hours < 0:
+        return
+
+    updates["working_hours"] = working_hours
+    if _has_attendance_field("custom_work_hours"):
+        updates["custom_work_hours"] = format_decimal_to_time(working_hours)
