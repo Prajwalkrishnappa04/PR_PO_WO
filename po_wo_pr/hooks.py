@@ -173,6 +173,10 @@ doc_events = {
 			"po_wo_pr.api.attendance_utils.update_attendance_exact_times"
 		]
 	},
+	"Attendance Request": {
+		"on_submit": "po_wo_pr.api.attendance_utils.apply_attendance_request_times",
+		"on_update_after_submit": "po_wo_pr.api.attendance_utils.apply_attendance_request_times"
+	},
 	"Employee Checkin": {
 		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time"
 	},
@@ -324,15 +328,7 @@ fixtures = [
             ]
         ]
     },
-    {
-        "dt": "Print Format",
-        "filters": [
-            ["name", "in", [
-                "Maa Supplier Quotation PF","Maa Foundation Purchase Receipt","Maa Foundation Purchase Invoice","Maa Request for Quotation P.Format","Maa Material Request PF","Maa Foundation Purchase Order"
-            ]
-            ]
-        ]
-    },
+   
     {
         "dt": "Translation",
         "filters": [
