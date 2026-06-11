@@ -66,6 +66,33 @@ def get_last_ordered_rate(item_code, supplier):
     return result[0].rate if result else 0
 
 
+@frappe.whitelist()
+def get_item_stock_balance(item_code, warehouse=None, company=None):
+    if not item_code:
+        return 0
+
+    conditions = ["bin.item_code = %s"]
+    values = [item_code]
+
+    if warehouse:
+        conditions.append("bin.warehouse = %s")
+        values.append(warehouse)
+
+    if company:
+        conditions.append("warehouse.company = %s")
+        values.append(company)
+
+    result = frappe.db.sql(f"""
+        SELECT COALESCE(SUM(bin.actual_qty), 0) AS actual_qty
+        FROM `tabBin` bin
+        INNER JOIN `tabWarehouse` warehouse ON warehouse.name = bin.warehouse
+        WHERE {" AND ".join(conditions)}
+          AND warehouse.is_group = 0
+    """, values, as_dict=True)
+
+    return result[0].actual_qty if result else 0
+
+
 def update_employee_loan_balance(doc, method=None):
     applicant = getattr(doc, "applicant", None)
     applicant_type = getattr(doc, "applicant_type", None)

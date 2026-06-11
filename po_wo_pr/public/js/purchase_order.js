@@ -1,5 +1,7 @@
 frappe.ui.form.on("Purchase Order Item", {
     item_code(frm, cdt, cdn) {
+        refresh_stock_balance(frm, cdt, cdn);
+
         const row = locals[cdt][cdn];
         if (!row.item_code || !frm.doc.supplier) return;
         frappe.call({
@@ -9,8 +11,44 @@ frappe.ui.form.on("Purchase Order Item", {
                 frappe.model.set_value(cdt, cdn, "custom_last_ordered_rate", r.message || 0);
             }
         });
+    },
+
+    warehouse(frm, cdt, cdn) {
+        refresh_stock_balance(frm, cdt, cdn);
     }
 });
+
+function refresh_all_stock_balances(frm) {
+    (frm.doc.items || []).forEach(row => {
+        refresh_stock_balance(frm, row.doctype, row.name);
+    });
+}
+
+function refresh_stock_balance(frm, cdt, cdn) {
+    update_stock_balance(frm, cdt, cdn);
+    setTimeout(() => update_stock_balance(frm, cdt, cdn), 500);
+}
+
+function update_stock_balance(frm, cdt, cdn) {
+    const row = locals[cdt][cdn];
+
+    if (!row || !row.item_code) {
+        frappe.model.set_value(cdt, cdn, "custom_stock_balance_qty", 0);
+        return;
+    }
+
+    frappe.call({
+        method: "po_wo_pr.api.setup.get_item_stock_balance",
+        args: {
+            item_code: row.item_code,
+            warehouse: row.warehouse || frm.doc.set_warehouse,
+            company: frm.doc.company
+        },
+        callback(r) {
+            frappe.model.set_value(cdt, cdn, "custom_stock_balance_qty", flt(r.message));
+        }
+    });
+}
 
 function render_po_comparison(frm, data) {
     const field = frm.fields_dict.custom_custom_table;
@@ -246,6 +284,8 @@ function render_po_comparison(frm, data) {
 }
 frappe.ui.form.on("Purchase Order", {
     refresh(frm) {
+        refresh_all_stock_balances(frm);
+
         if (!frm.is_new()) {
             frappe.call({
                 method: "po_wo_pr.api.setup.get_purchase_order_rfq_supplier_comparison",
@@ -271,6 +311,9 @@ frappe.ui.form.on("Purchase Order", {
             let week_later = frappe.datetime.add_days(tran, 7);
             frm.set_value("schedule_date", frappe.datetime.obj_to_str(week_later));
         }
+    },
+    set_warehouse(frm) {
+        refresh_all_stock_balances(frm);
     },
     cost_center(frm) {
         if (!frm.doc.cost_center) {
