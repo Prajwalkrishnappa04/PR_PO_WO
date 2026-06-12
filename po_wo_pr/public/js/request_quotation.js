@@ -1,5 +1,15 @@
 frappe.ui.form.on("Request for Quotation", {
+    setup(frm) {
+        set_email_template_mandatory(frm);
+    },
+
+    onload(frm) {
+        set_email_template_mandatory(frm);
+    },
+
     refresh(frm) {
+        set_email_template_mandatory(frm);
+
         if (!frm.doc.name) return;
 
         frappe.call({
@@ -41,6 +51,14 @@ frappe.ui.form.on("Request for Quotation", {
 });
 
 frappe.ui.form.on("Request for Quotation Supplier", {
+    send_email(frm) {
+        set_email_template_mandatory(frm);
+    },
+
+    suppliers_remove(frm) {
+        set_email_template_mandatory(frm);
+    },
+
     custom_print(frm, cdt, cdn) {
         const row = locals[cdt][cdn];
         if (!frm.doc.name || !row.supplier) return;
@@ -63,6 +81,12 @@ frappe.ui.form.on("Request for Quotation Supplier", {
         }
     }
 });
+
+function set_email_template_mandatory(frm) {
+    const email_template_required = (frm.doc.suppliers || []).some(row => cint(row.send_email));
+
+    frm.set_df_property("email_template", "reqd", email_template_required ? 1 : 0);
+}
 
 function render_comparison(frm, data) {
     const field = frm.fields_dict.custom_compare;
