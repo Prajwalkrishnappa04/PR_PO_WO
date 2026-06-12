@@ -147,7 +147,8 @@ doctype_js = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee"
+	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee",
+	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.CustomRequestforQuotation"
 }
 
 # Document Events
@@ -229,6 +230,10 @@ doc_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
+	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails": "po_wo_pr.api.request_for_quotation_email.send_supplier_emails",
+	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_from_rfq": "po_wo_pr.overrides.request_for_quotation_mapper.make_supplier_quotation_from_rfq",
+	"erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_order": "po_wo_pr.overrides.purchase_order.make_purchase_order_from_supplier_quotation",
+	"erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice_from_supplier_quotation",
 	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt": "po_wo_pr.overrides.purchase_order.make_purchase_receipt",
 	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice",
 	"erpnext.stock.doctype.purchase_receipt.purchase_receipt.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice_from_receipt",
