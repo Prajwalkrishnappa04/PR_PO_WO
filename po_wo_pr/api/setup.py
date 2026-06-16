@@ -1,6 +1,9 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 from frappe.model.naming import make_autoname
+from frappe.utils import getdate
+from erpnext.accounts.utils import get_fiscal_year
 
 def create_employee_custom_fields():
     create_custom_fields({
@@ -18,10 +21,81 @@ def create_employee_custom_fields():
     frappe.db.commit()
 
 def set_purchase_order_name(doc, method=None):
-    series = doc.naming_series or "MF/IND/CPX/.#####./.FY"
+    series = doc.naming_series or BUYING_NAMING_SERIES["Purchase Order"]["default"]
     if series.endswith("/.FY"):
         series = f"{series}."
     doc.name = make_autoname(series, doc=doc)
+
+
+BUYING_NAMING_SERIES = {
+    "Material Request": {
+        "options": "MF-MR-.##.-.MFY",
+        "default": "MF-MR-.##.-.MFY",
+    },
+    "Request for Quotation": {
+        "options": "MF-RFQ-.##.-.MFY",
+        "default": "MF-RFQ-.##.-.MFY",
+    },
+    "Supplier Quotation": {
+        "options": "MF-SQ-.##.-.MFY",
+        "default": "MF-SQ-.##.-.MFY",
+    },
+    "Purchase Order": {
+        "options": "\n".join([
+            "MF-PO-CON-.##.-.MFY",
+            "MF-PO-CPX-.##.-.MFY",
+            "MF-PO-SER-.##.-.MFY",
+            "MF-PO-ASSET-.##.-.MFY",
+        ]),
+        "default": "MF-PO-CPX-.##.-.MFY",
+    },
+    "Purchase Receipt": {
+        "options": "MF-MRN-.##.-.MFY",
+        "default": "MF-MRN-.##.-.MFY",
+    },
+    "Purchase Invoice": {
+        "options": "MF-PI-.##.-.MFY",
+        "default": "MF-PI-.##.-.MFY",
+    },
+    "Payment Request": {
+        "options": "MF-PR-.##.-.MFY",
+        "default": "MF-PR-.##.-.MFY",
+    },
+    "Payment Entry": {
+        "options": "MF-PE-.##.-.MFY",
+        "default": "MF-PE-.##.-.MFY",
+    },
+}
+
+
+@frappe.whitelist()
+def set_buying_naming_series():
+    for doctype, properties in BUYING_NAMING_SERIES.items():
+        for property_name, value in properties.items():
+            make_property_setter(
+                doctype,
+                "naming_series",
+                property_name,
+                value,
+                "Text",
+                validate_fields_for_doctype=False,
+            )
+
+    frappe.clear_cache()
+
+
+def parse_short_fiscal_year(doc=None, variable=None):
+    if doc:
+        date = doc.get("posting_date") or doc.get("transaction_date") or getdate()
+        company = doc.get("company")
+    else:
+        date = getdate()
+        company = None
+
+    fiscal_year = get_fiscal_year(date=date, company=company)[0]
+    start_year, end_year = fiscal_year.split("-", 1)
+
+    return f"{start_year}-{end_year[-2:]}"
 
 
 def set_purchase_receipt_po_fields(doc, method=None):
