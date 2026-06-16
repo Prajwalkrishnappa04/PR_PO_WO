@@ -1,5 +1,9 @@
 frappe.ui.form.on("Supplier Quotation", {
+    onload(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
+    },
     refresh(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
         frm.remove_custom_button("Quotation", "Create");
 
         if (frm.doc.docstatus === 1) {
@@ -13,9 +17,74 @@ frappe.ui.form.on("Supplier Quotation", {
 
         setTimeout(() => {
             $(frm.wrapper).find('[data-label="Quotation"]').hide();
+            hide_supplier_quotation_item_gst_fields(frm);
         }, 500);
+    },
+    items_add(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
     }
 });
+
+frappe.ui.form.on("Supplier Quotation Item", {
+    form_render(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
+    }
+});
+
+const SUPPLIER_QUOTATION_ITEM_GST_FIELDS = [
+    "gst_details_section",
+    "gst_hsn_code",
+    "gst_treatment",
+    "igst_rate",
+    "cgst_rate",
+    "sgst_rate",
+    "cess_rate",
+    "cess_non_advol_rate",
+    "cb_gst_details",
+    "igst_amount",
+    "cgst_amount",
+    "sgst_amount",
+    "cess_amount",
+    "cess_non_advol_amount",
+    "is_ineligible_for_itc",
+    "item_tax_template",
+    "taxable_value"
+];
+
+function hide_supplier_quotation_item_gst_fields(frm) {
+    const grid = frm?.fields_dict?.items?.grid;
+    if (!grid) {
+        return;
+    }
+
+    // UI-only: hide GST fields in Supplier Quotation Item grid/dialog without
+    // removing data fields or changing GST calculations.
+    SUPPLIER_QUOTATION_ITEM_GST_FIELDS.forEach(fieldname => {
+        if (frappe.meta.get_docfield("Supplier Quotation Item", fieldname, frm.doc.name)) {
+            grid.update_docfield_property(fieldname, "hidden", 1);
+        }
+    });
+
+    (grid.grid_rows || []).forEach(row => {
+        if (row.grid_form) {
+            hide_supplier_quotation_item_gst_grid_form(row.grid_form);
+        }
+    });
+
+    grid.refresh();
+}
+
+function hide_supplier_quotation_item_gst_grid_form(grid_form) {
+    SUPPLIER_QUOTATION_ITEM_GST_FIELDS.forEach(fieldname => {
+        const field = grid_form.fields_dict?.[fieldname];
+        if (!field) {
+            return;
+        }
+
+        field.df.hidden = 1;
+        field.refresh();
+    });
+}
 
 function make_work_order_entry(frm) {
     frappe.model.with_doctype("Work Order Entry", () => {
