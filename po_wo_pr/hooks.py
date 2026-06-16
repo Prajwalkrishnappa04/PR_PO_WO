@@ -65,6 +65,10 @@ doctype_js = {
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"Attendance" : "public/js/attendance_calendar_custom.js"}
 
+naming_series_variables = {
+	"MFY": "po_wo_pr.api.setup.parse_short_fiscal_year",
+}
+
 # Svg Icons
 # ------------------
 # include app icons in desk
@@ -101,6 +105,7 @@ doctype_js = {
 
 # before_install = "po_wo_pr.install.before_install"
 # after_install = "po_wo_pr.install.after_install"
+after_migrate = "po_wo_pr.api.setup.set_buying_naming_series"
 
 # Uninstallation
 # ------------
