@@ -47,7 +47,6 @@ const SUPPLIER_QUOTATION_ITEM_GST_FIELDS = [
     "cess_amount",
     "cess_non_advol_amount",
     "is_ineligible_for_itc",
-    "item_tax_template",
     "taxable_value"
 ];
 
