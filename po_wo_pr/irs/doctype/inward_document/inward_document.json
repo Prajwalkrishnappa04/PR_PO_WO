@@ -7,6 +7,9 @@
  "field_order": [
   "date",
   "place",
+  "taluka",
+  "district",
+  "state",
   "sender",
   "project",
   "application_status",
@@ -34,18 +37,41 @@
    "options": "Town Village"
   },
   {
-   "fieldname": "sender",
+   "fetch_from": "place.taluka",
+   "fieldname": "taluka",
    "fieldtype": "Data",
+   "label": "Taluka",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "place.district",
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "label": "District",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "place.state",
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Sender",
-   "reqd": 1
+   "options": "Student",
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "project",
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Project",
-   "options": "Project"
+   "options": "IRS Project"
   },
   {
    "depends_on": "eval:doc.project",
@@ -119,7 +145,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-27 19:39:53.862482",
+ "modified": "2026-06-22 16:50:38.111314",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",

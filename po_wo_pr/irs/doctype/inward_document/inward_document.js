@@ -2,7 +2,27 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Inward Document", {
+    place(frm) {
+        if (frm.doc.place) {
+            frappe.db.get_value("Town Village", frm.doc.place, ["taluka", "district", "state"], (r) => {
+                if (r) {
+                    frm.set_value("taluka", r.taluka || "");
+                    frm.set_value("district", r.district || "");
+                    frm.set_value("state", r.state || "");
+                }
+            });
+        } else {
+            frm.set_value("taluka", "");
+            frm.set_value("district", "");
+            frm.set_value("state", "");
+        }
+    },
+
     refresh(frm) {
+        frm.set_query("sender", () => ({
+            query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_student"
+        }));
+
         frm.add_custom_button("Add Student Entry", () => {
             frappe.call({
                 method: "frappe.client.get_value",
@@ -12,7 +32,6 @@ frappe.ui.form.on("Inward Document", {
                     fieldname: ["custom_maa_branch"]
                 },
                 callback(r) {
-
                     let employee_branch = r.message?.custom_maa_branch;
 
                     let d = new frappe.ui.Dialog({
@@ -58,16 +77,12 @@ frappe.ui.form.on("Inward Document", {
                                 callback(res) {
                                     if (!res.exc) {
                                         frm.set_value("maa_code", res.message.name);
-
                                         frm.save();
-
                                         frappe.msgprint("Student Entry Created");
-
                                         d.hide();
                                     }
                                 }
                             });
-
                         }
                     });
 
