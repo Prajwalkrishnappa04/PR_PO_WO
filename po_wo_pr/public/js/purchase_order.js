@@ -4,6 +4,7 @@ frappe.ui.form.on("Purchase Order Item", {
 
         const row = locals[cdt][cdn];
         if (!row.item_code || !frm.doc.supplier) return;
+        if (!frm.is_new() && !row.name.startsWith("new-")) return;
         frappe.call({
             method: "po_wo_pr.api.setup.get_last_ordered_rate",
             args: { item_code: row.item_code, supplier: frm.doc.supplier },
