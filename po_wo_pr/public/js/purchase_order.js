@@ -33,6 +33,8 @@ function refresh_stock_balance(frm, cdt, cdn) {
 function update_stock_balance(frm, cdt, cdn) {
     const row = locals[cdt][cdn];
 
+    if (frm.doc.docstatus === 1) return;
+
     if (!row || !row.item_code) {
         frappe.model.set_value(cdt, cdn, "custom_stock_balance_qty", 0);
         return;
