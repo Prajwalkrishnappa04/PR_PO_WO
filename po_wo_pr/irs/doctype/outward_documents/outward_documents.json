@@ -18,7 +18,6 @@
   "meduium",
   "subject",
   "concern_persion",
-  "amount",
   "remaks"
  ],
  "fields": [
@@ -35,8 +34,9 @@
   },
   {
    "fieldname": "to",
-   "fieldtype": "Data",
-   "label": "To"
+   "fieldtype": "Link",
+   "label": "To",
+   "options": "Employee"
   },
   {
    "fetch_from": "inward.project",
@@ -83,11 +83,6 @@
    "label": "Concern Persion"
   },
   {
-   "fieldname": "amount",
-   "fieldtype": "Currency",
-   "label": "Amount"
-  },
-  {
    "fieldname": "remaks",
    "fieldtype": "Small Text",
    "label": "Remaks"
@@ -108,7 +103,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-18 16:41:15.129394",
+ "modified": "2026-06-22 16:47:24.077306",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
