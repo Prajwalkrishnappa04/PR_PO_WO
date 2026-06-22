@@ -41,10 +41,10 @@
   {
    "fetch_from": "inward.project",
    "fieldname": "project",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Project",
-   "options": "Udaan - Application\nUdaan - Result\nUdaan - Documents\nVidya - Application\nVidya - Documents\nVidya - Cheque\nVidya - Acknowledgement\nMedical Application\nDisha\nAccounts & Admin\nGMB Documents\nBill\nMagazines\nSOW\nOther\nKEN\nUdaan - Cheque\nParvarish(PD Camp) - Confirmation\nParvarish(PD Camp) - Document\nUdaan - Cheque Acknowledgement\nUdaan - Medical Cheque\nComunity Cheque\nVidya\nUdaan\nParvarish(PD Camp) - Report\nFinancial Aid - Application\nParvarish\nUnnati\nIT\nLakshya"
+   "options": "IRS Project"
   },
   {
    "fieldname": "doc_no",
@@ -103,7 +103,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-22 16:47:24.077306",
+ "modified": "2026-06-22 21:42:45.497754",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
