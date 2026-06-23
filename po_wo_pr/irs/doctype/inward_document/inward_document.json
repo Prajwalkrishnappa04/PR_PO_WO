@@ -12,14 +12,15 @@
   "state",
   "sender",
   "project",
+  "subject",
   "application_status",
+  "reason_for_rejection",
   "entry_by",
   "reference_case",
   "refered_by",
   "column_break_leyt",
   "maa_code",
   "medium",
-  "subject",
   "concern_person",
   "handover_to",
   "remarks"
@@ -74,11 +75,18 @@
    "options": "IRS Project"
   },
   {
-   "depends_on": "eval:doc.project",
+   "depends_on": "eval:doc.subject && doc.subject.toLowerCase().includes('application')",
    "fieldname": "application_status",
    "fieldtype": "Select",
    "label": "Application Status",
-   "options": "NA\nPending\nAccept\nReject"
+   "options": "NA\nPending\nAccept\nReject\nRepeat Reject"
+  },
+  {
+   "depends_on": "eval:doc.application_status === 'Reject' || doc.application_status === 'Repeat Reject'",
+   "fieldname": "reason_for_rejection",
+   "fieldtype": "Link",
+   "label": "Reason for Rejection",
+   "options": "Reason Of Rejection"
   },
   {
    "fieldname": "entry_by",
@@ -119,8 +127,9 @@
    "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
   },
   {
+   "depends_on": "eval:doc.project",
    "fieldname": "subject",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "label": "Subject"
   },
   {
@@ -128,13 +137,13 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Concern Person",
-   "options": "User"
+   "options": "Employee"
   },
   {
    "fieldname": "handover_to",
    "fieldtype": "Link",
    "label": "Handover To",
-   "options": "User"
+   "options": "Employee"
   },
   {
    "fieldname": "remarks",

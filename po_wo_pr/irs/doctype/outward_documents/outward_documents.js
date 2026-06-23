@@ -3,7 +3,27 @@
 
 
 frappe.ui.form.on("Outward Documents", {
+    inward(frm) {
+        if (!frm.doc.inward) return;
+        frappe.db.get_value("Inward Document", frm.doc.inward,
+            ["date", "place", "project", "medium", "subject", "concern_person"],
+            (r) => {
+                if (!r) return;
+                frm.set_value("date", r.date || "");
+                frm.set_value("place", r.place || "");
+                frm.set_value("project", r.project || "");
+                frm.set_value("meduium", r.medium || "");
+                frm.set_value("subject", r.subject || "");
+                frm.set_value("concern_persion", r.concern_person || "");
+            }
+        );
+    },
+
     refresh(frm) {
+        frm.set_query("to", () => ({
+            query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_branch_employee"
+        }));
+
         frm.add_custom_button("Track Order", () => {
             if (!frm.doc.doc_no) {
                 frappe.msgprint("Please enter tracking number");

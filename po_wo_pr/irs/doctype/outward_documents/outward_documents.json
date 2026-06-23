@@ -27,7 +27,6 @@
    "label": "Date"
   },
   {
-   "fetch_from": "inward.place",
    "fieldname": "place",
    "fieldtype": "Data",
    "label": "Place"
@@ -39,12 +38,11 @@
    "options": "Employee"
   },
   {
-   "fetch_from": "inward.project",
    "fieldname": "project",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Project",
-   "options": "Udaan - Application\nUdaan - Result\nUdaan - Documents\nVidya - Application\nVidya - Documents\nVidya - Cheque\nVidya - Acknowledgement\nMedical Application\nDisha\nAccounts & Admin\nGMB Documents\nBill\nMagazines\nSOW\nOther\nKEN\nUdaan - Cheque\nParvarish(PD Camp) - Confirmation\nParvarish(PD Camp) - Document\nUdaan - Cheque Acknowledgement\nUdaan - Medical Cheque\nComunity Cheque\nVidya\nUdaan\nParvarish(PD Camp) - Report\nFinancial Aid - Application\nParvarish\nUnnati\nIT\nLakshya"
+   "options": "IRS Project"
   },
   {
    "fieldname": "doc_no",
@@ -63,20 +61,17 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "inward.medium",
    "fieldname": "meduium",
    "fieldtype": "Select",
    "label": "Meduium",
    "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
   },
   {
-   "fetch_from": "inward.subject",
    "fieldname": "subject",
    "fieldtype": "Data",
    "label": "Subject"
   },
   {
-   "fetch_from": "inward.concern_person",
    "fieldname": "concern_persion",
    "fieldtype": "Data",
    "in_standard_filter": 1,
