@@ -51,6 +51,7 @@ frappe.ui.form.on("Inward Document", {
 
     sender(frm) {
         if (!frm.doc.sender) return;
+        frm.set_value("maa_code", frm.doc.sender);
         frappe.db.get_value("Student", frm.doc.sender,
             ["townvillage", "application_receive_date"],
             (r) => {
