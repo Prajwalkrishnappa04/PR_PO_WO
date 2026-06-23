@@ -6,13 +6,20 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "project_name"
+  "project_name",
+  "subjects"
  ],
  "fields": [
   {
    "fieldname": "project_name",
    "fieldtype": "Data",
    "label": "Project Name"
+  },
+  {
+   "fieldname": "subjects",
+   "fieldtype": "Table",
+   "label": "Project Subjects",
+   "options": "Project Subject"
   }
  ],
  "grid_page_length": 50,
@@ -39,6 +46,8 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "title_field": "project_name",
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
