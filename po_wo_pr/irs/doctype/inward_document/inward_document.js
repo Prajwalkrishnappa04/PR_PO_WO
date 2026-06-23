@@ -49,6 +49,18 @@ frappe.ui.form.on("Inward Document", {
         );
     },
 
+    sender(frm) {
+        if (!frm.doc.sender) return;
+        frappe.db.get_value("Student", frm.doc.sender,
+            ["townvillage", "application_receive_date"],
+            (r) => {
+                if (!r) return;
+                frm.set_value("place", r.townvillage || "");
+                frm.set_value("date", r.application_receive_date || "");
+            }
+        );
+    },
+
     concern_person(frm) {
         frm.set_value("handover_to", frm.doc.concern_person);
     },

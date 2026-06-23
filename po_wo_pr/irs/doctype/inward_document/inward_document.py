@@ -9,14 +9,23 @@ from frappe.model.document import Document
 @frappe.validate_and_sanitize_search_inputs
 def search_branch_employee(doctype, txt, searchfield, start, page_len, filters):
 	user_branch = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "branch")
+	if user_branch:
+		return frappe.db.sql(
+			"""SELECT name, employee_name
+			FROM `tabEmployee`
+			WHERE branch = %(branch)s
+			AND (name LIKE %(txt)s OR employee_name LIKE %(txt)s)
+			ORDER BY employee_name
+			LIMIT %(start)s, %(page_len)s""",
+			{"branch": user_branch, "txt": f"%{txt}%", "start": start, "page_len": page_len},
+		)
 	return frappe.db.sql(
 		"""SELECT name, employee_name
 		FROM `tabEmployee`
-		WHERE branch = %(branch)s
-		AND (name LIKE %(txt)s OR employee_name LIKE %(txt)s)
+		WHERE (name LIKE %(txt)s OR employee_name LIKE %(txt)s)
 		ORDER BY employee_name
 		LIMIT %(start)s, %(page_len)s""",
-		{"branch": user_branch or "", "txt": f"%{txt}%", "start": start, "page_len": page_len},
+		{"txt": f"%{txt}%", "start": start, "page_len": page_len},
 	)
 
 

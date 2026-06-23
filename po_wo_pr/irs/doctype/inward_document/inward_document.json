@@ -107,7 +107,6 @@
    "fieldtype": "Link",
    "label": "Refered By",
    "link_filters": "[[\"Reference\",\"disabled\",\"=\",0]]",
-   "mandatory_depends_on": "eval:doc.reference_case",
    "options": "Reference"
   },
   {
