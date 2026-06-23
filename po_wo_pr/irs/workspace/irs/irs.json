@@ -1,0 +1,83 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"irs_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>IRS</b></span>\",\"col\":12}},{\"id\":\"irs_sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Document\",\"col\":4}},{\"id\":\"irs_sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outward Documents\",\"col\":4}},{\"id\":\"irs_sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IRS Project\",\"col\":4}}]",
+ "creation": "2026-06-23 10:00:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "mail",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "IRS",
+ "title": "IRS",
+ "links": [
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inward Document",
+   "link_count": 0,
+   "link_to": "Inward Document",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Outward Documents",
+   "link_count": 0,
+   "link_to": "Outward Documents",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "IRS Project",
+   "link_count": 0,
+   "link_to": "IRS Project",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-06-23 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "IRS",
+ "name": "IRS",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "label": "Inward Document",
+   "link_to": "Inward Document",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "label": "Outward Documents",
+   "link_to": "Outward Documents",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "IRS Project",
+   "link_to": "IRS Project",
+   "type": "DocType"
+  }
+ ],
+ "states": []
+}
