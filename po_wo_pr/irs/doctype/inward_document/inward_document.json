@@ -6,8 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "date",
-  "place",
   "taluka",
+  "place",
   "district",
   "state",
   "sender",
@@ -34,17 +34,16 @@
    "reqd": 1
   },
   {
+   "fieldname": "taluka",
+   "fieldtype": "Link",
+   "label": "Taluka",
+   "options": "Taluka"
+  },
+  {
    "fieldname": "place",
    "fieldtype": "Link",
    "label": "Place",
    "options": "Town Village"
-  },
-  {
-   "fetch_from": "place.taluka",
-   "fieldname": "taluka",
-   "fieldtype": "Data",
-   "label": "Taluka",
-   "read_only": 1
   },
   {
    "fetch_from": "place.district",

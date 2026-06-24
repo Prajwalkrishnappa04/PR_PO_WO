@@ -15,6 +15,15 @@ function load_project_subjects(frm) {
 }
 
 frappe.ui.form.on("Inward Document", {
+    taluka(frm) {
+        frm.set_value("place", "");
+        frm.set_value("district", "");
+        frm.set_value("state", "");
+        frm.set_query("place", () => ({
+            filters: frm.doc.taluka ? { taluka: frm.doc.taluka } : {}
+        }));
+    },
+
     place(frm) {
         if (frm.doc.place) {
             frappe.db.get_value("Town Village", frm.doc.place, ["taluka", "district", "state"], (r) => {
@@ -25,7 +34,6 @@ frappe.ui.form.on("Inward Document", {
                 }
             });
         } else {
-            frm.set_value("taluka", "");
             frm.set_value("district", "");
             frm.set_value("state", "");
         }
@@ -65,6 +73,10 @@ frappe.ui.form.on("Inward Document", {
         }));
         frm.set_query("handover_to", () => ({
             query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_branch_employee"
+        }));
+
+        frm.set_query("place", () => ({
+            filters: frm.doc.taluka ? { taluka: frm.doc.taluka } : {}
         }));
 
         if (frm.doc.application_status !== "Accept") return;
