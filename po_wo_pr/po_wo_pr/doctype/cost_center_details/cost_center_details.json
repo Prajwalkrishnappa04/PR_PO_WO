@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-16 17:24:13.684738",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_y8eg",
+  "gl_name",
+  "gl_description",
+  "gl_account_no",
+  "custom_type_of_expenses"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_y8eg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "gl_no.account_number",
+   "fieldname": "gl_description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GL Description"
+  },
+  {
+   "fieldname": "gl_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "GL Name",
+   "options": "Account"
+  },
+  {
+   "fieldname": "gl_account_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GL Account No"
+  },
+  {
+   "fieldname": "custom_type_of_expenses",
+   "fieldtype": "Data",
+   "label": "Cost center Details"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-18 10:53:22.627789",
+ "modified_by": "Administrator",
+ "module": "Po Wo Pr",
+ "name": "Cost center Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

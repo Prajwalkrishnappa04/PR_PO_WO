@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class MaaPrioject(Document):
+class CostcenterDetails(Document):
 	pass

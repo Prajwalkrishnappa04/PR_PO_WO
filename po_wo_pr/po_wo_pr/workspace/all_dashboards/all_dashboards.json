@@ -1,0 +1,148 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"c5e66e53\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Accounts Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"9d1bbb37\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Accounts\", \"col\": 3}}, {\"id\": \"dbae3218\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"9e39b3d8\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Assets Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"8c472d26\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset\", \"col\": 3}}, {\"id\": \"2b0fe36b\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"f2bec4ed\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Buying Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"0e0016b6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Buying\", \"col\": 3}}, {\"id\": \"49eb7414\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"943b52d8\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>CRM Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"0cb70cbe\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"CRM\", \"col\": 3}}, {\"id\": \"2c00a606\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"d52cb520\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>HR Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"b3fa7e22\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Attendance\", \"col\": 3}}, {\"id\": \"163f9f5c\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Employee Lifecycle\", \"col\": 3}}, {\"id\": \"0068f2f6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Expense Claims\", \"col\": 3}}, {\"id\": \"7c024c40\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Human Resource\", \"col\": 3}}, {\"id\": \"50dd098f\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Recruitment\", \"col\": 3}}, {\"id\": \"29c80167\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"25638503\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Loan Management Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"0d6fb266\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Loan Dashboard\", \"col\": 3}}, {\"id\": \"a3187a24\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"80680b3b\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Manufacturing Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"b7ae8cab\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Manufacturing\", \"col\": 3}}, {\"id\": \"637ea0ba\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"797fbe5c\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Payroll Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"2c0267d6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payroll\", \"col\": 3}}, {\"id\": \"7cb1c50d\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"bb437582\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Projects Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"dfd3dae1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project\", \"col\": 3}}, {\"id\": \"0678595c\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"3a423c83\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Selling Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"77d3da68\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Selling\", \"col\": 3}}, {\"id\": \"c23b0248\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"6884ade4\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Stock Dashboards</b></span>\", \"col\": 12}}, {\"id\": \"e02299d4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock\", \"col\": 3}}, {\"id\": \"d96b24f5\", \"type\": \"spacer\", \"data\": {\"col\": 12}}]",
+ "creation": "2026-03-31 09:34:19.865505",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "dashboard",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "All Dashboards",
+ "links": [],
+ "modified": "2026-03-31 09:34:19.865505",
+ "modified_by": "Administrator",
+ "module": "Po Wo Pr",
+ "name": "All Dashboards",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Accounts",
+   "link_to": "Accounts",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Asset",
+   "link_to": "Asset",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Buying",
+   "link_to": "Buying",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "CRM",
+   "link_to": "CRM",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Attendance",
+   "link_to": "Attendance",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Employee Lifecycle",
+   "link_to": "Employee Lifecycle",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Expense Claims",
+   "link_to": "Expense Claims",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Human Resource",
+   "link_to": "Human Resource",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Recruitment",
+   "link_to": "Recruitment",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Loan Dashboard",
+   "link_to": "Loan Dashboard",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Manufacturing",
+   "link_to": "Manufacturing",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Payroll",
+   "link_to": "Payroll",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Project",
+   "link_to": "Project",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Selling",
+   "link_to": "Selling",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "format": "{}",
+   "label": "Stock",
+   "link_to": "Stock",
+   "type": "Dashboard"
+  }
+ ],
+ "title": "All Dashboards"
+}

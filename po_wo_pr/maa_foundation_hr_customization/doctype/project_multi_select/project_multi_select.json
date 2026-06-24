@@ -13,14 +13,14 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "label": "Project",
-   "options": "Maa Prioject"
+   "options": "Maa Project"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-23 11:33:40.113371",
+ "modified": "2026-03-12 19:47:35.698295",
  "modified_by": "Administrator",
  "module": "Maa Foundation Hr Customization",
  "name": "Project Multi select",

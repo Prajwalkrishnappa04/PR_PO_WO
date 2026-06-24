@@ -1,0 +1,173 @@
+frappe.ui.form.on("Supplier Quotation", {
+    onload(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
+    },
+    refresh(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
+        frm.remove_custom_button("Quotation", "Create");
+
+        if (frm.doc.docstatus === 1) {
+            frm.add_custom_button(
+                "Work Order Entry",
+                () => make_work_order_entry(frm),
+                "Create"
+            );
+            frm.page.set_inner_btn_group_as_primary("Create");
+        }
+
+        setTimeout(() => {
+            $(frm.wrapper).find('[data-label="Quotation"]').hide();
+            hide_supplier_quotation_item_gst_fields(frm);
+        }, 500);
+    },
+    items_add(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
+    }
+});
+
+frappe.ui.form.on("Supplier Quotation Item", {
+    form_render(frm) {
+        hide_supplier_quotation_item_gst_fields(frm);
+    }
+});
+
+const SUPPLIER_QUOTATION_ITEM_GST_FIELDS = [
+    "gst_details_section",
+    "gst_hsn_code",
+    "gst_treatment",
+    "igst_rate",
+    "cgst_rate",
+    "sgst_rate",
+    "cess_rate",
+    "cess_non_advol_rate",
+    "cb_gst_details",
+    "igst_amount",
+    "cgst_amount",
+    "sgst_amount",
+    "cess_amount",
+    "cess_non_advol_amount",
+    "is_ineligible_for_itc",
+    "taxable_value"
+];
+
+function hide_supplier_quotation_item_gst_fields(frm) {
+    const grid = frm?.fields_dict?.items?.grid;
+    if (!grid) {
+        return;
+    }
+
+    // UI-only: hide GST fields in Supplier Quotation Item grid/dialog without
+    // removing data fields or changing GST calculations.
+    SUPPLIER_QUOTATION_ITEM_GST_FIELDS.forEach(fieldname => {
+        if (frappe.meta.get_docfield("Supplier Quotation Item", fieldname, frm.doc.name)) {
+            grid.update_docfield_property(fieldname, "hidden", 1);
+        }
+    });
+
+    (grid.grid_rows || []).forEach(row => {
+        if (row.grid_form) {
+            hide_supplier_quotation_item_gst_grid_form(row.grid_form);
+        }
+    });
+
+    grid.refresh();
+}
+
+function hide_supplier_quotation_item_gst_grid_form(grid_form) {
+    SUPPLIER_QUOTATION_ITEM_GST_FIELDS.forEach(fieldname => {
+        const field = grid_form.fields_dict?.[fieldname];
+        if (!field) {
+            return;
+        }
+
+        field.df.hidden = 1;
+        field.refresh();
+    });
+}
+
+function make_work_order_entry(frm) {
+    frappe.model.with_doctype("Work Order Entry", () => {
+        const source = frm.doc;
+        const target = frappe.model.get_new_doc("Work Order Entry");
+        const first_item = (source.items || []).find(row => row.item_group) || {};
+        const tax_values = get_work_order_tax_values(source);
+
+        target.supplier_name = source.supplier;
+        target.wo_date = frappe.datetime.get_today();
+        target.ref_your_qtn_date = source.transaction_date;
+        target["for"] = source.custom_for || source.title || source.quotation_number || source.name;
+        target.terms_of_payment = get_payment_term(source);
+        target.item_group = first_item.item_group;
+        target.total_value = flt(source.total);
+        target.discounted_percentage_ = flt(source.additional_discount_percentage);
+        target.discounted_value = flt(source.discount_amount);
+        target.revised_value = flt(source.net_total);
+        target.cgst_ = tax_values.cgst;
+        target.sgst_ = tax_values.sgst;
+        target.igst_ = tax_values.igst;
+        target.freight = tax_values.freight;
+        target.final_amount = flt(source.grand_total || source.rounded_total);
+
+        (source.items || []).forEach(source_row => {
+            const target_row = frappe.model.add_child(
+                target,
+                "Work Order Description",
+                "description"
+            );
+
+            target_row.item_code = source_row.item_code;
+            target_row.item_name = source_row.item_name;
+            target_row.item_group = source_row.item_group;
+            target_row.description = source_row.description || source_row.item_name;
+            target_row.uom = source_row.uom || source_row.stock_uom;
+            target_row.order_quantity = flt(source_row.qty);
+            target_row.rate = flt(source_row.rate);
+            target_row.amount = flt(source_row.amount);
+        });
+
+        frappe.set_route("Form", "Work Order Entry", target.name);
+    });
+}
+
+function get_payment_term(source) {
+    if (source.payment_schedule && source.payment_schedule.length) {
+        return source.payment_schedule[0].payment_term;
+    }
+
+    return null;
+}
+
+function get_work_order_tax_values(source) {
+    const tax_values = {
+        cgst: 0,
+        sgst: 0,
+        igst: 0,
+        freight: 0
+    };
+
+    (source.taxes || []).forEach(row => {
+        const label = [
+            row.account_head,
+            row.description,
+            row.cost_center
+        ].join(" ").toLowerCase();
+
+        if (label.includes("cgst")) {
+            tax_values.cgst = flt(row.rate);
+        } else if (label.includes("sgst")) {
+            tax_values.sgst = flt(row.rate);
+        } else if (label.includes("igst")) {
+            tax_values.igst = flt(row.rate);
+        } else if (
+            label.includes("freight")
+            || label.includes("transport")
+            || label.includes("packing")
+        ) {
+            tax_values.freight += flt(
+                row.tax_amount_after_discount_amount || row.tax_amount
+            );
+        }
+    });
+
+    return tax_values;
+}

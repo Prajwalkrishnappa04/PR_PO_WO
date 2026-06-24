@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestMaaPrioject(FrappeTestCase):
+class TestCity(FrappeTestCase):
 	pass

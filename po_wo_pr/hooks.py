@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/po_wo_pr/css/po_wo_pr.css"
-# app_include_js = "/assets/po_wo_pr/js/po_wo_pr.js"
+# app_include_js = "/assets/po_wo_pr/js/attendance_calendar_custom.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/po_wo_pr/css/po_wo_pr.css"
@@ -42,7 +42,8 @@ app_license = "mit"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 doctype_list_js = {
-    "Inward Document": "public/js/inward_list.js"
+    "Inward Document": "public/js/inward_list.js",
+    "Attendance": "public/js/attendance_list.js"
 }
 
 # include js in doctype views
@@ -50,11 +51,24 @@ doctype_js = {
     "Purchase Order" : "public/js/purchase_order.js",
     "Item" : "public/js/item_master.js",
     "Request for Quotation": "public/js/request_quotation.js",
-    "Employee": "public/js/employee.js"
-    }
+    "Employee": "public/js/employee.js",
+    "Cost Center":"public/js/cost_center.js",
+    "Shift Assignment":"public/js/shift_assignment.js",
+    "Material Request":"public/js/material_request.js",
+    "Attendance": "public/js/attendance.js",
+    "Employee Checkin": "public/js/employee_checkin.js",
+    "Supplier Quotation": "public/js/supplier_quotation.js",
+    "Purchase Receipt": "public/js/purchase_receipt.js",
+    "Purchase Invoice": "public/js/purchase_invoice.js",
+    "Payment Entry": "public/js/payment_entry.js"
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+# doctype_calendar_js = {"Attendance" : "public/js/attendance_calendar_custom.js"}
+
+naming_series_variables = {
+	"MFY": "po_wo_pr.api.setup.parse_short_fiscal_year",
+}
 
 # Svg Icons
 # ------------------
@@ -92,6 +106,7 @@ doctype_js = {
 
 # before_install = "po_wo_pr.install.before_install"
 # after_install = "po_wo_pr.install.after_install"
+after_migrate = "po_wo_pr.api.setup.set_buying_naming_series"
 
 # Uninstallation
 # ------------
@@ -138,7 +153,8 @@ doctype_js = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee"
+	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee",
+	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.CustomRequestforQuotation"
 }
 
 # Document Events
@@ -147,6 +163,9 @@ override_doctype_class = {
 # ---------------
 
 doc_events = {
+	"Request for Quotation": {
+		"before_print": "po_wo_pr.api.request_for_quotation_data.set_supplier_for_print"
+	},
 	"Loan": {
 		"on_submit": "po_wo_pr.api.setup.update_employee_loan_balance",
 		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance",
@@ -155,6 +174,27 @@ doc_events = {
 	"Loan Repayment": {
 		"on_submit": "po_wo_pr.api.setup.update_employee_loan_balance",
 		"on_cancel": "po_wo_pr.api.setup.update_employee_loan_balance"
+	},
+	"Attendance": {
+		"validate": [
+			"po_wo_pr.api.attendance_utils.update_custom_work_hours",
+			"po_wo_pr.api.attendance_utils.update_attendance_exact_times"
+		]
+	},
+	"Attendance Request": {
+		"on_submit": "po_wo_pr.api.attendance_utils.apply_attendance_request_times",
+		"on_update_after_submit": "po_wo_pr.api.attendance_utils.apply_attendance_request_times"
+	},
+	"Employee Checkin": {
+		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time"
+	},
+	"Purchase Receipt": {
+		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields",
+		"on_submit": "po_wo_pr.api.setup.update_po_received_qty",
+		"on_cancel": "po_wo_pr.api.setup.update_po_received_qty"
+	},
+	"Purchase Order": {
+		"autoname": "po_wo_pr.api.setup.set_purchase_order_name"
 	}
 }
 
@@ -195,9 +235,16 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "po_wo_pr.event.get_events"
-# }
+override_whitelisted_methods = {
+	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails": "po_wo_pr.api.request_for_quotation_email.send_supplier_emails",
+	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_from_rfq": "po_wo_pr.overrides.request_for_quotation_mapper.make_supplier_quotation_from_rfq",
+	"erpnext.stock.doctype.material_request.material_request.make_purchase_order": "po_wo_pr.overrides.material_request.make_purchase_order",
+	"erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_order": "po_wo_pr.overrides.purchase_order.make_purchase_order_from_supplier_quotation",
+	"erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice_from_supplier_quotation",
+	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt": "po_wo_pr.overrides.purchase_order.make_purchase_receipt",
+	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice",
+	"erpnext.stock.doctype.purchase_receipt.purchase_receipt.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice_from_receipt",
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -231,12 +278,14 @@ fixtures = [
     {
         "doctype": "Property Setter",
         "filters": {
-            "name":["in",["Employee-custom_shift_issuer-hidden",
-            "Employee-shift_request_approver-hidden","Employee-custom_attendance_exception-hidden",
-            "Employee-custom_allow_mobile_checkin-hidden","Employee-department-hidden","Item-item_code-hidden","Employee-main-field_order",
-            "Employee-micr_code-hidden","Employee-iban-hidden","Employee-ctc-hidden","Employee-custom_esic_number-hidden","Employee Education-main-field_order",
-            "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
-            "Employee-old_parent-hidden","Employee Internal Work History-department-hidden","Material Request Item-gst_hsn_code-hidden","Material Request Item-conversion_factor-req",
+            "name":["in",[
+                # "Employee-custom_shift_issuer-hidden",
+            # "Employee-shift_request_approver-hidden","Employee-custom_attendance_exception-hidden",
+            # "Employee-custom_allow_mobile_checkin-hidden","Employee-department-hidden","Item-item_code-hidden","Employee-main-field_order",
+            # "Employee-micr_code-hidden","Employee-iban-hidden","Employee-ctc-hidden","Employee-custom_esic_number-hidden","Employee Education-main-field_order",
+            # "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
+            # "Employee-old_parent-hidden","Employee Internal Work History-department-hidden",
+            "Material Request Item-gst_hsn_code-hidden","Material Request Item-conversion_factor-req",
             "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden"
             "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
             "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
@@ -253,9 +302,29 @@ fixtures = [
             "Request for Quotation-incoterm-hidden","Request for Quotation-tc_name-default","Supplier Quotation-main-field_order","Supplier Quotation-named_place-hidden","Purchase Order-set_warehouse-default","Purchase Order-main-field_order","Purchase Order-tc_name-default",
             "Purchase Order Item-warehouse-default","Purchase Receipt Item-warehouse-default","Purchase Receipt Item-manufacture_details-hidden","Purchase Receipt-place_of_supply-hidden","Purchase Receipt-apply_putaway_rule-hidden","Purchase Receipt-is_subcontracted-hidden",
             "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Invoice-set_warehouse-default","Purchase Order-tc_name-default","Purchase Order-payment_terms_template-default","Purchase Invoice-tc_name-default","Purchase Invoice-payment_terms_template-default",
-            "Expense Claim-department-hidden","Expense Claim-main-field_order"
-
-
+            "Expense Claim-department-hidden","Expense Claim-main-field_order",
+            "Material Request Item-stock_uom-hidden",
+            "Material Request Item-stock_uom-reqd",
+            "Request for Quotation Item-stock_uom-reqd",
+            "Request for Quotation Item-stock_uom-hidden",
+            "Supplier Quotation Item-stock_uom-reqd",
+            "Supplier Quotation Item-stock_uom-hidden",
+            "Purchase Receipt Item-stock_uom-reqd",
+            "Purchase Receipt Item-stock_uom-hidden"
+            "Supplier Quotation Item-base_amount-hidden",
+            "Supplier Quotation Item-base_rate-hidden",
+            "Purchase Order Item-stock_uom-hidden",
+            "Purchase Order Item-base_rate-hidden",
+            "Purchase Order Item-base_amount-hidden",
+            "Purchase Receipt Item-base_amount-hidden",
+            "Purchase Receipt Item-base_rate-hidden",
+            "Leave Application-half_day-hidden",
+            "Employee-custom_attach_aadhar-hidden",
+            "Employee-main-field_order",
+            "Attendance Request-half_day-hidden",
+            "Employee-custom_head_quarter_city-hidden",
+            "Purchase Order Item-gst_details_section-hidden",
+            "Purchase Order Item-references_section-hidden"
             ]]
         }
     },
@@ -263,16 +332,53 @@ fixtures = [
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
-                "Employee-custom_project","Employee-custom_insurance_policy_","Employee Education-custom_clevel","Employee External Work History-custom_nature_of_work",
-                "Employee Internal Work History-custom_work_description","Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
-                "Employee-custom_total_loan_balance","Employee-custom_reporting_manager","Employee-custom_reporting_manager_name","Employee-custom_office_document","Employee-custom_academic_documents_list",
-                "Material Request-custom_maa_project","Employee-custom_personal_document","Employee-custom_maa_foundation_experience","Employee-custom_loan","Employee-custom_loan_amount","Employee-custom_paid_amount",
-                "Employee-custom_remaining_amount","Material Request-custom_person_responsible","Material Request-custom_for","Purchase Order Item-custom_gst_included","Expense Claim-custom_maa_project",
-                
+                "Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
+                "Expense Claim-custom_maa_project","Attendance-custom_work_hours",
+                "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
+                "Attendance-custom_exact_in_time","Asset-custom_custodian_name","Asset-department-hidden","Asset-custom_asset_status","Asset-custom_supplier_name","Asset-custom_asset_id",
+                "Asset-custom_note","Supplier Quotation-custom_contact_numbers",
+            "Supplier Quotation-custom_contact_personss",
+            "Contact person-custom_contact_number",
+            "Purchase Invoice-custom_gate_pass_id",
+            "Purchase Invoice-custom_gate_pass_no",
+            "Purchase Invoice-custom_contact_numbers",
+            "Purchase Invoice-custom_contact_personss",
+            "Purchase Order-custom_contact_numbers",
+            "Purchase Order-custom_contact_personss",
+            "Request for Quotation-custom_contact_numbers",
+            "Request for Quotation-custom_contact_persons",
+            "Material Request-custom_contact_numbers",
+            "Material Request-custom_section_break_hcx0y",
+            "Material Request-custom_contact_person",
+            "Purchase Receipt-custom_contact_numbers",
+            "Purchase Receipt-custom_gate_pass_date",
+            "Purchase Receipt-custom_gate_pass_no",
+            "Purchase Receipt-custom_contact_personss",
+            ]
+            ]
+        ]
+    },
+
+
+    {
+    "dt": "DocType",
+    "filters": [
+        ["name", "in", [
+            "MR Contact Person"
+        ]]
+    ]
+},
+   
+    {
+        "dt": "Translation",
+        "filters": [
+            ["name", "in", [
+                "ova7m68opp"
             ]
             ]
         ]
     }
+
 ]
 
 # user_data_fields = [
@@ -309,4 +415,3 @@ fixtures = [
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
