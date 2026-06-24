@@ -35,7 +35,7 @@ def search_student(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql(
 		"""SELECT name, student_name
 		FROM `tabStudent`
-		WHERE (name LIKE %(txt)s OR student_name LIKE %(txt)s)
+		WHERE (maa_code LIKE %(txt)s OR student_name LIKE %(txt)s OR name LIKE %(txt)s)
 		ORDER BY student_name
 		LIMIT %(start)s, %(page_len)s""",
 		{"txt": f"%{txt}%", "start": start, "page_len": page_len},

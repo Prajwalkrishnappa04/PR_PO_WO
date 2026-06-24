@@ -17,7 +17,6 @@
   "column_break_bebl",
   "meduium",
   "subject",
-  "concern_persion",
   "remaks"
  ],
  "fields": [
@@ -33,9 +32,8 @@
   },
   {
    "fieldname": "to",
-   "fieldtype": "Link",
-   "label": "To",
-   "options": "Employee"
+   "fieldtype": "Data",
+   "label": "To"
   },
   {
    "fieldname": "project",
@@ -63,19 +61,13 @@
   {
    "fieldname": "meduium",
    "fieldtype": "Select",
-   "label": "Meduium",
+   "label": "Medium",
    "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
   },
   {
    "fieldname": "subject",
    "fieldtype": "Data",
    "label": "Subject"
-  },
-  {
-   "fieldname": "concern_persion",
-   "fieldtype": "Data",
-   "in_standard_filter": 1,
-   "label": "Concern Persion"
   },
   {
    "fieldname": "remaks",
