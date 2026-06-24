@@ -27,9 +27,11 @@
  ],
  "fields": [
   {
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "place",
@@ -60,12 +62,10 @@
   },
   {
    "fieldname": "sender",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Sender",
-   "options": "Student",
-   "reqd": 1,
-   "search_index": 1
+   "reqd": 1
   },
   {
    "fieldname": "project",
@@ -79,7 +79,7 @@
    "fieldname": "application_status",
    "fieldtype": "Select",
    "label": "Application Status",
-   "options": "NA\nPending\nAccept\nReject\nRepeat Reject"
+   "options": "\nPending\nAccept\nReject\nRepeat Reject"
   },
   {
    "depends_on": "eval:doc.application_status === 'Reject' || doc.application_status === 'Repeat Reject'",
@@ -121,9 +121,9 @@
   },
   {
    "fieldname": "medium",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Medium",
-   "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
+   "options": "Mode Of Transport Data"
   },
   {
    "depends_on": "eval:doc.project",
@@ -134,6 +134,7 @@
   {
    "fieldname": "concern_person",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "in_standard_filter": 1,
    "label": "Concern Person",
    "options": "Employee"
@@ -141,6 +142,7 @@
   {
    "fieldname": "handover_to",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "label": "Handover To",
    "options": "Employee"
   },

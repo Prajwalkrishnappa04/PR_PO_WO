@@ -42,20 +42,7 @@ frappe.ui.form.on("Inward Document", {
             ["student_name", "townvillage", "application_receive_date"],
             (r) => {
                 if (!r) return;
-                frm.set_value("sender", frm.doc.maa_code);
-                frm.set_value("place", r.townvillage || "");
-                frm.set_value("date", r.application_receive_date || "");
-            }
-        );
-    },
-
-    sender(frm) {
-        if (!frm.doc.sender) return;
-        frm.set_value("maa_code", frm.doc.sender);
-        frappe.db.get_value("Student", frm.doc.sender,
-            ["townvillage", "application_receive_date"],
-            (r) => {
-                if (!r) return;
+                frm.set_value("sender", r.student_name || "");
                 frm.set_value("place", r.townvillage || "");
                 frm.set_value("date", r.application_receive_date || "");
             }
@@ -72,10 +59,6 @@ frappe.ui.form.on("Inward Document", {
 
     refresh(frm) {
         load_project_subjects(frm);
-
-        frm.set_query("sender", () => ({
-            query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_student"
-        }));
 
         frm.set_query("concern_person", () => ({
             query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_branch_employee"
