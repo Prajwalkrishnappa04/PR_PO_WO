@@ -337,12 +337,12 @@ fixtures = [
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
                 "Attendance-custom_exact_in_time","Asset-custom_custodian_name","Asset-department-hidden","Asset-custom_asset_status","Asset-custom_supplier_name","Asset-custom_asset_id",
                 "Asset-custom_note","Supplier Quotation-custom_contact_numbers",
-            "Supplier Quotation-custom_contact_persons",
+            "Supplier Quotation-custom_contact_personss",
             "Contact person-custom_contact_number",
             "Purchase Invoice-custom_gate_pass_id",
             "Purchase Invoice-custom_gate_pass_no",
             "Purchase Invoice-custom_contact_numbers",
-            "Purchase Invoice-custom_contact_persons",
+            "Purchase Invoice-custom_contact_personss",
             "Purchase Order-custom_contact_numbers",
             "Purchase Order-custom_contact_personss",
             "Request for Quotation-custom_contact_numbers",
@@ -350,9 +350,9 @@ fixtures = [
             "Material Request-custom_contact_numbers",
             "Material Request-custom_contact_person",
             "Purchase Receipt-custom_contact_numbers",
-            "Purchase Receipt-custom_contact_persons",
             "Purchase Receipt-custom_gate_pass_date",
-            "Purchase Receipt-custom_gate_pass_no"
+            "Purchase Receipt-custom_gate_pass_no",
+            "Purchase Receipt-custom_contact_personss",
             ]
             ]
         ]
