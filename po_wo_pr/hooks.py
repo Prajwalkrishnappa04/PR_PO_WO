@@ -348,6 +348,7 @@ fixtures = [
             "Request for Quotation-custom_contact_numbers",
             "Request for Quotation-custom_contact_persons",
             "Material Request-custom_contact_numbers",
+            "Material Request-custom_section_break_hcx0y",
             "Material Request-custom_contact_person",
             "Purchase Receipt-custom_contact_numbers",
             "Purchase Receipt-custom_gate_pass_date",
