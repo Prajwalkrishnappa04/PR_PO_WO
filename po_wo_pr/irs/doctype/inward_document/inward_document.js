@@ -28,7 +28,9 @@ frappe.ui.form.on("Inward Document", {
         if (frm.doc.place) {
             frappe.db.get_value("Town Village", frm.doc.place, ["taluka", "district", "state"], (r) => {
                 if (r) {
-                    frm.set_value("taluka", r.taluka || "");
+                    // Set taluka directly to avoid triggering taluka's change event (which clears place)
+                    frm.doc.taluka = r.taluka || "";
+                    frm.refresh_field("taluka");
                     frm.set_value("district", r.district || "");
                     frm.set_value("state", r.state || "");
                 }
