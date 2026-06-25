@@ -90,9 +90,9 @@
   },
   {
    "fieldname": "meduium",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Medium",
-   "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
+   "options": "Mode Of Transport Data"
   },
   {
    "fieldname": "subject",

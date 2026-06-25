@@ -113,7 +113,7 @@ frappe.ui.form.on("Inward Document", {
                                 get_query() {
                                     return {
                                         filters: {
-                                            maa_branch: employee_branch
+                                            branch: employee_branch
                                         }
                                     };
                                 }
