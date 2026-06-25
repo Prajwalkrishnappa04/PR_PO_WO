@@ -324,7 +324,9 @@ fixtures = [
             "Attendance Request-half_day-hidden",
             "Employee-custom_head_quarter_city-hidden",
             "Purchase Order Item-gst_details_section-hidden",
-            "Purchase Order Item-references_section-hidden"
+            "Purchase Order Item-references_section-hidden",
+            "Material Request Item-item_code-label",
+            "Material Request Item-item_name-hidden"
             ]]
         }
     },
@@ -354,6 +356,8 @@ fixtures = [
             "Purchase Receipt-custom_gate_pass_date",
             "Purchase Receipt-custom_gate_pass_no",
             "Purchase Receipt-custom_contact_personss",
+            "Purchase Order-custom_our_enquiry_ref",
+            "Request for Quotation-custom_our_enquiry_ref",
             ]
             ]
         ]
