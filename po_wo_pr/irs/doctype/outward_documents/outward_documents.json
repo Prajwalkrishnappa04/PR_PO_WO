@@ -9,6 +9,9 @@
   "inward",
   "date",
   "place",
+  "taluka",
+  "district",
+  "state",
   "to",
   "project",
   "doc_no",
@@ -21,14 +24,34 @@
  ],
  "fields": [
   {
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "place",
    "fieldtype": "Data",
    "label": "Place"
+  },
+  {
+   "fieldname": "taluka",
+   "fieldtype": "Data",
+   "label": "Taluka",
+   "read_only": 1
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "label": "District",
+   "read_only": 1
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State",
+   "read_only": 1
   },
   {
    "fieldname": "to",
