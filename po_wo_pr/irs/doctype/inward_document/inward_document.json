@@ -11,6 +11,7 @@
   "district",
   "state",
   "sender",
+  "mob_no",
   "project",
   "subject",
   "application_status",
@@ -65,6 +66,12 @@
    "in_list_view": 1,
    "label": "Sender",
    "reqd": 1
+  },
+  {
+   "fieldname": "mob_no",
+   "fieldtype": "Data",
+   "label": "Mob. No.",
+   "options": "Phone"
   },
   {
    "fieldname": "project",

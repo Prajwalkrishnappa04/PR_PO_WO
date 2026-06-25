@@ -13,6 +13,7 @@
   "district",
   "state",
   "to",
+  "mob_no",
   "project",
   "doc_no",
   "url",
@@ -57,6 +58,12 @@
    "fieldname": "to",
    "fieldtype": "Data",
    "label": "To"
+  },
+  {
+   "fieldname": "mob_no",
+   "fieldtype": "Data",
+   "label": "Mob. No.",
+   "options": "Phone"
   },
   {
    "fieldname": "project",
