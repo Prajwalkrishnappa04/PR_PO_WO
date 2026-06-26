@@ -327,7 +327,8 @@ fixtures = [
             "Purchase Order Item-references_section-hidden",
             "Material Request Item-item_code-label",
             "Material Request Item-item_name-hidden",
-            "Request for Quotation Supplier-send_email-default"
+            "Request for Quotation Supplier-send_email-default",
+            "Request for Quotation-main-default_print_format"
             ]]
         }
     },
