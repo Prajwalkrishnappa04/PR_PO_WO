@@ -91,7 +91,7 @@ frappe.ui.form.on("Inward Document", {
             filters: frm.doc.taluka ? { taluka: frm.doc.taluka } : {}
         }));
 
-        if (frm.doc.application_status !== "Accept") return;
+        if (frm.is_new() || frm.doc.application_status !== "Accept" || frm.is_dirty()) return;
 
         frm.add_custom_button("Add Student Entry", () => {
             if (frm.doc.maa_code) {
