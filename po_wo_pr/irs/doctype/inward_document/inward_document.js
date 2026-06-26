@@ -110,14 +110,7 @@ frappe.ui.form.on("Inward Document", {
                                 label: "Interview Place",
                                 fieldtype: "Link",
                                 options: "Interview Place",
-                                reqd: 1,
-                                get_query() {
-                                    return {
-                                        filters: {
-                                            branch: employee_branch
-                                        }
-                                    };
-                                }
+                                reqd: 1
                             }
                         ],
 
