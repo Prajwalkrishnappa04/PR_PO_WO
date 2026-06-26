@@ -159,7 +159,7 @@ override_doctype_class = {
 
 # Document Events
 # ---------------
-# Hook on# Document Events
+# Document Events
 # ---------------
 
 doc_events = {
@@ -286,7 +286,7 @@ fixtures = [
             # "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
             # "Employee-old_parent-hidden","Employee Internal Work History-department-hidden",
             "Material Request Item-gst_hsn_code-hidden","Material Request Item-conversion_factor-req",
-            "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden"
+            "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden",
             "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
             "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
             "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-shipping_rule-hidden"
@@ -310,7 +310,7 @@ fixtures = [
             "Supplier Quotation Item-stock_uom-reqd",
             "Supplier Quotation Item-stock_uom-hidden",
             "Purchase Receipt Item-stock_uom-reqd",
-            "Purchase Receipt Item-stock_uom-hidden"
+            "Purchase Receipt Item-stock_uom-hidden",
             "Supplier Quotation Item-base_amount-hidden",
             "Supplier Quotation Item-base_rate-hidden",
             "Purchase Order Item-stock_uom-hidden",
@@ -326,7 +326,8 @@ fixtures = [
             "Purchase Order Item-gst_details_section-hidden",
             "Purchase Order Item-references_section-hidden",
             "Material Request Item-item_code-label",
-            "Material Request Item-item_name-hidden"
+            "Material Request Item-item_name-hidden",
+            "Request for Quotation Supplier-send_email-default"
             ]]
         }
     },
