@@ -49,12 +49,13 @@ frappe.ui.form.on("Inward Document", {
     maa_code(frm) {
         if (!frm.doc.maa_code) return;
         frappe.db.get_value("Student", frm.doc.maa_code,
-            ["student_name", "townvillage", "application_receive_date"],
+            ["student_name", "townvillage", "application_receive_date", "phone_no"],
             (r) => {
                 if (!r) return;
                 frm.set_value("sender", r.student_name || "");
                 frm.set_value("place", r.townvillage || "");
-                frm.set_value("date", r.application_receive_date || "");
+                frm.set_value("date", r.application_receive_date || frappe.datetime.get_today());
+                frm.set_value("mob_no", r.phone_no || "");
             }
         );
     },

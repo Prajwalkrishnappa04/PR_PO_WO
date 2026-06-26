@@ -358,6 +358,7 @@ fixtures = [
             "Purchase Receipt-custom_contact_personss",
             "Purchase Order-custom_our_enquiry_ref",
             "Request for Quotation-custom_our_enquiry_ref",
+            "Bank Account-custom_branch"
             ]
             ]
         ]
