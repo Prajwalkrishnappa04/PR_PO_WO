@@ -326,7 +326,8 @@ fixtures = [
             "Purchase Order Item-gst_details_section-hidden",
             "Purchase Order Item-references_section-hidden",
             "Material Request Item-item_code-label",
-            "Material Request Item-item_name-hidden"
+            "Material Request Item-item_name-hidden",
+            "Request for Quotation Supplier-send_email-default"
             ]]
         }
     },
@@ -358,6 +359,7 @@ fixtures = [
             "Purchase Receipt-custom_contact_personss",
             "Purchase Order-custom_our_enquiry_ref",
             "Request for Quotation-custom_our_enquiry_ref",
+            "Purchase Order-custom_po_type"
             ]
             ]
         ]
