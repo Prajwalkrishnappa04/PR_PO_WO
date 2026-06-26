@@ -321,6 +321,189 @@ function set_email_template_mandatory(frm) {
     frm.set_df_property("email_template", "reqd", email_template_required ? 1 : 0);
 }
 
+// function render_comparison(frm, data) {
+//     const field = frm.fields_dict.custom_compare;
+
+//     if (!field) {
+//         console.warn("HTML field custom_compare not found");
+//         return;
+//     }
+
+//     // Handle new data structure
+//     const items = data.items || data;
+//     const suppliers = data.suppliers || [];
+
+//     // If no items, show message
+//     if (!Object.keys(items).length) {
+//         field.$wrapper.html(
+//             "<p class='text-muted'>No items found in this Request for Quotation.</p>"
+//         );
+//         return;
+//     }
+
+//     // If suppliers array is empty, try to get from items' rates
+//     let allSuppliers = suppliers.length ? suppliers : [];
+//     if (!allSuppliers.length) {
+//         let supplierSet = new Set();
+//         Object.values(items).forEach(row => {
+//             Object.keys(row.rates || {}).forEach(s => supplierSet.add(s));
+//         });
+//         allSuppliers = Array.from(supplierSet);
+//     }
+
+//     if (!allSuppliers.length) {
+//         field.$wrapper.html(
+//             "<p class='text-muted'>No Suppliers found for comparison.</p>"
+//         );
+//         return;
+//     }
+
+//     let html = `
+//     <style>
+//         .rfq-comparison-container {
+//             margin-top: 15px;
+//             overflow-x: auto;
+//         }
+//         .rfq-table {
+//             width: 100%;
+//             border-collapse: collapse;
+//             min-width: 600px;
+//             font-size: 13px;
+//         }
+//         .rfq-table th, .rfq-table td {
+//             border: 1px solid #d1d8dd;
+//             padding: 10px 12px;
+//             text-align: right;
+//         }
+//         .rfq-table th {
+//             background: linear-gradient(to bottom, #f7f7f7, #eaeaea);
+//             font-weight: 600;
+//             color: #36414c;
+//             white-space: nowrap;
+//         }
+//         .rfq-table td.item-cell {
+//             text-align: left;
+//             font-weight: 500;
+//             color: #1f272e;
+//         }
+//         .rfq-table td.uom-cell {
+//             text-align: center;
+//             color: #6c7680;
+//         }
+//         .rfq-table tbody tr:nth-child(even) {
+//             background: #fafbfc;
+//         }
+//         .rfq-table tbody tr:hover {
+//             background: #f0f4f7;
+//         }
+//         .best-rate {
+//             background: #d4edda !important;
+//             font-weight: bold;
+//             color: #155724;
+//         }
+//         .no-quote {
+//             color: #999;
+//             font-style: italic;
+//         }
+//         .rfq-table-header {
+//             display: flex;
+//             align-items: center;
+//             margin-bottom: 10px;
+//         }
+//         .rfq-table-header h5 {
+//             margin: 0;
+//             color: #36414c;
+//         }
+//         .supplier-count {
+//             margin-left: 10px;
+//             font-size: 12px;
+//             color: #6c7680;
+//         }
+//     </style>
+
+//     <div class="rfq-comparison-container">
+//         <div class="rfq-table-header">
+//             <h5>Supplier Quotation Comparison</h5>
+//             <span class="supplier-count">(${allSuppliers.length} Suppliers)</span>
+//         </div>
+//         <table class="rfq-table">
+//             <thead>
+//                 <tr>
+//                     <th style="text-align: left;">Item</th>
+//                     <th style="text-align: center;">UOM</th>
+//                     ${allSuppliers.map(s => `<th>${frappe.utils.escape_html(s)}</th>`).join("")}
+//                 </tr>
+//             </thead>
+//             <tbody>
+//     `;
+
+//     for (let itemCode of Object.keys(items)) {
+//         const item = items[itemCode];
+//         let numericRates = Object.values(item.rates || {}).filter(r => typeof r === "number" && r > 0);
+//         let minRate = numericRates.length ? Math.min(...numericRates) : null;
+
+//         html += `<tr>
+//             <td class="item-cell">${frappe.utils.escape_html(item.item_name || itemCode)}</td>
+//             <td class="uom-cell">${item.uom || "-"}</td>
+//             ${allSuppliers.map(s => {
+//             let rate = item.rates ? item.rates[s] : undefined;
+//             let hasRate = rate !== undefined && rate !== null;
+//             let isBest = hasRate && rate === minRate && minRate !== null;
+//             let cls = isBest ? "best-rate" : (hasRate ? "" : "no-quote");
+//             let displayValue = hasRate ? frappe.format(rate, { fieldtype: "Currency" }) : "-";
+//             return `<td class="${cls}">${displayValue}</td>`;
+//         }).join("")}
+//         </tr>`;
+//     }
+
+//     html += "</tbody></table></div>";
+
+//     field.$wrapper.html(html);
+// }
+
+
+
+function adapt_rfq_data_to_po_shape(data) {
+    const items = data.items || data;
+    const suppliers = data.suppliers || [];
+
+    const adaptedItems = {};
+
+    Object.keys(items).forEach(itemKey => {
+        const row = items[itemKey];
+        const rates = row.rates || {};
+
+        const supplierMap = {};
+        Object.keys(rates).forEach(supplier => {
+            const rate = Number(rates[supplier] || 0);
+            supplierMap[supplier] = {
+                rate: rate,
+                discount_percentage: 0,
+                discount_amount: 0,
+                amount: 0
+            };
+        });
+
+        adaptedItems[itemKey] = {
+            item_name: row.item_name || itemKey,
+            item_code: row.item_code || itemKey,
+            qty: row.qty || "-",
+            uom: row.uom || "-",
+            suppliers: supplierMap
+        };
+    });
+
+    const supplierSet = new Set(suppliers);
+    Object.values(adaptedItems).forEach(item => {
+        Object.keys(item.suppliers).forEach(s => supplierSet.add(s));
+    });
+
+    return {
+        items: adaptedItems,
+        suppliers: Array.from(supplierSet)
+    };
+}
+
 function render_comparison(frm, data) {
     const field = frm.fields_dict.custom_compare;
 
@@ -329,26 +512,15 @@ function render_comparison(frm, data) {
         return;
     }
 
-    // Handle new data structure
-    const items = data.items || data;
-    const suppliers = data.suppliers || [];
+    const adapted = adapt_rfq_data_to_po_shape(data);
+    const items = adapted.items;
+    const allSuppliers = adapted.suppliers;
 
-    // If no items, show message
     if (!Object.keys(items).length) {
         field.$wrapper.html(
             "<p class='text-muted'>No items found in this Request for Quotation.</p>"
         );
         return;
-    }
-
-    // If suppliers array is empty, try to get from items' rates
-    let allSuppliers = suppliers.length ? suppliers : [];
-    if (!allSuppliers.length) {
-        let supplierSet = new Set();
-        Object.values(items).forEach(row => {
-            Object.keys(row.rates || {}).forEach(s => supplierSet.add(s));
-        });
-        allSuppliers = Array.from(supplierSet);
     }
 
     if (!allSuppliers.length) {
@@ -358,105 +530,215 @@ function render_comparison(frm, data) {
         return;
     }
 
-    let html = `
-    <style>
-        .rfq-comparison-container {
-            margin-top: 15px;
-            overflow-x: auto;
-        }
-        .rfq-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-            font-size: 13px;
-        }
-        .rfq-table th, .rfq-table td {
-            border: 1px solid #d1d8dd;
-            padding: 10px 12px;
-            text-align: right;
-        }
-        .rfq-table th {
-            background: linear-gradient(to bottom, #f7f7f7, #eaeaea);
-            font-weight: 600;
-            color: #36414c;
-            white-space: nowrap;
-        }
-        .rfq-table td.item-cell {
-            text-align: left;
-            font-weight: 500;
-            color: #1f272e;
-        }
-        .rfq-table td.uom-cell {
-            text-align: center;
-            color: #6c7680;
-        }
-        .rfq-table tbody tr:nth-child(even) {
-            background: #fafbfc;
-        }
-        .rfq-table tbody tr:hover {
-            background: #f0f4f7;
-        }
-        .best-rate {
-            background: #d4edda !important;
-            font-weight: bold;
-            color: #155724;
-        }
-        .no-quote {
-            color: #999;
-            font-style: italic;
-        }
-        .rfq-table-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .rfq-table-header h5 {
-            margin: 0;
-            color: #36414c;
-        }
-        .supplier-count {
-            margin-left: 10px;
-            font-size: 12px;
-            color: #6c7680;
-        }
-    </style>
+    const bestRateByItem = {};
+    Object.keys(items).forEach(itemKey => {
+        const supplierData = items[itemKey].suppliers || {};
+        const numericRates = Object.values(supplierData)
+            .map(s => s.rate)
+            .filter(r => typeof r === "number" && r > 0);
+        bestRateByItem[itemKey] = numericRates.length ? Math.min(...numericRates) : null;
+    });
 
-    <div class="rfq-comparison-container">
-        <div class="rfq-table-header">
-            <h5>Supplier Quotation Comparison</h5>
-            <span class="supplier-count">(${allSuppliers.length} Suppliers)</span>
-        </div>
-        <table class="rfq-table">
-            <thead>
-                <tr>
-                    <th style="text-align: left;">Item</th>
-                    <th style="text-align: center;">UOM</th>
-                    ${allSuppliers.map(s => `<th>${frappe.utils.escape_html(s)}</th>`).join("")}
-                </tr>
-            </thead>
-            <tbody>
+    let html = `
+        <style>
+            .rfq-comparison-container {
+                margin-top: 15px;
+                overflow-x: auto;
+            }
+
+            .rfq-table {
+                width: 100%;
+                border-collapse: collapse;
+                min-width: 820px;
+                font-size: 13px;
+            }
+
+            .rfq-table th,
+            .rfq-table td {
+                border: 1px solid #d1d8dd;
+                padding: 8px 10px;
+                text-align: left;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+
+            .rfq-table th {
+                background: #f7f7f7;
+                font-weight: 600;
+                color: #36414c;
+                text-align: center;
+            }
+
+            .rfq-table td.item-cell {
+                text-align: left;
+                font-weight: 500;
+                color: #1f272e;
+            }
+
+            .rfq-table td.supplier-cell {
+                text-align: left;
+                color: #36414c;
+            }
+
+            .rfq-table td.uom-cell,
+            .rfq-table td.qty-cell,
+            .rfq-table td.no-cell {
+                text-align: center;
+                color: #36414c;
+            }
+
+            .rfq-table td.rate-cell,
+            .rfq-table td.discount-cell,
+            .rfq-table td.amount-cell {
+                text-align: right;
+            }
+
+            .rfq-table tbody tr:nth-child(even) {
+                background: #fafbfc;
+            }
+
+            .rfq-table tbody tr:hover {
+                background: #f0f4f7;
+            }
+
+            .no-quote {
+                color: #999;
+                font-style: italic;
+                text-align: center !important;
+            }
+
+            .rfq-table-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .rfq-table-header h5 {
+                margin: 0;
+                color: #36414c;
+            }
+
+            .supplier-count {
+                margin-left: 10px;
+                font-size: 12px;
+                color: #6c7680;
+            }
+
+            .rfq-item-start td {
+                border-top: 2px solid #c7d0d9;
+            }
+
+            .rfq-best-rate {
+                background: #d4edda !important;
+                font-weight: bold;
+                color: #155724;
+            }
+        </style>
+
+        <div class="rfq-comparison-container">
+            <div class="rfq-table-header">
+                <h5>Supplier Quotation Comparison</h5>
+                <span class="supplier-count">(${allSuppliers.length} Supplier)</span>
+            </div>
+
+            <table class="rfq-table">
+                <thead>
+                    <tr>
+                        <th style="width: 55px;">No.</th>
+                        <th style="text-align:left; min-width: 220px;">Item Name</th>
+                        <th style="width: 80px;">Qty</th>
+                        <th style="width: 90px;">UOM</th>
+                        <th style="text-align:left; min-width: 180px;">Supplier</th>
+                        <th style="width: 120px;">Rate</th>
+                        <th style="width: 110px;">Discount</th>
+                        <th style="width: 130px;">Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
     `;
 
-    for (let itemCode of Object.keys(items)) {
-        const item = items[itemCode];
-        let numericRates = Object.values(item.rates || {}).filter(r => typeof r === "number" && r > 0);
-        let minRate = numericRates.length ? Math.min(...numericRates) : null;
+    Object.keys(items).forEach((itemKey, itemIndex) => {
+        const item = items[itemKey];
+        const supplierRows = allSuppliers.length ? allSuppliers : ["-"];
+        const rowspan = supplierRows.length;
+        const bestRate = bestRateByItem[itemKey];
 
-        html += `<tr>
-            <td class="item-cell">${frappe.utils.escape_html(item.item_name || itemCode)}</td>
-            <td class="uom-cell">${item.uom || "-"}</td>
-            ${allSuppliers.map(s => {
-            let rate = item.rates ? item.rates[s] : undefined;
-            let hasRate = rate !== undefined && rate !== null;
-            let isBest = hasRate && rate === minRate && minRate !== null;
-            let cls = isBest ? "best-rate" : (hasRate ? "" : "no-quote");
-            let displayValue = hasRate ? frappe.format(rate, { fieldtype: "Currency" }) : "-";
-            return `<td class="${cls}">${displayValue}</td>`;
-        }).join("")}
-        </tr>`;
-    }
+        supplierRows.forEach((supplier, supplierIndex) => {
+            let supplierData = item.suppliers ? item.suppliers[supplier] : null;
+            let rate = supplierData ? Number(supplierData.rate || 0) : 0;
+            let discountPercentage = supplierData ? Number(supplierData.discount_percentage || 0) : 0;
+            let discountAmount = supplierData ? Number(supplierData.discount_amount || 0) : 0;
+            let amount = supplierData ? Number(supplierData.amount || 0) : 0;
+            let discountDisplay = "-";
+            let rowClasses = [];
 
-    html += "</tbody></table></div>";
+            if (discountPercentage > 0) {
+                discountDisplay = `${discountPercentage}%`;
+            } else if (discountAmount > 0) {
+                discountDisplay = frappe.format(discountAmount, {
+                    fieldtype: "Currency"
+                });
+            }
+
+            if (supplierIndex === 0) {
+                rowClasses.push("rfq-item-start");
+            }
+
+            if (rate > 0 && bestRate !== null && rate === bestRate) {
+                rowClasses.push("rfq-best-rate");
+            }
+
+            html += `
+                <tr class="${rowClasses.join(" ")}">
+            `;
+
+            if (supplierIndex === 0) {
+                html += `
+                    <td class="no-cell" rowspan="${rowspan}">
+                        ${itemIndex + 1}
+                    </td>
+
+                    <td class="item-cell" rowspan="${rowspan}">
+                        ${frappe.utils.escape_html(item.item_name || item.item_code || itemKey)}
+                    </td>
+
+                    <td class="qty-cell" rowspan="${rowspan}">
+                        ${item.qty || "-"}
+                    </td>
+
+                    <td class="uom-cell" rowspan="${rowspan}">
+                        ${item.uom || "-"}
+                    </td>
+                `;
+            }
+
+            html += `
+                    <td class="supplier-cell">
+                        ${supplier !== "-" ? frappe.utils.escape_html(supplier) : "-"}
+                    </td>
+
+                    <td class="${rate ? "rate-cell" : "no-quote"}">
+                        ${rate ? frappe.format(rate, { fieldtype: "Currency" }) : "-"}
+                    </td>
+
+                    <td class="${discountDisplay !== "-" ? "discount-cell" : "no-quote"}">
+                        ${discountDisplay}
+                    </td>
+
+                    <td class="${amount ? "amount-cell" : "no-quote"}">
+                        ${amount ? frappe.format(amount, { fieldtype: "Currency" }) : "-"}
+                    </td>
+                </tr>
+            `;
+        });
+    });
+
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
 
     field.$wrapper.html(html);
 }
