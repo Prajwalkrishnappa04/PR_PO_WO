@@ -42,6 +42,20 @@ def search_student(doctype, txt, searchfield, start, page_len, filters):
 	)
 
 
+@frappe.whitelist()
+def create_student_and_set_maa_code(student_name, gender, interview_place, application_receive_date, maa_branch=None):
+	student = frappe.get_doc({
+		"doctype": "Student",
+		"student_name": student_name,
+		"gender": gender,
+		"interview_place": interview_place,
+		"maa_branch": maa_branch,
+		"application_receive_date": application_receive_date
+	})
+	student.insert(ignore_permissions=True)
+	return student.name
+
+
 class InwardDocument(Document):
 	#to save entry by user
 	def save_entry_By(self):

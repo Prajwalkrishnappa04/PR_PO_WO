@@ -12,7 +12,7 @@ frappe.ui.form.on("Outward Documents", {
     inward(frm) {
         if (!frm.doc.inward) return;
         frappe.db.get_value("Inward Document", frm.doc.inward,
-            ["date", "place", "taluka", "district", "state", "project", "medium", "subject"],
+            ["date", "place", "taluka", "district", "state", "project", "medium", "subject", "mob_no"],
             (r) => {
                 if (!r) return;
                 frm.set_value("date", r.date || "");
@@ -23,6 +23,7 @@ frappe.ui.form.on("Outward Documents", {
                 frm.set_value("project", r.project || "");
                 frm.set_value("meduium", r.medium || "");
                 frm.set_value("subject", r.subject || "");
+                frm.set_value("mob_no", r.mob_no || "");
             }
         );
     },

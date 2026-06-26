@@ -2,15 +2,24 @@
 // For license information, please see license.txt
 
 function load_project_subjects(frm) {
-    if (!frm.doc.project) {
-        frm.set_df_property("subject", "options", "");
-        frm.refresh_field("subject");
-        return;
-    }
-    frappe.db.get_doc("IRS Project", frm.doc.project).then(doc => {
-        let options = [""].concat((doc.subjects || []).map(r => r.subject));
-        frm.set_df_property("subject", "options", options.join("\n"));
-        frm.refresh_field("subject");
+    const field = frm.fields_dict["subject"];
+    frm.set_df_property("subject", "options", "");
+    if (field && field.set_data) field.set_data([]);
+
+    if (!frm.doc.project) return;
+
+    frappe.call({
+        method: "frappe.client.get",
+        args: { doctype: "IRS Project", name: frm.doc.project },
+        callback(r) {
+            if (!r.message) return;
+            const subjects = (r.message.subjects || [])
+                .map(row => row.subject)
+                .filter(Boolean);
+            frm.set_df_property("subject", "options", subjects.join("\n"));
+            if (field && field.set_data) field.set_data(subjects);
+            frm.refresh_field("subject");
+        }
     });
 }
 
@@ -85,6 +94,10 @@ frappe.ui.form.on("Inward Document", {
         if (frm.doc.application_status !== "Accept") return;
 
         frm.add_custom_button("Add Student Entry", () => {
+            if (frm.doc.maa_code) {
+                frappe.set_route("Form", "Student", frm.doc.maa_code);
+                return;
+            }
             frappe.call({
                 method: "frappe.client.get_value",
                 args: {
@@ -98,6 +111,13 @@ frappe.ui.form.on("Inward Document", {
                     let d = new frappe.ui.Dialog({
                         title: "Add Interview Details",
                         fields: [
+                            {
+                                fieldname: "maa_branch",
+                                label: "Maa Branch",
+                                fieldtype: "Link",
+                                options: "Maa Branches",
+                                reqd: 1
+                            },
                             {
                                 fieldname: "gender",
                                 label: "Gender",
@@ -117,23 +137,21 @@ frappe.ui.form.on("Inward Document", {
                         primary_action_label: "Submit",
                         primary_action(values) {
                             frappe.call({
-                                method: "frappe.client.insert",
+                                method: "po_wo_pr.irs.doctype.inward_document.inward_document.create_student_and_set_maa_code",
                                 args: {
-                                    doc: {
-                                        doctype: "Student",
-                                        student_name: frm.doc.sender,
-                                        gender: values.gender,
-                                        interview_place: values.interview_place,
-                                        maa_branch: employee_branch,
-                                        application_receive_date: frm.doc.date
-                                    }
+                                    student_name: frm.doc.sender,
+                                    gender: values.gender,
+                                    interview_place: values.interview_place,
+                                    maa_branch: values.maa_branch,
+                                    application_receive_date: frm.doc.date
                                 },
                                 callback(res) {
-                                    if (!res.exc) {
-                                        frm.set_value("maa_code", res.message.name);
-                                        frm.save();
-                                        frappe.msgprint("Student Entry Created");
+                                    if (!res.exc && res.message) {
                                         d.hide();
+                                        frappe.model.set_value(frm.doctype, frm.docname, "maa_code", res.message);
+                                        frm.save().then(() => {
+                                            frappe.msgprint(__("Student Entry Created"));
+                                        });
                                     }
                                 }
                             });
