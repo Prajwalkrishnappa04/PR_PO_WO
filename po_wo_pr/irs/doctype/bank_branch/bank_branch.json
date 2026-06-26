@@ -1,16 +1,24 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:branch_name",
+ "autoname": "naming_series:",
  "creation": "2026-06-26 12:31:30.044392",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "section_break_dz3h",
   "amended_from",
   "branch_name"
  ],
  "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "BB-.####",
+   "set_only_once": 1
+  },
   {
    "fieldname": "section_break_dz3h",
    "fieldtype": "Section Break"
@@ -32,8 +40,7 @@
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Branch Name",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
@@ -44,7 +51,7 @@
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Bank Branch",
- "naming_rule": "By fieldname",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
