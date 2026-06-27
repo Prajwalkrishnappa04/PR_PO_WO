@@ -6,13 +6,16 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "maa_code",
   "inward",
   "date",
   "place",
   "taluka",
   "district",
   "state",
+  "inter_office",
   "to",
+  "to_branch",
   "mob_no",
   "project",
   "doc_no",
@@ -55,9 +58,23 @@
    "read_only": 1
   },
   {
+   "default": 0,
+   "fieldname": "inter_office",
+   "fieldtype": "Check",
+   "label": "Inter Office"
+  },
+  {
+   "depends_on": "eval:!doc.inter_office",
    "fieldname": "to",
    "fieldtype": "Data",
    "label": "To"
+  },
+  {
+   "depends_on": "eval:doc.inter_office",
+   "fieldname": "to_branch",
+   "fieldtype": "Link",
+   "label": "To (Branch)",
+   "options": "Maa Branches"
   },
   {
    "fieldname": "mob_no",
@@ -115,12 +132,19 @@
    "fieldname": "url",
    "fieldtype": "Data",
    "label": "URL"
+  },
+  {
+   "fieldname": "maa_code",
+   "fieldtype": "Link",
+   "label": "Maa Code",
+   "in_list_view": 1,
+   "options": "Student"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-22 21:42:45.497754",
+ "modified": "2026-06-27 09:52:44.991491",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
