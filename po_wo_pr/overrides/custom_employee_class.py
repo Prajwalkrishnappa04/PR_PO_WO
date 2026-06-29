@@ -14,6 +14,8 @@ class CustomEmployee(EmployeeMaster):
 
 
     def update_custom_loan_fields(self):
+        if not frappe.db.table_exists("tabLoan"):
+            return
         loans = frappe.get_all("Loan", filters={
             "applicant_type": "Employee",
             "applicant": self.name,
@@ -65,6 +67,8 @@ class CustomEmployee(EmployeeMaster):
 
 @frappe.whitelist()
 def update_employee_loan_data(employee):
+    if not frappe.db.table_exists("tabLoan"):
+        return {}
     loans = frappe.get_all("Loan", filters={
         "applicant_type": "Employee",
         "applicant": employee,

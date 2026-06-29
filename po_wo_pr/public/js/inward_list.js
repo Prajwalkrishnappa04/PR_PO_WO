@@ -4,7 +4,7 @@ frappe.listview_settings['Inward Document'] = {
             frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then(r => {
                 if (r.message && r.message.name) {
                     listview.filter_area.add([
-                        ["Inward Document", "concern_person", "=", r.message.name, false]
+                        ["Inward Document", "concern_person", "=", r.message.name]
                     ]);
                 }
             });
