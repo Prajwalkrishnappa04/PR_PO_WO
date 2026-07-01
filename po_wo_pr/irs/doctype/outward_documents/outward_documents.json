@@ -1,12 +1,14 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "autoincrement",
+ "autoname": "naming_series:",
  "creation": "2025-11-04 12:12:13.870025",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "maa_code",
+  "student_name",
   "inward",
   "date",
   "place",
@@ -27,6 +29,15 @@
   "remaks"
  ],
  "fields": [
+  {
+   "default": "OUTB-.#####.-.YYYY.",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "OUTB-.#####.-.YYYY.",
+   "set_only_once": 1
+  },
   {
    "default": "Today",
    "fieldname": "date",
@@ -139,6 +150,14 @@
    "label": "Maa Code",
    "in_list_view": 1,
    "options": "Student"
+  },
+  {
+   "fetch_from": "maa_code.student_name",
+   "fetch_if_empty": 0,
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "label": "Student Name",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
@@ -148,7 +167,7 @@
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
- "naming_rule": "Autoincrement",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

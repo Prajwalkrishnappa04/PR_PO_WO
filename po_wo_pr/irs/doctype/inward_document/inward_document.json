@@ -1,13 +1,14 @@
 {
  "actions": [],
- "autoname": "autoincrement",
+ "autoname": "naming_series:",
  "creation": "2025-11-04 11:46:49.448241",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "date",
-  "taluka",
   "place",
+  "taluka",
   "district",
   "state",
   "sender",
@@ -24,14 +25,24 @@
   "medium",
   "concern_person",
   "handover_to",
+  "outward_entry",
   "remarks"
  ],
  "fields": [
   {
+   "default": "INB-.#####.-.YYYY.",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "INB-.#####.-.YYYY.",
+   "set_only_once": 1
+  },
+  {
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date",
+   "label": "Posting Date",
    "reqd": 1
   },
   {
@@ -156,6 +167,12 @@
    "show_title_field_in_link": 1
   },
   {
+   "fieldname": "outward_entry",
+   "fieldtype": "Link",
+   "label": "Outward Entry",
+   "options": "Outward Documents"
+  },
+  {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
@@ -168,7 +185,7 @@
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
- "naming_rule": "Autoincrement",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

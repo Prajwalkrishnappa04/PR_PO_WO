@@ -69,9 +69,6 @@ frappe.ui.form.on("Inward Document", {
         );
     },
 
-    concern_person(frm) {
-        frm.set_value("handover_to", frm.doc.concern_person);
-    },
 
     application_status(frm) {
         frm.refresh();
