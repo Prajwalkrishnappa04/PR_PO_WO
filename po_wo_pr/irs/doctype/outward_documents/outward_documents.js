@@ -29,7 +29,18 @@ frappe.ui.form.on("Outward Documents", {
         );
     },
 
+    to_branch(frm) {
+        frm.set_value("concern_person", "");
+        frm.set_query("concern_person", () => ({
+            filters: frm.doc.to_branch ? { branch: frm.doc.to_branch } : {}
+        }));
+    },
+
     refresh(frm) {
+        frm.set_query("concern_person", () => ({
+            filters: frm.doc.to_branch ? { branch: frm.doc.to_branch } : {}
+        }));
+
         frm.add_custom_button("Track Order", () => {
             if (!frm.doc.doc_no) {
                 frappe.msgprint("Please enter tracking number");

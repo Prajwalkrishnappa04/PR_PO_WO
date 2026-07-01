@@ -7,25 +7,31 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "maa_code",
-  "student_name",
+  "section_break_basic",
   "inward",
   "date",
+  "maa_code",
+  "student_name",
+  "column_break_bebl",
   "place",
   "taluka",
   "district",
   "state",
+  "section_break_recipient",
   "inter_office",
   "to",
   "to_branch",
+  "concern_person",
   "mob_no",
+  "column_break_right",
   "project",
-  "doc_no",
-  "url",
-  "entry_by",
-  "column_break_bebl",
   "meduium",
   "subject",
+  "section_break_doc",
+  "doc_no",
+  "url",
+  "column_break_doc2",
+  "entry_by",
   "remaks"
  ],
  "fields": [
@@ -37,6 +43,10 @@
    "label": "Series",
    "options": "OUTB-.#####.-.YYYY.",
    "set_only_once": 1
+  },
+  {
+   "fieldname": "section_break_basic",
+   "fieldtype": "Section Break"
   },
   {
    "default": "Today",
@@ -69,6 +79,11 @@
    "read_only": 1
   },
   {
+   "fieldname": "section_break_recipient",
+   "fieldtype": "Section Break",
+   "label": "Recipient"
+  },
+  {
    "default": 0,
    "fieldname": "inter_office",
    "fieldtype": "Check",
@@ -85,7 +100,14 @@
    "fieldname": "to_branch",
    "fieldtype": "Link",
    "label": "To (Branch)",
-   "options": "Maa Branches"
+   "options": "Branch"
+  },
+  {
+   "depends_on": "eval:doc.inter_office && doc.to_branch",
+   "fieldname": "concern_person",
+   "fieldtype": "Link",
+   "label": "Concern Person",
+   "options": "Employee"
   },
   {
    "fieldname": "mob_no",
@@ -94,27 +116,15 @@
    "options": "Phone"
   },
   {
+   "fieldname": "column_break_right",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "project",
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Project",
    "options": "IRS Project"
-  },
-  {
-   "fieldname": "doc_no",
-   "fieldtype": "Data",
-   "label": "Doc No"
-  },
-  {
-   "fieldname": "entry_by",
-   "fieldtype": "Link",
-   "label": "Entry By",
-   "options": "User",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_bebl",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "meduium",
@@ -128,6 +138,33 @@
    "label": "Subject"
   },
   {
+   "fieldname": "section_break_doc",
+   "fieldtype": "Section Break",
+   "label": "Document Details"
+  },
+  {
+   "fieldname": "doc_no",
+   "fieldtype": "Data",
+   "label": "Doc No"
+  },
+  {
+   "fieldname": "url",
+   "default": "https://trackcourier.io/track-and-trace/tirupati-courier/",
+   "fieldtype": "Data",
+   "label": "URL"
+  },
+  {
+   "fieldname": "column_break_doc2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "entry_by",
+   "fieldtype": "Link",
+   "label": "Entry By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
    "fieldname": "remaks",
    "fieldtype": "Small Text",
    "label": "Remaks"
@@ -137,12 +174,6 @@
    "fieldtype": "Link",
    "label": "Inward",
    "options": "Inward Document"
-  },
-  {
-   "default": "https://trackcourier.io/track-and-trace/tirupati-courier/",
-   "fieldname": "url",
-   "fieldtype": "Data",
-   "label": "URL"
   },
   {
    "fieldname": "maa_code",
