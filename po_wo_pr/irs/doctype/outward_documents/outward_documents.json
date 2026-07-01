@@ -41,8 +41,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Series",
-   "options": "OUTB-.#####.-.YYYY.",
-   "set_only_once": 1
+   "options": "OUTB-.#####.-.YYYY."
   },
   {
    "fieldname": "section_break_basic",
@@ -106,8 +105,10 @@
    "depends_on": "eval:doc.inter_office && doc.to_branch",
    "fieldname": "concern_person",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "label": "Concern Person",
-   "options": "Employee"
+   "options": "Employee",
+   "show_title_field_in_link": 1
   },
   {
    "fieldname": "mob_no",

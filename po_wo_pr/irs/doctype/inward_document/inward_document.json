@@ -35,8 +35,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Series",
-   "options": "INB-.#####.-.YYYY.",
-   "set_only_once": 1
+   "options": "INB-.#####.-.YYYY."
   },
   {
    "default": "Today",
