@@ -364,7 +364,13 @@ fixtures = [
             "Bank Account-custom_branch",
             "Supplier Quotation-custom_delivery_terms",
             "Purchase Receipt-custom_lr_amount",
-            "Purchase Receipt-custom_challan_qty"
+            "Purchase Invoice-custom_lr_amount",
+            "Purchase Receipt Item-custom_challan_qty",
+            "Purchase Receipt Item-custom_remarks",
+            "Purchase Invoice Item-custom_challan_qty",
+            "Purchase Invoice Item-custom_remarks",
+
+            
             ]
             ]
         ]
