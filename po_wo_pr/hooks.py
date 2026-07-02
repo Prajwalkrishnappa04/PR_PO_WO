@@ -328,7 +328,8 @@ fixtures = [
             "Material Request Item-item_code-label",
             "Material Request Item-item_name-hidden",
             "Request for Quotation Supplier-send_email-default",
-            "Request for Quotation-main-default_print_format"
+            "Request for Quotation-main-default_print_format",
+            "Supplier Quotation-transaction_date-label",
             ]]
         }
     },
@@ -360,7 +361,10 @@ fixtures = [
             "Purchase Receipt-custom_contact_personss",
             "Purchase Order-custom_our_enquiry_ref",
             "Request for Quotation-custom_our_enquiry_ref",
-            "Bank Account-custom_branch"
+            "Bank Account-custom_branch",
+            "Supplier Quotation-custom_delivery_terms",
+            "Purchase Receipt-custom_lr_amount",
+            "Purchase Receipt-custom_challan_qty"
             ]
             ]
         ]
