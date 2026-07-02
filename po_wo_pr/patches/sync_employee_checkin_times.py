@@ -2,6 +2,9 @@ import frappe
 from frappe.utils import get_time, getdate
 
 def execute():
+    if not frappe.db.has_column("Employee Checkin", "custom_exact_time"):
+        return
+
     # Fetch check-ins where custom_exact_time or custom_exact_date is missing
     checkins = frappe.get_all("Employee Checkin", or_filters=[
         ["custom_exact_time", "is", "not set"],

@@ -1,12 +1,36 @@
 // Copyright (c) 2025, Hybrowlabs
 // For license information, please see license.txt
 
+function load_project_subjects(frm) {
+    const field = frm.fields_dict["subject"];
+    if (field && field.set_data) field.set_data([]);
+
+    if (!frm.doc.project) return;
+
+    frappe.call({
+        method: "frappe.client.get",
+        args: { doctype: "IRS Project", name: frm.doc.project },
+        callback(r) {
+            if (!r.message) return;
+            const subjects = (r.message.subjects || [])
+                .map(row => row.subject)
+                .filter(Boolean);
+            if (field && field.set_data) field.set_data(subjects);
+            frm.refresh_field("subject");
+        }
+    });
+}
 
 frappe.ui.form.on("Outward Documents", {
     onload(frm) {
         if (frm.is_new()) {
             frm.set_value("date", frappe.datetime.get_today());
         }
+    },
+
+    project(frm) {
+        frm.set_value("subject", "");
+        load_project_subjects(frm);
     },
 
     inward(frm) {
@@ -37,6 +61,8 @@ frappe.ui.form.on("Outward Documents", {
     },
 
     refresh(frm) {
+        load_project_subjects(frm);
+
         frm.set_query("concern_person", () => ({
             filters: frm.doc.to_branch ? { branch: frm.doc.to_branch } : {}
         }));

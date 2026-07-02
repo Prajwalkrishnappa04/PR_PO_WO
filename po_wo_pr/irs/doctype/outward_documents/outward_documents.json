@@ -135,7 +135,7 @@
   },
   {
    "fieldname": "subject",
-   "fieldtype": "Data",
+   "fieldtype": "Autocomplete",
    "label": "Subject"
   },
   {
