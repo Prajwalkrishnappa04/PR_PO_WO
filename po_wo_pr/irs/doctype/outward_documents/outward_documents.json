@@ -12,10 +12,11 @@
   "date",
   "maa_code",
   "student_name",
-  "column_break_bebl",
   "place",
+  "column_break_rknx",
   "taluka",
   "district",
+  "pincode",
   "state",
   "section_break_recipient",
   "inter_office",
@@ -61,18 +62,28 @@
    "options": "Town Village"
   },
   {
+   "fetch_from": "place.taluka",
    "fieldname": "taluka",
    "fieldtype": "Data",
    "label": "Taluka",
    "read_only": 1
   },
   {
+   "fetch_from": "place.district",
    "fieldname": "district",
    "fieldtype": "Data",
    "label": "District",
    "read_only": 1
   },
   {
+   "fetch_from": "place.pincode",
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "place.state",
    "fieldname": "state",
    "fieldtype": "Data",
    "label": "State",
@@ -84,7 +95,7 @@
    "label": "Recipient"
   },
   {
-   "default": 0,
+   "default": "0",
    "fieldname": "inter_office",
    "fieldtype": "Check",
    "label": "Inter Office"
@@ -108,8 +119,7 @@
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
    "label": "Concern Person",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "mob_no",
@@ -150,8 +160,8 @@
    "label": "Doc No"
   },
   {
-   "fieldname": "url",
    "default": "https://trackcourier.io/track-and-trace/tirupati-courier/",
+   "fieldname": "url",
    "fieldtype": "Data",
    "label": "URL"
   },
@@ -180,23 +190,26 @@
   {
    "fieldname": "maa_code",
    "fieldtype": "Link",
-   "label": "Maa Code",
    "in_list_view": 1,
+   "label": "Maa Code",
    "options": "Student"
   },
   {
    "fetch_from": "maa_code.student_name",
-   "fetch_if_empty": 0,
    "fieldname": "student_name",
    "fieldtype": "Data",
    "label": "Student Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_rknx",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-27 09:52:44.991491",
+ "modified": "2026-07-03 15:02:09.207679",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
