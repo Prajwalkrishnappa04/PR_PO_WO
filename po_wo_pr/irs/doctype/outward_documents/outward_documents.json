@@ -56,8 +56,9 @@
   },
   {
    "fieldname": "place",
-   "fieldtype": "Data",
-   "label": "Place"
+   "fieldtype": "Link",
+   "label": "Town/Village",
+   "options": "Town Village"
   },
   {
    "fieldname": "taluka",
