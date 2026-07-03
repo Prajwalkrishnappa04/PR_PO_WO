@@ -77,6 +77,9 @@ frappe.ui.form.on("Inward Document", {
     refresh(frm) {
         load_project_subjects(frm);
 
+        frm.set_query("maa_code", () => ({
+            query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_student"
+        }));
         frm.set_query("concern_person", () => ({
             query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_branch_employee"
         }));

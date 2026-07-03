@@ -33,10 +33,10 @@ def search_branch_employee(doctype, txt, searchfield, start, page_len, filters):
 @frappe.validate_and_sanitize_search_inputs
 def search_student(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql(
-		"""SELECT name, student_name
+		"""SELECT name, student_name, maa_code
 		FROM `tabStudent`
 		WHERE (maa_code LIKE %(txt)s OR student_name LIKE %(txt)s OR name LIKE %(txt)s)
-		ORDER BY student_name
+		ORDER BY CAST(NULLIF(REGEXP_REPLACE(maa_code, '[^0-9]', ''), '') AS UNSIGNED)
 		LIMIT %(start)s, %(page_len)s""",
 		{"txt": f"%{txt}%", "start": start, "page_len": page_len},
 	)
