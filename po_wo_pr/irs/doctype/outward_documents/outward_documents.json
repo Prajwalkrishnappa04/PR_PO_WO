@@ -10,10 +10,11 @@
   "section_break_basic",
   "inward",
   "date",
+  "sent_date",
   "maa_code",
   "student_name",
-  "place",
   "column_break_rknx",
+  "place",
   "taluka",
   "district",
   "pincode",
@@ -33,7 +34,8 @@
   "url",
   "column_break_doc2",
   "entry_by",
-  "remaks"
+  "remaks",
+  "mail_sent"
  ],
  "fields": [
   {
@@ -52,14 +54,20 @@
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date",
+   "label": "Posting Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "sent_date",
+   "fieldtype": "Date",
+   "label": "Sent Date"
   },
   {
    "fieldname": "place",
    "fieldtype": "Link",
    "label": "Town/Village",
-   "options": "Town Village"
+   "options": "Town Village",
+   "reqd": 1
   },
   {
    "fetch_from": "place.taluka",
@@ -204,12 +212,20 @@
   {
    "fieldname": "column_break_rknx",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "mail_sent",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Mail Sent",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-03 15:04:14.690280",
+ "modified": "2026-07-04 10:34:44.087655",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",

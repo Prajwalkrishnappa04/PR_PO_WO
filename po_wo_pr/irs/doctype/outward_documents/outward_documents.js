@@ -53,6 +53,42 @@ frappe.ui.form.on("Outward Documents", {
         );
     },
 
+    validate(frm) {
+        if (!frm.doc.concern_person || frm.doc.mail_sent || frm.__mail_handled) return;
+
+        frappe.validated = false;
+        frm.__mail_handled = true;
+
+        frappe.confirm(
+            __("Do you want to send an email notification to the Concern Person?"),
+            () => {
+                frappe.call({
+                    method: "po_wo_pr.irs.doctype.outward_documents.outward_documents.send_concern_person_mail",
+                    args: {
+                        concern_person: frm.doc.concern_person,
+                        docname: frm.doc.name,
+                        date: frm.doc.date,
+                        project: frm.doc.project || "",
+                        subject: frm.doc.subject || "",
+                        doc_no: frm.doc.doc_no || ""
+                    },
+                    callback(r) {
+                        if (!r.exc) {
+                            frappe.show_alert({ message: __("Email sent successfully"), indicator: "green" });
+                            frm.set_value("mail_sent", 1);
+                        }
+                        frm.__mail_handled = false;
+                        frm.save();
+                    }
+                });
+            },
+            () => {
+                frm.__mail_handled = false;
+                frm.save();
+            }
+        );
+    },
+
     to_branch(frm) {
         frm.set_value("concern_person", "");
         frm.set_query("concern_person", () => ({
