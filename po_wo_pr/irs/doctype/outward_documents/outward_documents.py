@@ -37,7 +37,7 @@ def send_concern_person_mail(concern_person, docname=None, date=None, project=No
 class OutwardDocuments(Document):
 	def save_entry_By(self):
 		if not self.entry_by:
-			self.entry_by = frappe.session.user
+			self.entry_by = frappe.db.get_value("User", frappe.session.user, "full_name") or frappe.session.user
 
 	def before_save(self):
 		self.save_entry_By()

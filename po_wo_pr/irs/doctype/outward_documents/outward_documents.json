@@ -32,6 +32,7 @@
   "section_break_doc",
   "doc_no",
   "url",
+  "tracking_url",
   "column_break_doc2",
   "entry_by",
   "remaks",
@@ -168,10 +169,17 @@
    "label": "Doc No"
   },
   {
-   "default": "https://trackcourier.io/track-and-trace/tirupati-courier/",
    "fieldname": "url",
+   "fieldtype": "Link",
+   "label": "Courier",
+   "options": "URL Master"
+  },
+  {
+   "fetch_from": "url.url",
+   "fieldname": "tracking_url",
    "fieldtype": "Data",
-   "label": "URL"
+   "label": "Tracking URL",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_doc2",
@@ -179,9 +187,8 @@
   },
   {
    "fieldname": "entry_by",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Entry By",
-   "options": "User",
    "read_only": 1
   },
   {

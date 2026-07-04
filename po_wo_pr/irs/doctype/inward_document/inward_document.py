@@ -60,7 +60,7 @@ class InwardDocument(Document):
 	#to save entry by user
 	def save_entry_By(self):
 		if not self.entry_by:
-			self.entry_by = frappe.session.user
+			self.entry_by = frappe.db.get_value("User", frappe.session.user, "full_name") or frappe.session.user
 
 	#before save hook
 	def before_save(self):

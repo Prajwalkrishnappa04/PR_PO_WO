@@ -108,16 +108,11 @@ frappe.ui.form.on("Outward Documents", {
                 frappe.msgprint("Please enter tracking number");
                 return;
             }
-            window.open(`${frm.doc.url}${frm.doc.doc_no}`, "_blank");
+            if (!frm.doc.tracking_url) {
+                frappe.msgprint("Please select a Courier");
+                return;
+            }
+            window.open(`${frm.doc.tracking_url}${frm.doc.doc_no}`, "_blank");
         });
-
-        // URL field editable rules
-        if (frm.is_new()) {
-            frm.set_df_property("url", "reqd", true);
-            frm.set_df_property("url", "read_only", false);
-        } else {
-            frm.set_df_property("url", "reqd", false);
-            frm.set_df_property("url", "read_only", true);
-        }
     }
 });

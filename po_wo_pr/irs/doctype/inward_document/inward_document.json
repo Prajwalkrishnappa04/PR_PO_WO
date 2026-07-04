@@ -107,9 +107,8 @@
   },
   {
    "fieldname": "entry_by",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Entry By",
-   "options": "User",
    "read_only": 1
   },
   {
