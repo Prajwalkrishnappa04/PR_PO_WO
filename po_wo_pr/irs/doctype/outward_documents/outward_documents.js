@@ -54,7 +54,7 @@ frappe.ui.form.on("Outward Documents", {
     },
 
     validate(frm) {
-        if (!frm.doc.concern_person || frm.doc.mail_sent || frm.__mail_handled) return;
+        if (!frm.doc.concern_person || frm.doc.mail_sent || frm.__mail_handled || frm.__skip_mail) return;
 
         frappe.validated = false;
         frm.__mail_handled = true;
@@ -62,6 +62,7 @@ frappe.ui.form.on("Outward Documents", {
         frappe.confirm(
             __("Do you want to send an email notification to the Concern Person?"),
             () => {
+                // Yes
                 frappe.call({
                     method: "po_wo_pr.irs.doctype.outward_documents.outward_documents.send_concern_person_mail",
                     args: {
@@ -83,8 +84,12 @@ frappe.ui.form.on("Outward Documents", {
                 });
             },
             () => {
+                // No or X — save without sending, skip dialog on the re-triggered save
                 frm.__mail_handled = false;
-                frm.save();
+                frm.__skip_mail = true;
+                frm.save().then(() => {
+                    frm.__skip_mail = false;
+                });
             }
         );
     },
