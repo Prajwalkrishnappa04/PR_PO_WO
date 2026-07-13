@@ -5,6 +5,7 @@ import frappe
 from frappe.model.document import Document
 
 
+
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def search_branch_employee(doctype, txt, searchfield, start, page_len, filters):
@@ -39,6 +40,26 @@ def search_student(doctype, txt, searchfield, start, page_len, filters):
 		ORDER BY CAST(NULLIF(REGEXP_REPLACE(maa_code, '[^0-9]', ''), '') AS UNSIGNED)
 		LIMIT %(start)s, %(page_len)s""",
 		{"txt": f"%{txt}%", "start": start, "page_len": page_len},
+	)
+
+
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def search_town_village(doctype, txt, searchfield, start, page_len, filters):
+	# Search only by the townvillage field (not by name/taluka).
+	conditions = ["townvillage LIKE %(txt)s"]
+	values = {"txt": f"%{txt}%", "start": start, "page_len": page_len}
+	if filters and filters.get("taluka"):
+		conditions.append("taluka = %(taluka)s")
+		values["taluka"] = filters.get("taluka")
+
+	return frappe.db.sql(
+		"""SELECT name, townvillage
+		FROM `tabTown Village`
+		WHERE {conditions}
+		ORDER BY townvillage
+		LIMIT %(start)s, %(page_len)s""".format(conditions=" AND ".join(conditions)),
+		values,
 	)
 
 
