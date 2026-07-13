@@ -61,8 +61,14 @@ frappe.ui.form.on("Inward Document", {
 
         const mc = frm.doc.maa_code.toUpperCase();
         if (mc.startsWith("MFBH") || mc.startsWith("MFVA")) {
-            frm.set_value("project", "Vidhya").then(() => {
-                frm.set_value("subject", "Vidya - Application");
+            // "Vidhya" is the project_name (title); the Link value must be the record's
+            // name/id, so resolve it by project_name before setting.
+            frappe.db.get_value("IRS Project", { project_name: "Vidhya" }, "name", (r) => {
+                if (r && r.name) {
+                    frm.set_value("project", r.name).then(() => {
+                        frm.set_value("subject", "Vidya - Application");
+                    });
+                }
             });
         }
 
