@@ -5,6 +5,7 @@ import frappe
 from frappe.model.document import Document
 
 
+
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def search_branch_employee(doctype, txt, searchfield, start, page_len, filters):
