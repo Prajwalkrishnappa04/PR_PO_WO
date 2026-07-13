@@ -395,6 +395,11 @@ fixtures = [
             ]
             ]
         ]
+    },
+
+    {
+        "dt": "Workflow",
+        "filters": [["name", "in", ["Inward Document"]]]
     }
 
 ]
