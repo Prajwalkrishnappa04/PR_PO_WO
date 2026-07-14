@@ -23,6 +23,34 @@ function load_project_subjects(frm) {
     });
 }
 
+function set_vidhya_project(frm) {
+    // "Vidhya" is the project_name (title); the project Link value must be the record's
+    // name/id. Resolve it via a server method (IRS Project read is restricted to System
+    // Manager, so a client-side get_value returns empty for other users).
+    frappe.call({
+        method: "po_wo_pr.irs.doctype.inward_document.inward_document.get_project_by_name",
+        args: { project_name: "Vidhya" },
+        callback: (res) => {
+            if (!res.message) return;
+            frm.set_value("project", res.message).then(() => {
+                // project() clears subject and loads its options async; wait for that to
+                // finish (after_ajax), then ensure the option exists and set it so the
+                // autocomplete both stores and displays the value.
+                frappe.after_ajax(() => {
+                    const target = "Vidya - Application";
+                    const field = frm.fields_dict["subject"];
+                    const opts = (frm.get_field("subject").df.options || "")
+                        .split("\n").filter(Boolean);
+                    if (!opts.includes(target)) opts.push(target);
+                    frm.set_df_property("subject", "options", opts.join("\n"));
+                    if (field && field.set_data) field.set_data(opts);
+                    frm.set_value("subject", target).then(() => frm.refresh_field("subject"));
+                });
+            });
+        }
+    });
+}
+
 frappe.ui.form.on("Inward Document", {
     taluka(frm) {
         frm.set_value("place", "");
@@ -59,21 +87,8 @@ frappe.ui.form.on("Inward Document", {
     maa_code(frm) {
         if (!frm.doc.maa_code) return;
 
-        const mc = frm.doc.maa_code.toUpperCase();
-        if (mc.startsWith("MFBH") || mc.startsWith("MFVA")) {
-            // "Vidhya" is the project_name (title); the Link value must be the record's
-            // name/id, so resolve it by project_name before setting.
-            frappe.db.get_value("IRS Project", { project_name: "Vidhya" }, "name", (r) => {
-                if (r && r.name) {
-                    frm.set_value("project", r.name).then(() => {
-                        frm.set_value("subject", "Vidya - Application");
-                    });
-                }
-            });
-        }
-
         frappe.db.get_value("Student", frm.doc.maa_code,
-            ["student_name", "townvillage", "application_receive_date", "phone_no"],
+            ["student_name", "townvillage", "application_receive_date", "phone_no", "maa_code"],
             (r) => {
                 if (!r) return;
                 frm.set_value("sender", r.student_name || "");
@@ -82,6 +97,14 @@ frappe.ui.form.on("Inward Document", {
                     frm.set_value("date", r.application_receive_date || frappe.datetime.get_today());
                 }
                 frm.set_value("mob_no", r.phone_no || "");
+
+                // maa_code is a Link to Student and stores the Student's name, which can
+                // differ from its maa_code value. So check the prefix on the Student's
+                // actual maa_code, not on the link value.
+                const mc = (r.maa_code || "").toUpperCase();
+                if (mc.startsWith("MFBH") || mc.startsWith("MFVA")) {
+                    set_vidhya_project(frm);
+                }
             }
         );
     },
