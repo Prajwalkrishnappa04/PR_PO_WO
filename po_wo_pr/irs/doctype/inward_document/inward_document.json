@@ -27,6 +27,7 @@
   "handover_to",
   "outward_entry",
   "remarks",
+  "received_date",
   "section_break_plnu",
   "document_records"
  ],
@@ -187,12 +188,17 @@
    "fieldtype": "Table",
    "label": "Document Records",
    "options": "Inward Details"
+  },
+  {
+   "fieldname": "received_date",
+   "fieldtype": "Date",
+   "label": "Received Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-14 17:12:30.671342",
+ "modified": "2026-07-14 18:34:54.448255",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
