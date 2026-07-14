@@ -54,6 +54,7 @@
    "fieldname": "place",
    "fieldtype": "Link",
    "label": "Place",
+   "in_standard_filter": 1,
    "options": "Town Village"
   },
   {
@@ -74,6 +75,7 @@
    "fieldname": "sender",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Sender",
    "reqd": 1
   },
@@ -133,6 +135,7 @@
    "fieldname": "maa_code",
    "fieldtype": "Link",
    "label": "Maa Code",
+   "in_standard_filter": 1,
    "options": "Student"
   },
   {
@@ -153,16 +156,14 @@
    "ignore_user_permissions": 1,
    "in_standard_filter": 1,
    "label": "Concern Person",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "handover_to",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
    "label": "Handover To",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "outward_entry",
@@ -179,7 +180,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2099-12-31 23:59:59.000003",
+ "modified": "2026-07-14 17:12:30.671342",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
