@@ -26,7 +26,9 @@
   "concern_person",
   "handover_to",
   "outward_entry",
-  "remarks"
+  "remarks",
+  "section_break_plnu",
+  "document_records"
  ],
  "fields": [
   {
@@ -175,12 +177,26 @@
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_plnu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "document_records",
+   "fieldtype": "Table",
+   "label": "Document Records",
+   "options": "Inward Details"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2026-07-14 17:12:30.671342",
+=======
+ "modified": "2026-07-14 16:19:04.310198",
+>>>>>>> maa_foundation
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
