@@ -84,6 +84,21 @@ frappe.ui.form.on("Inward Document", {
         setTimeout(() => set_row_wise_tab(frm), 300);
     },
 
+    received_date(frm) {
+        // Parent received_date badle to badhi child rows ni receiving_date same karo.
+        (frm.doc.document_records || []).forEach(row => {
+            frappe.model.set_value(row.doctype, row.name, "receiving_date", frm.doc.received_date);
+        });
+        frm.refresh_field("document_records");
+    },
+
+    document_records_add(frm, cdt, cdn) {
+        // Navi row add thay to parent no received_date ema set karo.
+        if (frm.doc.received_date) {
+            frappe.model.set_value(cdt, cdn, "receiving_date", frm.doc.received_date);
+        }
+    },
+
     taluka(frm) {
         frm.set_value("place", "");
         frm.set_value("district", "");
@@ -149,6 +164,15 @@ frappe.ui.form.on("Inward Document", {
     refresh(frm) {
         setTimeout(() => set_row_wise_tab(frm), 300);
         load_project_subjects(frm);
+
+        // Form kholta: received_date hoy to je rows ni receiving_date khaali che ema bharo.
+        if (frm.doc.received_date) {
+            (frm.doc.document_records || []).forEach(row => {
+                if (!row.receiving_date) {
+                    frappe.model.set_value(row.doctype, row.name, "receiving_date", frm.doc.received_date);
+                }
+            });
+        }
 
         frm.set_query("concern_person", () => ({
             query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_branch_employee"
