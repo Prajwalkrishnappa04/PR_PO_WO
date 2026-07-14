@@ -64,6 +64,14 @@ def search_town_village(doctype, txt, searchfield, start, page_len, filters):
 
 
 @frappe.whitelist()
+def get_project_by_name(project_name):
+	# Resolve an IRS Project's id by its project_name, bypassing read-permission
+	# (frappe.db.get_value does not enforce perms) so non-System-Manager users can
+	# still get the auto-set project.
+	return frappe.db.get_value("IRS Project", {"project_name": project_name}, "name")
+
+
+@frappe.whitelist()
 def create_student_and_set_maa_code(student_name, gender, interview_place, application_receive_date, maa_branch=None):
 	student = frappe.get_doc({
 		"doctype": "Student",
