@@ -51,7 +51,39 @@ function set_vidhya_project(frm) {
     });
 }
 
+function set_row_wise_tab(frm) {
+    // By default Frappe's Tab order follows the field-definition order, which walks the
+    // whole left column and only then the right column. This re-assigns tabindex so Tab
+    // moves left field -> right field -> next row (row-wise), section by section.
+    let tab = 1;
+
+    frm.$wrapper.find(".form-section").each(function () {
+        const columns = [];
+
+        $(this).find(".form-column").each(function () {
+            const inputs = $(this)
+                .find("input:visible, textarea:visible, select:visible")
+                .filter(function () {
+                    return !this.disabled && this.type !== "hidden";
+                })
+                .toArray();
+            columns.push(inputs);
+        });
+
+        const max_rows = Math.max(0, ...columns.map(c => c.length));
+        for (let r = 0; r < max_rows; r++) {
+            for (let c = 0; c < columns.length; c++) {
+                if (columns[c][r]) columns[c][r].setAttribute("tabindex", tab++);
+            }
+        }
+    });
+}
+
 frappe.ui.form.on("Inward Document", {
+    onload_post_render(frm) {
+        setTimeout(() => set_row_wise_tab(frm), 300);
+    },
+
     taluka(frm) {
         frm.set_value("place", "");
         frm.set_value("district", "");
@@ -115,6 +147,7 @@ frappe.ui.form.on("Inward Document", {
     },
 
     refresh(frm) {
+        setTimeout(() => set_row_wise_tab(frm), 300);
         load_project_subjects(frm);
 
         frm.set_query("concern_person", () => ({
