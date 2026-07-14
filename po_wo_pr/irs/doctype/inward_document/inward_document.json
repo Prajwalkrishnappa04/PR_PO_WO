@@ -192,11 +192,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
-<<<<<<< HEAD
  "modified": "2026-07-14 17:12:30.671342",
-=======
- "modified": "2026-07-14 16:19:04.310198",
->>>>>>> maa_foundation
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
