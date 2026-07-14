@@ -26,7 +26,9 @@
   "concern_person",
   "handover_to",
   "outward_entry",
-  "remarks"
+  "remarks",
+  "section_break_plnu",
+  "document_records"
  ],
  "fields": [
   {
@@ -153,16 +155,14 @@
    "ignore_user_permissions": 1,
    "in_standard_filter": 1,
    "label": "Concern Person",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "handover_to",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
    "label": "Handover To",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "outward_entry",
@@ -174,12 +174,22 @@
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_plnu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "document_records",
+   "fieldtype": "Table",
+   "label": "Document Records",
+   "options": "Inward Details"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2099-12-31 23:59:59.000003",
+ "modified": "2026-07-14 16:19:04.310198",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
