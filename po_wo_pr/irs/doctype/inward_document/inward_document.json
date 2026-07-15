@@ -27,6 +27,7 @@
   "handover_to",
   "outward_entry",
   "remarks",
+  "received_date",
   "section_break_plnu",
   "document_records"
  ],
@@ -188,6 +189,11 @@
    "fieldtype": "Table",
    "label": "Document Records",
    "options": "Inward Details"
+  },
+  {
+   "fieldname": "received_date",
+   "fieldtype": "Date",
+   "label": "Received Date"
   }
  ],
  "grid_page_length": 50,

@@ -91,6 +91,14 @@ class InwardDocument(Document):
 		if not self.entry_by:
 			self.entry_by = frappe.db.get_value("User", frappe.session.user, "full_name") or frappe.session.user
 
+	def set_receiving_dates(self):
+		# received_date set hoy to badhi child (document_records) rows ni receiving_date
+		# ene barabar karo, jethi save par hameshaa parent ni received_date sathe match thay.
+		if self.received_date:
+			for row in self.document_records:
+				row.receiving_date = self.received_date
+
 	#before save hook
 	def before_save(self):
 		self.save_entry_By()
+		self.set_receiving_dates()
