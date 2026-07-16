@@ -6,7 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "date",
+  "received_date",
   "place",
   "taluka",
   "district",
@@ -27,7 +27,7 @@
   "handover_to",
   "outward_entry",
   "remarks",
-  "received_date",
+  "date",
   "section_break_plnu",
   "document_records"
  ],
@@ -200,7 +200,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-16 11:23:24.495906",
+ "modified": "2026-07-16 18:23:46.882226",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
