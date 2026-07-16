@@ -1,4 +1,23 @@
 frappe.listview_settings['Inward Document'] = {
+    // Color the Application Status column (Accept=green, Reject=red, Pending=orange).
+    // Keep this in the SAME object as onload — a second
+    // `frappe.listview_settings['Inward Document'] = {...}` would overwrite it.
+    formatters: {
+        application_status(value) {
+            if (!value) return "";
+            const color = {
+                "Accept": "green",
+                "Reject": "red",
+                "Repeat Reject": "red",
+                "Pending": "orange",
+            }[value] || "gray";
+            return `<span class="indicator-pill ${color} filterable ellipsis"
+                data-filter="application_status,=,${value}">
+                <span class="ellipsis">${__(value)}</span>
+            </span>`;
+        },
+    },
+
     onload(listview) {
         if (frappe.session.user !== "Administrator") {
             frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then(r => {
