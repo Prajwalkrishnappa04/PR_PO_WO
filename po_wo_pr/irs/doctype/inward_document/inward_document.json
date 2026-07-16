@@ -153,16 +153,14 @@
    "ignore_user_permissions": 1,
    "in_standard_filter": 1,
    "label": "Concern Person",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "handover_to",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
    "label": "Handover To",
-   "options": "Employee",
-   "show_title_field_in_link": 1
+   "options": "Employee"
   },
   {
    "fieldname": "outward_entry",
