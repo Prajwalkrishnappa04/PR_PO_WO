@@ -8,9 +8,8 @@
  "field_order": [
   "naming_series",
   "section_break_basic",
-  "inward",
-  "date",
   "sent_date",
+  "inward",
   "maa_code",
   "student_name",
   "column_break_rknx",
@@ -33,6 +32,7 @@
   "doc_no",
   "url",
   "tracking_url",
+  "date",
   "column_break_doc2",
   "entry_by",
   "remaks",
@@ -56,6 +56,7 @@
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Posting Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -232,7 +233,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 10:34:44.087655",
+ "modified": "2026-07-17 13:05:11.338651",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
