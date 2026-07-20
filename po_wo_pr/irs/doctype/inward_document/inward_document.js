@@ -84,6 +84,12 @@ frappe.ui.form.on("Inward Document", {
         setTimeout(() => set_row_wise_tab(frm), 300);
     },
 
+    inter_office(frm) {
+        // sender / from_branch toggle via depends_on, so the visible inputs change and the
+        // tabindex sequence has to be rebuilt.
+        setTimeout(() => set_row_wise_tab(frm), 300);
+    },
+
     received_date(frm) {
         // Parent received_date badle to badhi child rows ni receiving_date same karo.
         (frm.doc.document_records || []).forEach(row => {
