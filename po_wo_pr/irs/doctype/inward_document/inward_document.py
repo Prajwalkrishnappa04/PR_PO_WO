@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
@@ -98,7 +99,80 @@ class InwardDocument(Document):
 			for row in self.document_records:
 				row.receiving_date = self.received_date
 
+	def set_document_records_from_project(self):
+		# Subject "Application" no hoy (koi pan project no) tyare e project na
+		# Document List mathi document names document_records ma bharo.
+		#
+		# Aa FAKT navi entry banti hoy tyare j chale. Pachi na Save par kyare y
+		# nahi chale — etle jo user ne koi document ni jarur na hoy ane e row
+		# delete kari de, to e row pachi kyare y fetch nahi thay.
+		if not self.is_new():
+			return
+		if not self.project or not self.subject:
+			return
+		if "application" not in self.subject.lower():
+			return
+
+		rows = frappe.get_all(
+			"Student Document Detail",
+			filters={
+				"parent": self.project,
+				"parenttype": "IRS Project",
+				"parentfield": "document_list",
+			},
+			fields=["name1"],
+			order_by="idx",
+		)
+		if not rows:
+			return
+
+		existing = {
+			(row.document_name or "").strip().lower()
+			for row in self.document_records
+			if row.document_name
+		}
+
+		for row in rows:
+			document_name = (row.name1 or "").strip()
+			if not document_name or document_name.lower() in existing:
+				continue
+			self.append("document_records", {
+				"document_name": document_name,
+				"receiving_date": self.received_date,
+			})
+			existing.add(document_name.lower())
+
+	def validate_unique_document_records(self):
+		# document_records ma ek j Document Name be vaar na aavvu joie.
+		# Comparison trim + lowercase par, jethi "SSC Certificate" ane
+		# " ssc certificate " ne pan duplicate ganay.
+		seen = {}
+		duplicates = []
+
+		for row in self.document_records:
+			key = (row.document_name or "").strip().lower()
+			if not key:
+				continue
+			if key in seen:
+				duplicates.append((row.idx, row.document_name, seen[key]))
+			else:
+				seen[key] = row.idx
+
+		if duplicates:
+			messages = [
+				_("Row #{0}: Document Name {1} is already added in row #{2}").format(
+					idx, frappe.bold(document_name), first_idx
+				)
+				for idx, document_name, first_idx in duplicates
+			]
+			frappe.throw(
+				"<br>".join(messages),
+				title=_("Duplicate Document Name"),
+			)
+
 	#before save hook
 	def before_save(self):
 		self.save_entry_By()
+		self.set_document_records_from_project()
+		self.validate_unique_document_records()
 		self.set_receiving_dates()
