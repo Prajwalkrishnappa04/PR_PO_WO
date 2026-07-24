@@ -29,6 +29,7 @@
   "project",
   "subject",
   "section_break_doc",
+  "concern_person_email",
   "doc_no",
   "url",
   "tracking_url",
@@ -132,10 +133,12 @@
    "options": "Employee"
   },
   {
+   "fetch_from": "concern_person.cell_number",
    "fieldname": "mob_no",
    "fieldtype": "Data",
    "label": "Mob. No.",
-   "options": "Phone"
+   "options": "Phone",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_right",
@@ -163,6 +166,14 @@
    "fieldname": "section_break_doc",
    "fieldtype": "Section Break",
    "label": "Document Details"
+  },
+  {
+   "fetch_from": "concern_person.company_email",
+   "fieldname": "concern_person_email",
+   "fieldtype": "Data",
+   "label": "Concern Person Email",
+   "options": "Email",
+   "read_only": 1
   },
   {
    "fieldname": "doc_no",
