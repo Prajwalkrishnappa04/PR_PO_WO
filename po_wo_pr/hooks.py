@@ -48,18 +48,18 @@ doctype_list_js = {
 
 # include js in doctype views
 doctype_js = {
-    "Purchase Order" : "public/js/purchase_order.js",
+    "Purchase Order" : ["public/js/purchase_order.js", "public/js/enquiry_ref.js"],
     "Item" : "public/js/item_master.js",
-    "Request for Quotation": "public/js/request_quotation.js",
+    "Request for Quotation": ["public/js/request_quotation.js", "public/js/enquiry_ref.js"],
     "Employee": "public/js/employee.js",
     "Cost Center":"public/js/cost_center.js",
     "Shift Assignment":"public/js/shift_assignment.js",
     "Material Request":"public/js/material_request.js",
     "Attendance": "public/js/attendance.js",
     "Employee Checkin": "public/js/employee_checkin.js",
-    "Supplier Quotation": "public/js/supplier_quotation.js",
-    "Purchase Receipt": "public/js/purchase_receipt.js",
-    "Purchase Invoice": "public/js/purchase_invoice.js",
+    "Supplier Quotation": ["public/js/supplier_quotation.js", "public/js/enquiry_ref.js"],
+    "Purchase Receipt": ["public/js/purchase_receipt.js", "public/js/enquiry_ref.js"],
+    "Purchase Invoice": ["public/js/purchase_invoice.js", "public/js/enquiry_ref.js"],
     "Payment Entry": "public/js/payment_entry.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
@@ -191,10 +191,18 @@ doc_events = {
 	"Purchase Receipt": {
 		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields",
 		"on_submit": "po_wo_pr.api.setup.update_po_received_qty",
-		"on_cancel": "po_wo_pr.api.setup.update_po_received_qty"
+		"on_cancel": "po_wo_pr.api.setup.update_po_received_qty",
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
 	},
 	"Purchase Order": {
-		"autoname": "po_wo_pr.api.setup.set_purchase_order_name"
+		"autoname": "po_wo_pr.api.setup.set_purchase_order_name",
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+	},
+	"Supplier Quotation": {
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+	},
+	"Purchase Invoice": {
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
 	}
 }
 

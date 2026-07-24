@@ -1,5 +1,7 @@
 import frappe
 
+from po_wo_pr.overrides.enquiry_ref import copy_enquiry_refs
+
 from erpnext.buying.doctype.request_for_quotation.request_for_quotation import (
 	make_supplier_quotation_from_rfq as erpnext_make_supplier_quotation_from_rfq,
 )
@@ -25,4 +27,5 @@ def make_supplier_quotation_from_rfq(source_name, target_doc=None, for_supplier=
 	target_doc = erpnext_make_supplier_quotation_from_rfq(
 		source_name, target_doc=target_doc, for_supplier=for_supplier
 	)
+	target_doc = copy_enquiry_refs("Request for Quotation", source_name, target_doc)
 	return map_rfq_contact_persons(source_name, target_doc)

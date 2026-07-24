@@ -8,9 +8,8 @@
  "field_order": [
   "naming_series",
   "section_break_basic",
-  "inward",
-  "date",
   "sent_date",
+  "inward",
   "maa_code",
   "student_name",
   "column_break_rknx",
@@ -30,9 +29,11 @@
   "project",
   "subject",
   "section_break_doc",
+  "concern_person_email",
   "doc_no",
   "url",
   "tracking_url",
+  "date",
   "column_break_doc2",
   "entry_by",
   "remaks",
@@ -56,6 +57,7 @@
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Posting Date",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -131,10 +133,12 @@
    "options": "Employee"
   },
   {
+   "fetch_from": "concern_person.cell_number",
    "fieldname": "mob_no",
    "fieldtype": "Data",
    "label": "Mob. No.",
-   "options": "Phone"
+   "options": "Phone",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_right",
@@ -162,6 +166,14 @@
    "fieldname": "section_break_doc",
    "fieldtype": "Section Break",
    "label": "Document Details"
+  },
+  {
+   "fetch_from": "concern_person.company_email",
+   "fieldname": "concern_person_email",
+   "fieldtype": "Data",
+   "label": "Concern Person Email",
+   "options": "Email",
+   "read_only": 1
   },
   {
    "fieldname": "doc_no",
@@ -232,7 +244,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 10:34:44.087655",
+ "modified": "2026-07-17 13:05:11.338651",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",

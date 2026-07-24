@@ -23,6 +23,87 @@ function load_project_subjects(frm) {
     });
 }
 
+function is_application_subject(subject) {
+    // Same rule as application_status's depends_on — any project's
+    // "... - Application" subject matches.
+    return !!subject && subject.toLowerCase().includes("application");
+}
+
+function fill_document_records(frm) {
+    // Project na Document List mathi document names document_records ma bharo.
+    //
+    // Aa FAKT navi entry ma j chale (frm.is_new()). Save thai gaya pachi kyare y
+    // nahi chale — etle jo user ne koi document ni jarur na hoy ane e row delete
+    // kari de, to e row pachi kyare y fetch nahi thay.
+    if (!frm.is_new()) return;
+    if (!frm.doc.project) return;
+    if (!is_application_subject(frm.doc.subject)) return;
+
+    frappe.call({
+        method: "frappe.client.get",
+        args: { doctype: "IRS Project", name: frm.doc.project },
+        callback(r) {
+            if (!r.message) return;
+
+            const names = (r.message.document_list || [])
+                .map(row => row.name1)
+                .filter(Boolean);
+            if (!names.length) return;
+
+            // Pahela thi rahel document names — duplicate rokva mate.
+            const existing = new Set(
+                (frm.doc.document_records || [])
+                    .map(row => (row.document_name || "").trim().toLowerCase())
+                    .filter(Boolean)
+            );
+
+            let added = 0;
+            names.forEach(document_name => {
+                const key = document_name.trim().toLowerCase();
+                if (existing.has(key)) return;
+                const row = frm.add_child("document_records");
+                row.document_name = document_name;
+                if (frm.doc.received_date) row.receiving_date = frm.doc.received_date;
+                existing.add(key);
+                added++;
+            });
+
+            if (added) frm.refresh_field("document_records");
+        }
+    });
+}
+
+function validate_unique_document_records(frm) {
+    // document_records ma ek j Document Name be vaar na aavvu joie.
+    // Comparison trim + lowercase par, jethi "SSC Certificate" ane
+    // "  ssc certificate  " ne pan duplicate ganay.
+    const seen = {};
+    const messages = [];
+
+    (frm.doc.document_records || []).forEach(row => {
+        const key = (row.document_name || "").trim().toLowerCase();
+        if (!key) return;
+        if (seen[key]) {
+            messages.push(
+                __("Row #{0}: Document Name {1} is already added in row #{2}", [
+                    row.idx,
+                    `<b>${frappe.utils.escape_html(row.document_name)}</b>`,
+                    seen[key]
+                ])
+            );
+        } else {
+            seen[key] = row.idx;
+        }
+    });
+
+    if (messages.length) {
+        frappe.throw({
+            message: messages.join("<br>"),
+            title: __("Duplicate Document Name")
+        });
+    }
+}
+
 function set_vidhya_project(frm) {
     // "Vidhya" is the project_name (title); the project Link value must be the record's
     // name/id. Resolve it via a server method (IRS Project read is restricted to System
@@ -84,6 +165,12 @@ frappe.ui.form.on("Inward Document", {
         setTimeout(() => set_row_wise_tab(frm), 300);
     },
 
+    inter_office(frm) {
+        // sender / from_branch toggle via depends_on, so the visible inputs change and the
+        // tabindex sequence has to be rebuilt.
+        setTimeout(() => set_row_wise_tab(frm), 300);
+    },
+
     received_date(frm) {
         // Parent received_date badle to badhi child rows ni receiving_date same karo.
         (frm.doc.document_records || []).forEach(row => {
@@ -129,6 +216,14 @@ frappe.ui.form.on("Inward Document", {
     project(frm) {
         frm.set_value("subject", "");
         load_project_subjects(frm);
+    },
+
+    subject(frm) {
+        fill_document_records(frm);
+    },
+
+    validate(frm) {
+        validate_unique_document_records(frm);
     },
 
     maa_code(frm) {
