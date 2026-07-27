@@ -48,18 +48,18 @@ doctype_list_js = {
 
 # include js in doctype views
 doctype_js = {
-    "Purchase Order" : "public/js/purchase_order.js",
+    "Purchase Order" : ["public/js/purchase_order.js", "public/js/enquiry_ref.js"],
     "Item" : "public/js/item_master.js",
-    "Request for Quotation": "public/js/request_quotation.js",
+    "Request for Quotation": ["public/js/request_quotation.js", "public/js/enquiry_ref.js"],
     "Employee": "public/js/employee.js",
     "Cost Center":"public/js/cost_center.js",
     "Shift Assignment":"public/js/shift_assignment.js",
     "Material Request":"public/js/material_request.js",
     "Attendance": "public/js/attendance.js",
     "Employee Checkin": "public/js/employee_checkin.js",
-    "Supplier Quotation": "public/js/supplier_quotation.js",
-    "Purchase Receipt": "public/js/purchase_receipt.js",
-    "Purchase Invoice": "public/js/purchase_invoice.js",
+    "Supplier Quotation": ["public/js/supplier_quotation.js", "public/js/enquiry_ref.js"],
+    "Purchase Receipt": ["public/js/purchase_receipt.js", "public/js/enquiry_ref.js"],
+    "Purchase Invoice": ["public/js/purchase_invoice.js", "public/js/enquiry_ref.js"],
     "Payment Entry": "public/js/payment_entry.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
@@ -159,7 +159,7 @@ override_doctype_class = {
 
 # Document Events
 # ---------------
-# Hook on# Document Events
+# Document Events
 # ---------------
 
 doc_events = {
@@ -191,10 +191,18 @@ doc_events = {
 	"Purchase Receipt": {
 		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields",
 		"on_submit": "po_wo_pr.api.setup.update_po_received_qty",
-		"on_cancel": "po_wo_pr.api.setup.update_po_received_qty"
+		"on_cancel": "po_wo_pr.api.setup.update_po_received_qty",
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
 	},
 	"Purchase Order": {
-		"autoname": "po_wo_pr.api.setup.set_purchase_order_name"
+		"autoname": "po_wo_pr.api.setup.set_purchase_order_name",
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+	},
+	"Supplier Quotation": {
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+	},
+	"Purchase Invoice": {
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
 	}
 }
 
@@ -237,6 +245,7 @@ doc_events = {
 #
 override_whitelisted_methods = {
 	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails": "po_wo_pr.api.request_for_quotation_email.send_supplier_emails",
+	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.get_pdf": "po_wo_pr.api.request_for_quotation_data.get_pdf",
 	"erpnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_from_rfq": "po_wo_pr.overrides.request_for_quotation_mapper.make_supplier_quotation_from_rfq",
 	"erpnext.stock.doctype.material_request.material_request.make_purchase_order": "po_wo_pr.overrides.material_request.make_purchase_order",
 	"erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_order": "po_wo_pr.overrides.purchase_order.make_purchase_order_from_supplier_quotation",
@@ -286,7 +295,7 @@ fixtures = [
             # "Employee External Work History-main-field_order","Employee-custom_educational_details-hidden","Employee-lft-hidden","Employee-rgt-hidden",
             # "Employee-old_parent-hidden","Employee Internal Work History-department-hidden",
             "Material Request Item-gst_hsn_code-hidden","Material Request Item-conversion_factor-req",
-            "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden"
+            "Material Request Item-conversion_factor-hidden","Material Request-scan_barcode-hidden","Material Request Item-manufacture_details-hidden","Material Request Item-accounting_details_section-hidden",
             "Material Request Item-accounting_dimensions_section-collapsible", "Material Request Item-rate-hidden","Supplier Quotation-quotation_number-label","Supplier Quotation Item-gst_hsn_code-hidden",
             "Supplier Quotation Item-gst_hsn_code-hidden","Supplier Quotation Item-conversion_factor-reqd","Supplier Quotation Item-conversion_factor-hidden","Supplier Quotation Item-item_weight_details-hidden",
             "Supplier Quotation Item-manufacture_details-hidden","Purchase Order-scan_barcode-hidden","Purchase Order-discount_section-collapsible","Purchase Order-shipping_rule-hidden"
@@ -294,14 +303,14 @@ fixtures = [
             "Purchase Receipt-incoterm-hidden","Purchase Invoice-incoterm-hidden","Supplier Quotation-incoterm-hidden","Purchase Receipt-shipping_col-hidden","Supplier Quotation-column_break_34-hidden",
             "Purchase Invoice-column_break_58-hidden","Purchase Receipt-scan_barcode-hidden","Purchase Invoice-scan_barcode-hidden","Purchase Receipt-main-field_order","Purchase Receipt-shipping_rule-hidden",
             "Purchase Receipt-raw_material_details-hidden","Purchase Invoice-shipping_rule-hidden","Purchase Invoice-main-field_order","Purchase Invoice-raw_materials_supplied-hidden","Supplier Quotation-shipping_rule-hidden",
-            "Material Request-set_from_warehouse-default","Quotation-scan_barcode-hidden","Quotation-incoterm-hidden","Item-gst_hsn_code-default","Supplier Quotation-place_of_supply-hidden",
+            "Quotation-scan_barcode-hidden","Quotation-incoterm-hidden","Item-gst_hsn_code-default","Supplier Quotation-place_of_supply-hidden",
             "Supplier Quotation-accounting_dimensions_section-hidden","Purchase Order-place_of_supply-hidden","Purchase Order-scan_barcode-hidden","Material Request Item-accounting_dimensions_section-hidden",
             "Purchase Order-ignore_pricing_rule-hidden","Material Request Item-actual_qty-hidden","Material Request Item-projected_qty-hidden","Material Request Item-min_order_qty-hidden","Material Request Item-accounting_details_section-hidden",
             "Material Request Item-page_break-hidden","Request for Quotation Item-section_break_24-hidden","Purchase Order Item-manufacture_details-hidden","Supplier Quotation Item-ad_sec_break-hidden","Supplier Quotation Item-section_break_44-hidden",
-            "Material Request-set_from_warehouse-default","Material Request-tc_name-default","Request for Quotation Item-image_view-hidden","Request for Quotation Item-section_break_23-hidden","Request for Quotation Item-warehouse-default",
+            "Material Request-tc_name-default","Request for Quotation Item-image_view-hidden","Request for Quotation Item-section_break_23-hidden",
             "Request for Quotation-incoterm-hidden","Request for Quotation-tc_name-default","Supplier Quotation-main-field_order","Supplier Quotation-named_place-hidden","Purchase Order-set_warehouse-default","Purchase Order-main-field_order","Purchase Order-tc_name-default",
-            "Purchase Order Item-warehouse-default","Purchase Receipt Item-warehouse-default","Purchase Receipt Item-manufacture_details-hidden","Purchase Receipt-place_of_supply-hidden","Purchase Receipt-apply_putaway_rule-hidden","Purchase Receipt-is_subcontracted-hidden",
-            "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Invoice-set_warehouse-default","Purchase Order-tc_name-default","Purchase Order-payment_terms_template-default","Purchase Invoice-tc_name-default","Purchase Invoice-payment_terms_template-default",
+            "Purchase Receipt Item-manufacture_details-hidden","Purchase Receipt-place_of_supply-hidden","Purchase Receipt-apply_putaway_rule-hidden","Purchase Receipt-is_subcontracted-hidden",
+            "Purchase Invoice-place_of_supply-hidden","Purchase Invoice-tc_name-default","Purchase Order-tc_name-default","Purchase Order-payment_terms_template-default","Purchase Invoice-tc_name-default","Purchase Invoice-payment_terms_template-default",
             "Expense Claim-department-hidden","Expense Claim-main-field_order",
             "Material Request Item-stock_uom-hidden",
             "Material Request Item-stock_uom-reqd",
@@ -310,7 +319,7 @@ fixtures = [
             "Supplier Quotation Item-stock_uom-reqd",
             "Supplier Quotation Item-stock_uom-hidden",
             "Purchase Receipt Item-stock_uom-reqd",
-            "Purchase Receipt Item-stock_uom-hidden"
+            "Purchase Receipt Item-stock_uom-hidden",
             "Supplier Quotation Item-base_amount-hidden",
             "Supplier Quotation Item-base_rate-hidden",
             "Purchase Order Item-stock_uom-hidden",
@@ -324,7 +333,12 @@ fixtures = [
             "Attendance Request-half_day-hidden",
             "Employee-custom_head_quarter_city-hidden",
             "Purchase Order Item-gst_details_section-hidden",
-            "Purchase Order Item-references_section-hidden"
+            "Purchase Order Item-references_section-hidden",
+            "Material Request Item-item_code-label",
+            "Material Request Item-item_name-hidden",
+            "Request for Quotation Supplier-send_email-default",
+            "Request for Quotation-main-default_print_format",
+            "Supplier Quotation-transaction_date-label",
             ]]
         }
     },
@@ -336,24 +350,27 @@ fixtures = [
                 "Expense Claim-custom_maa_project","Attendance-custom_work_hours",
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
                 "Attendance-custom_exact_in_time","Asset-custom_custodian_name","Asset-department-hidden","Asset-custom_asset_status","Asset-custom_supplier_name","Asset-custom_asset_id",
-                "Asset-custom_note","Supplier Quotation-custom_contact_numbers",
-            "Supplier Quotation-custom_contact_personss",
+                "Asset-custom_note",
             "Contact person-custom_contact_number",
             "Purchase Invoice-custom_gate_pass_id",
             "Purchase Invoice-custom_gate_pass_no",
-            "Purchase Invoice-custom_contact_numbers",
-            "Purchase Invoice-custom_contact_personss",
-            "Purchase Order-custom_contact_numbers",
-            "Purchase Order-custom_contact_personss",
-            "Request for Quotation-custom_contact_numbers",
-            "Request for Quotation-custom_contact_persons",
             "Material Request-custom_contact_numbers",
             "Material Request-custom_section_break_hcx0y",
             "Material Request-custom_contact_person",
-            "Purchase Receipt-custom_contact_numbers",
             "Purchase Receipt-custom_gate_pass_date",
             "Purchase Receipt-custom_gate_pass_no",
-            "Purchase Receipt-custom_contact_personss",
+            "Purchase Order-custom_our_enquiry_ref",
+            "Request for Quotation-custom_our_enquiry_ref",
+            "Bank Account-custom_branch",
+            "Supplier Quotation-custom_delivery_terms",
+            "Purchase Receipt-custom_lr_amount",
+            "Purchase Invoice-custom_lr_amount",
+            "Purchase Receipt Item-custom_challan_qty",
+            "Purchase Receipt Item-custom_remarks",
+            "Purchase Invoice Item-custom_challan_qty",
+            "Purchase Invoice Item-custom_remarks",
+
+            
             ]
             ]
         ]
@@ -377,6 +394,11 @@ fixtures = [
             ]
             ]
         ]
+    },
+
+    {
+        "dt": "Workflow",
+        "filters": [["name", "in", ["Inward Document"]]]
     }
 
 ]

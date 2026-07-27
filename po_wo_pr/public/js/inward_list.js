@@ -1,5 +1,34 @@
 frappe.listview_settings['Inward Document'] = {
+    // Color the Application Status column (Accept=green, Reject=red, Pending=orange).
+    // Keep this in the SAME object as onload — a second
+    // `frappe.listview_settings['Inward Document'] = {...}` would overwrite it.
+    formatters: {
+        application_status(value) {
+            if (!value) return "";
+            const color = {
+                "Accept": "green",
+                "Reject": "red",
+                "Repeat Reject": "red",
+                "Pending": "orange",
+            }[value] || "gray";
+            return `<span class="indicator-pill ${color} filterable ellipsis"
+                data-filter="application_status,=,${value}">
+                <span class="ellipsis">${__(value)}</span>
+            </span>`;
+        },
+    },
+
     onload(listview) {
+        if (frappe.session.user !== "Administrator") {
+            frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then(r => {
+                if (r.message && r.message.name) {
+                    listview.filter_area.add([
+                        ["Inward Document", "concern_person", "=", r.message.name]
+                    ]);
+                }
+            });
+        }
+
         listview.page.add_action_item(__("Create Outward Action"), function () {
             let selected = listview.get_checked_items(true);
 
@@ -8,7 +37,6 @@ frappe.listview_settings['Inward Document'] = {
                 return;
             }
 
-            // Open a dialog popup
             let d = new frappe.ui.Dialog({
                 title: __("Create Outward Action"),
                 fields: [
@@ -31,7 +59,6 @@ frappe.listview_settings['Inward Document'] = {
                 ],
                 primary_action_label: __("Submit"),
                 primary_action(values) {
-                    // Call backend method here
                     frappe.call({
                         method: "po_wo_pr.irs.api.bulk_inward_to_outward",
                         args: {

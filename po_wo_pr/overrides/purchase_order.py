@@ -13,8 +13,11 @@ from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
 )
 
 
+from po_wo_pr.overrides.enquiry_ref import copy_enquiry_refs
+
+
 COMPANY_CONTACT_PERSON_FIELD = "custom_company_contact_person"
-CONTACT_PERSONS_FIELD = "custom_contact_persons"
+CONTACT_PERSON_FIELDS = ["custom_contact_person", "custom_contact_person_2"]
 
 
 def set_company_contact_person(source_doctype, source_name, target_doc):
@@ -31,11 +34,14 @@ def set_company_contact_person(source_doctype, source_name, target_doc):
 	return target_doc
 
 
-def set_custom_contact_persons(source_doctype, source_name, target_doc):
-	contact_person = frappe.db.get_value(source_doctype, source_name, CONTACT_PERSONS_FIELD)
+def set_contact_persons(source_doctype, source_name, target_doc):
+	values = frappe.db.get_value(
+		source_doctype, source_name, CONTACT_PERSON_FIELDS, as_dict=True
+	) or {}
 
-	if contact_person and target_doc.meta.has_field(CONTACT_PERSONS_FIELD):
-		target_doc.set(CONTACT_PERSONS_FIELD, contact_person)
+	for field in CONTACT_PERSON_FIELDS:
+		if values.get(field) and target_doc.meta.has_field(field):
+			target_doc.set(field, values[field])
 
 	return target_doc
 
@@ -64,7 +70,8 @@ def make_purchase_order_from_supplier_quotation(source_name, target_doc=None, ar
 		source_name, target_doc=target_doc, args=args
 	)
 	target_doc = copy_supplier_quotation_taxes(source_name, target_doc)
-	return set_custom_contact_persons("Supplier Quotation", source_name, target_doc)
+	target_doc = copy_enquiry_refs("Supplier Quotation", source_name, target_doc)
+	return set_contact_persons("Supplier Quotation", source_name, target_doc)
 
 
 @frappe.whitelist()
@@ -72,25 +79,29 @@ def make_purchase_invoice_from_supplier_quotation(source_name, target_doc=None):
 	target_doc = erpnext_make_purchase_invoice_from_supplier_quotation(
 		source_name, target_doc=target_doc
 	)
-	return set_custom_contact_persons("Supplier Quotation", source_name, target_doc)
+	target_doc = copy_enquiry_refs("Supplier Quotation", source_name, target_doc)
+	return set_contact_persons("Supplier Quotation", source_name, target_doc)
 
 
 @frappe.whitelist()
 def make_purchase_receipt(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_receipt(source_name, target_doc=target_doc, args=args)
 	target_doc = set_company_contact_person("Purchase Order", source_name, target_doc)
-	return set_custom_contact_persons("Purchase Order", source_name, target_doc)
+	target_doc = copy_enquiry_refs("Purchase Order", source_name, target_doc)
+	return set_contact_persons("Purchase Order", source_name, target_doc)
 
 
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_invoice(source_name, target_doc=target_doc, args=args)
 	target_doc = set_company_contact_person("Purchase Order", source_name, target_doc)
-	return set_custom_contact_persons("Purchase Order", source_name, target_doc)
+	target_doc = copy_enquiry_refs("Purchase Order", source_name, target_doc)
+	return set_contact_persons("Purchase Order", source_name, target_doc)
 
 
 @frappe.whitelist()
 def make_purchase_invoice_from_receipt(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_invoice_from_receipt(source_name, target_doc=target_doc, args=args)
 	target_doc = set_company_contact_person("Purchase Receipt", source_name, target_doc)
-	return set_custom_contact_persons("Purchase Receipt", source_name, target_doc)
+	target_doc = copy_enquiry_refs("Purchase Receipt", source_name, target_doc)
+	return set_contact_persons("Purchase Receipt", source_name, target_doc)
