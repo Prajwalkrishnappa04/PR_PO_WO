@@ -1,20 +1,16 @@
 {
  "actions": [],
- "autoname": "naming_series:",
+ "autoname": "autoincrement",
  "creation": "2025-11-04 11:46:49.448241",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
-  "received_date",
-  "place",
+  "date",
   "taluka",
+  "place",
   "district",
   "state",
-  "inter_office",
   "sender",
-  "from_branch",
-  "mob_no",
   "project",
   "subject",
   "application_status",
@@ -24,31 +20,17 @@
   "refered_by",
   "column_break_leyt",
   "maa_code",
-  "udaan_maa_code",
   "medium",
   "concern_person",
   "handover_to",
-  "outward_entry",
-  "remarks",
-  "date",
-  "section_break_plnu",
-  "document_records"
+  "remarks"
  ],
  "fields": [
-  {
-   "default": "INB-.#####.-.YYYY.",
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Series",
-   "options": "INB-.#####.-.YYYY."
-  },
   {
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Posting Date",
-   "read_only": 1,
+   "label": "Date",
    "reqd": 1
   },
   {
@@ -60,7 +42,6 @@
   {
    "fieldname": "place",
    "fieldtype": "Link",
-   "in_standard_filter": 1,
    "label": "Place",
    "options": "Town Village"
   },
@@ -79,33 +60,11 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "inter_office",
-   "fieldtype": "Check",
-   "label": "Inter Office"
-  },
-  {
-   "depends_on": "eval:!doc.inter_office",
    "fieldname": "sender",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Sender",
-   "mandatory_depends_on": "eval:!doc.inter_office"
-  },
-  {
-   "depends_on": "eval:doc.inter_office",
-   "fieldname": "from_branch",
-   "fieldtype": "Link",
-   "label": "From (Branch)",
-   "mandatory_depends_on": "eval:doc.inter_office",
-   "options": "Branch"
-  },
-  {
-   "fieldname": "mob_no",
-   "fieldtype": "Data",
-   "label": "Mob. No.",
-   "options": "Phone"
+   "reqd": 1
   },
   {
    "fieldname": "project",
@@ -115,7 +74,6 @@
    "options": "IRS Project"
   },
   {
-   "default": "Pending",
    "depends_on": "eval:doc.subject && doc.subject.toLowerCase().includes('application')",
    "fieldname": "application_status",
    "fieldtype": "Select",
@@ -131,8 +89,9 @@
   },
   {
    "fieldname": "entry_by",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Entry By",
+   "options": "User",
    "read_only": 1
   },
   {
@@ -156,18 +115,8 @@
   {
    "fieldname": "maa_code",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Maa Code",
    "options": "Student"
-  },
-    {
-   "fieldname": "udaan_maa_code",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Udaan Maa Code",
-   "options": "Udaan Student"
   },
   {
    "fieldname": "medium",
@@ -178,7 +127,7 @@
   {
    "depends_on": "eval:doc.project",
    "fieldname": "subject",
-   "fieldtype": "Autocomplete",
+   "fieldtype": "Select",
    "label": "Subject"
   },
   {
@@ -197,40 +146,19 @@
    "options": "Employee"
   },
   {
-   "fieldname": "outward_entry",
-   "fieldtype": "Link",
-   "label": "Outward Entry",
-   "options": "Outward Documents"
-  },
-  {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
-  },
-  {
-   "fieldname": "section_break_plnu",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "document_records",
-   "fieldtype": "Table",
-   "label": "Document Records",
-   "options": "Inward Details"
-  },
-  {
-   "fieldname": "received_date",
-   "fieldtype": "Date",
-   "label": "Received Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-16 19:09:53.551493",
+ "modified": "2026-06-22 16:50:38.111314",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {

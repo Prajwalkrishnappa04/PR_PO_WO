@@ -1,148 +1,39 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "naming_series:",
+ "autoname": "autoincrement",
  "creation": "2025-11-04 12:12:13.870025",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
-  "section_break_basic",
-  "sent_date",
   "inward",
-  "maa_code",
-  "student_name",
-  "column_break_rknx",
+  "date",
   "place",
-  "taluka",
-  "district",
-  "pincode",
-  "state",
-  "section_break_recipient",
-  "inter_office",
   "to",
-  "to_branch",
-  "concern_person",
-  "mob_no",
-  "column_break_right",
-  "meduium",
   "project",
-  "subject",
-  "section_break_doc",
-  "concern_person_email",
   "doc_no",
   "url",
-  "tracking_url",
-  "date",
-  "column_break_doc2",
   "entry_by",
-  "remaks",
-  "mail_sent"
+  "column_break_bebl",
+  "meduium",
+  "subject",
+  "remaks"
  ],
  "fields": [
   {
-   "default": "OUTB-.#####.-.YYYY.",
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Series",
-   "options": "OUTB-.#####.-.YYYY."
-  },
-  {
-   "fieldname": "section_break_basic",
-   "fieldtype": "Section Break"
-  },
-  {
-   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Posting Date",
-   "read_only": 1,
-   "reqd": 1
-  },
-  {
-   "fieldname": "sent_date",
-   "fieldtype": "Date",
-   "label": "Sent Date"
+   "label": "Date"
   },
   {
    "fieldname": "place",
-   "fieldtype": "Link",
-   "label": "Town/Village",
-   "options": "Town Village",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "place.taluka",
-   "fieldname": "taluka",
    "fieldtype": "Data",
-   "label": "Taluka",
-   "read_only": 1
+   "label": "Place"
   },
   {
-   "fetch_from": "place.district",
-   "fieldname": "district",
-   "fieldtype": "Data",
-   "label": "District",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "place.pincode",
-   "fieldname": "pincode",
-   "fieldtype": "Data",
-   "label": "Pincode",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "place.state",
-   "fieldname": "state",
-   "fieldtype": "Data",
-   "label": "State",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_break_recipient",
-   "fieldtype": "Section Break",
-   "label": "Recipient"
-  },
-  {
-   "default": "0",
-   "fieldname": "inter_office",
-   "fieldtype": "Check",
-   "label": "Inter Office"
-  },
-  {
-   "depends_on": "eval:!doc.inter_office",
    "fieldname": "to",
    "fieldtype": "Data",
    "label": "To"
-  },
-  {
-   "depends_on": "eval:doc.inter_office",
-   "fieldname": "to_branch",
-   "fieldtype": "Link",
-   "label": "To (Branch)",
-   "options": "Branch"
-  },
-  {
-   "depends_on": "eval:doc.inter_office && doc.to_branch",
-   "fieldname": "concern_person",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Concern Person",
-   "options": "Employee"
-  },
-  {
-   "fetch_from": "concern_person.cell_number",
-   "fieldname": "mob_no",
-   "fieldtype": "Data",
-   "label": "Mob. No.",
-   "options": "Phone",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_right",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "project",
@@ -152,56 +43,31 @@
    "options": "IRS Project"
   },
   {
-   "fieldname": "meduium",
-   "fieldtype": "Link",
-   "label": "Medium",
-   "options": "Mode Of Transport Data"
-  },
-  {
-   "fieldname": "subject",
-   "fieldtype": "Autocomplete",
-   "label": "Subject"
-  },
-  {
-   "fieldname": "section_break_doc",
-   "fieldtype": "Section Break",
-   "label": "Document Details"
-  },
-  {
-   "fetch_from": "concern_person.company_email",
-   "fieldname": "concern_person_email",
-   "fieldtype": "Data",
-   "label": "Concern Person Email",
-   "options": "Email",
-   "read_only": 1
-  },
-  {
    "fieldname": "doc_no",
    "fieldtype": "Data",
    "label": "Doc No"
   },
   {
-   "fieldname": "url",
+   "fieldname": "entry_by",
    "fieldtype": "Link",
-   "label": "Courier",
-   "options": "URL Master"
-  },
-  {
-   "fetch_from": "url.url",
-   "fieldname": "tracking_url",
-   "fieldtype": "Data",
-   "label": "Tracking URL",
+   "label": "Entry By",
+   "options": "User",
    "read_only": 1
   },
   {
-   "fieldname": "column_break_doc2",
+   "fieldname": "column_break_bebl",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "entry_by",
+   "fieldname": "meduium",
+   "fieldtype": "Select",
+   "label": "Medium",
+   "options": "Hand Delivery\nCourier\nBus\nPost\nReg AD\nSpeed Post\nEmail\nTransport\nOnline Form\nWhatsApp"
+  },
+  {
+   "fieldname": "subject",
    "fieldtype": "Data",
-   "label": "Entry By",
-   "read_only": 1
+   "label": "Subject"
   },
   {
    "fieldname": "remaks",
@@ -215,40 +81,20 @@
    "options": "Inward Document"
   },
   {
-   "fieldname": "maa_code",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Maa Code",
-   "options": "Student"
-  },
-  {
-   "fetch_from": "maa_code.student_name",
-   "fieldname": "student_name",
+   "default": "https://trackcourier.io/track-and-trace/tirupati-courier/",
+   "fieldname": "url",
    "fieldtype": "Data",
-   "label": "Student Name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_rknx",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "mail_sent",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "Mail Sent",
-   "read_only": 1
+   "label": "URL"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-17 13:05:11.338651",
+ "modified": "2026-06-22 21:42:45.497754",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {

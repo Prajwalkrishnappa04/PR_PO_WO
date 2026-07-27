@@ -7,9 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "project_name",
-  "subjects",
-  "section_break_fngk",
-  "document_list"
+  "subjects"
  ],
  "fields": [
   {
@@ -22,22 +20,12 @@
    "fieldtype": "Table",
    "label": "Project Subjects",
    "options": "Project Subject"
-  },
-  {
-   "fieldname": "section_break_fngk",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "document_list",
-   "fieldtype": "Table",
-   "label": "Document List",
-   "options": "Student Document Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-22 11:28:18.336832",
+ "modified": "2026-06-22 16:49:59.106754",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "IRS Project",
@@ -58,10 +46,10 @@
   }
  ],
  "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
  "show_title_field_in_link": 1,
+ "title_field": "project_name",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "title_field": "project_name"
+ "states": []
 }
