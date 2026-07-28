@@ -1,50 +1,20 @@
 import frappe
-from frappe import _
-from frappe.utils.print_format import download_pdf
-
-
-def get_rfq_supplier_row(doc, supplier):
-    selected_supplier = next((row for row in doc.suppliers if row.supplier == supplier), None)
-    if not selected_supplier:
-        frappe.throw(_("Supplier {0} is not linked with this RFQ.").format(supplier), frappe.PermissionError)
-
-    return selected_supplier
-
-
-def scope_rfq_to_supplier(doc, supplier):
-    selected_supplier = get_rfq_supplier_row(doc, supplier)
-
-    doc.update_supplier_part_no(supplier)
-    doc.suppliers[:] = [selected_supplier]
-
-    return doc
 
 
 def set_supplier_for_print(doc, method=None, settings=None):
     supplier = frappe.form_dict.get("supplier")
-    if supplier:
-        scope_rfq_to_supplier(doc, supplier)
+    if not supplier:
+        return
 
+    selected_supplier = next((row for row in doc.suppliers if row.supplier == supplier), None)
+    if not selected_supplier:
+        return
 
-@frappe.whitelist()
-def get_pdf(
-    name: str,
-    supplier: str,
-    print_format: str | None = None,
-    language: str | None = None,
-    letterhead: str | None = None,
-):
-    doc = frappe.get_doc("Request for Quotation", name)
-    scope_rfq_to_supplier(doc, supplier)
-
-    download_pdf(
-        doc.doctype,
-        doc.name,
-        print_format,
-        doc=doc,
-        language=language,
-        letterhead=letterhead or None,
-    )
+    doc.update_supplier_part_no(supplier)
+    doc.suppliers[:] = [
+        selected_supplier,
+        *(row for row in doc.suppliers if row is not selected_supplier)
+    ]
 
 
 @frappe.whitelist()
