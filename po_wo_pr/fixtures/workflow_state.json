@@ -1,0 +1,11 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-27 18:37:35.386183",
+  "name": "Pending Approval",
+  "style": "",
+  "workflow_state_name": "Pending Approval"
+ }
+]

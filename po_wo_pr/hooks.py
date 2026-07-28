@@ -398,7 +398,21 @@ fixtures = [
 
     {
         "dt": "Workflow",
-        "filters": [["name", "in", ["Inward Document"]]]
+        "filters": [["name", "in", [
+            "Inward Document",
+            "Supplier Quotation Approval",
+            "Purchase Order Approval",
+        ]]]
+    },
+
+    # states/actions the purchase workflows depend on (not shipped by Frappe)
+    {
+        "dt": "Workflow State",
+        "filters": [["name", "in", ["Pending Approval"]]]
+    },
+    {
+        "dt": "Workflow Action Master",
+        "filters": [["name", "in", ["Send for Approval"]]]
     }
 
 ]
