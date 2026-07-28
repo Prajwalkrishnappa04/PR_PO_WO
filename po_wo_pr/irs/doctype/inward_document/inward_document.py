@@ -102,3 +102,33 @@ class InwardDocument(Document):
 	def before_save(self):
 		self.save_entry_By()
 		self.set_receiving_dates()
+	def autoname(self):
+		employee = frappe.db.get_value(
+			"Employee",
+			{"user_id": frappe.session.user},
+			"custom_maa_branch"
+		)
+
+		if not employee:
+			frappe.throw("Employee Branch not found for current user.")
+
+		branch_letter = employee.strip()[0].upper()
+		prefix = f"IN{branch_letter}"
+
+		year = frappe.utils.now_datetime().year
+
+		last = frappe.db.sql("""
+			SELECT name
+			FROM `tabInward Document`
+			WHERE name LIKE %s
+			ORDER BY CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(name, '-', 2), '-', -1) AS UNSIGNED) DESC
+			LIMIT 1
+		""", (f"{prefix}-%-{year}",))
+
+		if last:
+			last_no = int(last[0][0].split("-")[1])
+			next_no = last_no + 1
+		else:
+			next_no = 1
+
+		self.name = f"{prefix}-{str(next_no).zfill(5)}-{year}"		
