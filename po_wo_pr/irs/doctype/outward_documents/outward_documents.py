@@ -11,6 +11,8 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
+CONCERN_PERSON_EMAIL_TEMPLATE = "Outward Document Concern Person Notification"
+
 
 @frappe.whitelist()
 def send_concern_person_mail(concern_person, docname=None, date=None, project=None, subject=None, doc_no=None):
@@ -120,6 +122,84 @@ class OutwardDocuments(Document):
 
 	def before_save(self):
 		self.save_entry_By()
+
+	def on_submit(self):
+		self.notify_concern_person()
+
+	def get_concern_person_email(self):
+		"""Resolve who the notification goes to.
+
+		`concern_person_email` is a read-only fetch of Employee.company_email, so it is
+		empty for every employee whose company email was never filled in. Fall back to
+		their personal_email so those documents still notify someone.
+		"""
+		if self.concern_person_email:
+			return self.concern_person_email
+
+		if not self.concern_person:
+			return None
+
+		return frappe.db.get_value("Employee", self.concern_person, "personal_email")
+
+	def notify_concern_person(self):
+		"""Email the Concern Person the Name / Subject / Remaks of this document.
+
+		Rendered from the "Outward Document Concern Person Notification" Email Template so
+		the wording can be changed from the UI without touching code. Silently skips when
+		there is no recipient or the template is missing -- a submit must not fail because
+		of a notification.
+		"""
+		recipient = self.get_concern_person_email()
+		if not recipient:
+			return
+
+		if not frappe.db.exists("Email Template", CONCERN_PERSON_EMAIL_TEMPLATE):
+			frappe.log_error(
+				f"Email Template '{CONCERN_PERSON_EMAIL_TEMPLATE}' is missing, so no mail was sent "
+				f"for {self.name}.",
+				"Outward Documents notification",
+			)
+			return
+
+		template = frappe.get_doc("Email Template", CONCERN_PERSON_EMAIL_TEMPLATE)
+		# `doc` is passed alongside the three listed fields so the template can reference
+		# anything else on the document if it is extended later. `employee_name` is only
+		# for the greeting -- `name` is the document ID (OUTB-xxxxx-YYYY), not a person.
+		context = {
+			"doc": self,
+			"name": self.name,
+			"subject": self.subject,
+			"remaks": self.remaks,
+			"employee_name": frappe.db.get_value("Employee", self.concern_person, "employee_name")
+			if self.concern_person
+			else None,
+		}
+		rendered = template.get_formatted_email(context)
+
+		try:
+			frappe.sendmail(
+				recipients=[recipient],
+				subject=rendered["subject"],
+				message=rendered["message"],
+				reference_doctype=self.doctype,
+				reference_name=self.name,
+			)
+		except Exception:
+			# No default outgoing Email Account (or the mail server refused the handoff).
+			# The document is already submitted at this point, so swallow it and leave a
+			# trail rather than rolling the user's submit back over a notification.
+			self.log_error("Outward Documents: could not notify concern person")
+			frappe.msgprint(
+				_("Document submitted, but the notification email could not be sent to {0}.").format(
+					recipient
+				),
+				indicator="orange",
+				alert=True,
+			)
+			return
+
+		if not self.mail_sent:
+			self.db_set("mail_sent", 1, update_modified=False)
 
 	def on_trash(self):
 		# Legacy docs with plain numeric names (created before naming_series was set)
