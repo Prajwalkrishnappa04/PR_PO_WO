@@ -203,6 +203,9 @@ doc_events = {
 	},
 	"Purchase Invoice": {
 		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+	},
+	"Request for Quotation": {
+		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
 	}
 }
 
