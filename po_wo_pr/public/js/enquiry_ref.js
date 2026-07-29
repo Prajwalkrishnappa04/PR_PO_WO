@@ -18,6 +18,14 @@ frappe.ui.form.on("RFQ Enquiry Reference", {
 
 ENQUIRY_REF_PARENTS.forEach((doctype) => {
     frappe.ui.form.on(doctype, {
+        // picking a chip in the multiselect fires the parent fieldname handler,
+        // not the child's enquiry_reference_no -- so rebuild here too
+        custom_our_enquiry_ref(frm) {
+            build_ref_enquiry_no(frm);
+        },
+        custom_our_enquiry_ref_add(frm) {
+            build_ref_enquiry_no(frm);
+        },
         custom_our_enquiry_ref_remove(frm) {
             build_ref_enquiry_no(frm);
         },
