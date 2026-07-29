@@ -309,6 +309,14 @@ frappe.ui.form.on("Purchase Order", {
         }
     },
     onload(frm) {
+        frm.set_query("terms", "custom_term_selection", () => {
+            return {
+                filters: {
+                    disabled: 0
+                }
+            };
+        });
+
         if (frm.doc.transaction_date && !frm.doc.schedule_date) {
             let tran = frappe.datetime.str_to_obj(frm.doc.transaction_date);
             let week_later = frappe.datetime.add_days(tran, 7);
@@ -317,6 +325,15 @@ frappe.ui.form.on("Purchase Order", {
     },
     set_warehouse(frm) {
         refresh_all_stock_balances(frm);
+    },
+    custom_term_selection(frm) {
+        set_terms_from_selection(frm);
+    },
+    tc_name(frm) {
+        // Term Selection wins over the single Terms Template
+        if (get_selected_terms(frm).length) {
+            setTimeout(() => set_terms_from_selection(frm), 300);
+        }
     },
     cost_center(frm) {
         if (!frm.doc.cost_center) {
@@ -342,6 +359,40 @@ frappe.ui.form.on("Purchase Order", {
         });
     }
 });
+
+function get_selected_terms(frm) {
+    const selected = (frm.doc.custom_term_selection || [])
+        .map(row => row.terms)
+        .filter(Boolean);
+
+    // keep the order of selection, drop duplicates
+    return [...new Set(selected)];
+}
+
+function set_terms_from_selection(frm) {
+    const templates = get_selected_terms(frm);
+
+    if (!templates.length) {
+        if (frm.doc.tc_name) {
+            // fall back to the single Terms Template, if one is set
+            frm.trigger("tc_name");
+        } else {
+            frm.set_value("terms", "");
+        }
+        return;
+    }
+
+    frappe.call({
+        method: "po_wo_pr.api.setup.get_combined_terms",
+        args: {
+            templates: templates,
+            doc: frm.doc
+        },
+        callback(r) {
+            frm.set_value("terms", r.message || "");
+        }
+    });
+}
 
 function set_gl_code_filter(frm) {
     frm.set_query("custom_gl_code", function () {

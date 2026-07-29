@@ -1,3 +1,5 @@
+import json
+
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 from frappe.custom.doctype.property_setter.property_setter import make_property_setter
@@ -492,3 +494,50 @@ def get_purchase_order_rfq_supplier_comparison(po_name):
         "items": data,
         "suppliers": all_suppliers
     }
+
+
+@frappe.whitelist()
+def get_combined_terms(templates, doc=None):
+    """Render multiple Terms and Conditions templates and return them as a single block.
+
+    Used by the Term Selection (Table MultiSelect) field so that selecting
+    N templates fills the Terms field with the content of all N templates.
+    """
+    if isinstance(templates, str):
+        templates = json.loads(templates)
+
+    if isinstance(doc, str):
+        doc = json.loads(doc)
+
+    content = []
+    seen = set()
+
+    for template_name in templates or []:
+        if not template_name or template_name in seen:
+            continue
+
+        seen.add(template_name)
+
+        tc = frappe.db.get_value(
+            "Terms and Conditions",
+            template_name,
+            ["terms", "disabled"],
+            as_dict=True
+        )
+
+        if not tc or tc.disabled or not tc.terms:
+            continue
+
+        terms = tc.terms
+
+        try:
+            terms = frappe.render_template(terms, doc or {})
+        except Exception:
+            frappe.log_error(
+                title="Terms and Conditions render failed",
+                message=f"Template: {template_name}"
+            )
+
+        content.append(terms)
+
+    return "\n".join(content)
