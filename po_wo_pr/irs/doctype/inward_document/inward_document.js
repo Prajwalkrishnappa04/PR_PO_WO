@@ -73,6 +73,28 @@ function fill_document_records(frm) {
     });
 }
 
+function setup_received_all_button(frm) {
+    // document_records grid ma "Add Row" ni jamni baaju "Received All" button,
+    // je badhi child rows nu Received checkbox tick kari de.
+    const grid = frm.fields_dict.document_records && frm.fields_dict.document_records.grid;
+    if (!grid) return;
+
+    const $btn = grid.add_custom_button(__("Received All"), () => {
+        const rows = frm.doc.document_records || [];
+        if (!rows.length) {
+            frappe.show_alert({ message: __("No rows to mark as received"), indicator: "orange" });
+            return;
+        }
+        rows.forEach(row => {
+            frappe.model.set_value(row.doctype, row.name, "received", 1);
+        });
+        frm.refresh_field("document_records");
+    });
+
+    // add_custom_button prepend kare che, etle Add Row pachi khasedvu pade.
+    $btn.removeClass("hidden").insertAfter(grid.wrapper.find(".grid-add-row"));
+}
+
 function validate_unique_document_records(frm) {
     // document_records ma ek j Document Name be vaar na aavvu joie.
     // Comparison trim + lowercase par, jethi "SSC Certificate" ane
@@ -339,6 +361,7 @@ udaan_maa_code(frm) {
         setTimeout(() => set_row_wise_tab(frm), 300);
         watch_row_wise_tab(frm);
         load_project_subjects(frm);
+        setup_received_all_button(frm);
 
         // Form kholta: received_date hoy to je rows ni receiving_date khaali che ema bharo.
         if (frm.doc.received_date) {
