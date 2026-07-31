@@ -18,6 +18,7 @@ from po_wo_pr.overrides.enquiry_ref import copy_enquiry_refs
 
 COMPANY_CONTACT_PERSON_FIELD = "custom_company_contact_person"
 CONTACT_PERSON_FIELDS = ["custom_contact_person", "custom_contact_person_2"]
+SUPPLIER_QUOTATION_NO_FIELD = "custom_supplier_quotation_no"
 
 
 def set_company_contact_person(source_doctype, source_name, target_doc):
@@ -64,6 +65,27 @@ def copy_supplier_quotation_taxes(source_name, target_doc):
 	return target_doc
 
 
+def set_supplier_quotation_no(source_name, target_doc):
+	"""Supplier e aapelo quotation number (SQ nu `quotation_number`) PO par mukvo.
+
+	PO nu `custom_supplier_quotation_no` read-only + mandatory che, etle ene fakt ahi
+	thi j value made che — matlab PO Supplier Quotation mathi banyo hoy tyare j. Sidha
+	banaveli PO ma user e jate bharvu pade (field read-only hovathi e shakya nathi),
+	etle aa field vaali PO hammesha SQ mathi j aavvi joie.
+	"""
+	if not target_doc.meta.has_field(SUPPLIER_QUOTATION_NO_FIELD):
+		return target_doc
+
+	quotation_number = frappe.db.get_value(
+		"Supplier Quotation", source_name, "quotation_number"
+	)
+
+	if quotation_number:
+		target_doc.set(SUPPLIER_QUOTATION_NO_FIELD, quotation_number)
+
+	return target_doc
+
+
 @frappe.whitelist()
 def make_purchase_order_from_supplier_quotation(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_order_from_supplier_quotation(
@@ -71,6 +93,7 @@ def make_purchase_order_from_supplier_quotation(source_name, target_doc=None, ar
 	)
 	target_doc = copy_supplier_quotation_taxes(source_name, target_doc)
 	target_doc = copy_enquiry_refs("Supplier Quotation", source_name, target_doc)
+	target_doc = set_supplier_quotation_no(source_name, target_doc)
 	return set_contact_persons("Supplier Quotation", source_name, target_doc)
 
 
