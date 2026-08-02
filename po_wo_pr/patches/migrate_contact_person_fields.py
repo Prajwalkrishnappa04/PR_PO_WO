@@ -19,11 +19,15 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 BUYING_DOCS = ["Supplier Quotation", "Purchase Order", "Purchase Receipt", "Purchase Invoice"]
 
 # insert_after for `custom_contact_person` on each buying doc (mirrors custom/*.json).
+# PR/PI once anchored on custom_enquiry_ref_name / custom_company_contact_person; those
+# fields were dropped by `remove_legacy_enquiry_contact_fields`, so anchor on the
+# enquiry-ref text that replaced them. insert_after is only a layout hint -- a missing
+# anchor would just append the field at the end, never fail.
 INSERT_AFTER = {
 	"Supplier Quotation": "custom_for",
 	"Purchase Order": "custom_for",
-	"Purchase Receipt": "custom_enquiry_ref_name",
-	"Purchase Invoice": "custom_company_contact_person",
+	"Purchase Receipt": "custom_ref_enquiry_no",
+	"Purchase Invoice": "custom_ref_enquiry_no",
 }
 
 # Old fields to delete once their data is preserved.

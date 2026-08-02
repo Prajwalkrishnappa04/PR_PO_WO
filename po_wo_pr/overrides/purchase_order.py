@@ -16,23 +16,8 @@ from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
 from po_wo_pr.overrides.enquiry_ref import copy_enquiry_refs
 
 
-COMPANY_CONTACT_PERSON_FIELD = "custom_company_contact_person"
 CONTACT_PERSON_FIELDS = ["custom_contact_person", "custom_contact_person_2"]
 SUPPLIER_QUOTATION_NO_FIELD = "custom_supplier_quotation_no"
-
-
-def set_company_contact_person(source_doctype, source_name, target_doc):
-	company_contact_person = frappe.db.get_value(
-		source_doctype, source_name, COMPANY_CONTACT_PERSON_FIELD
-	)
-
-	if not company_contact_person:
-		return target_doc
-
-	if target_doc.meta.has_field(COMPANY_CONTACT_PERSON_FIELD):
-		target_doc.set(COMPANY_CONTACT_PERSON_FIELD, company_contact_person)
-
-	return target_doc
 
 
 def set_contact_persons(source_doctype, source_name, target_doc):
@@ -109,7 +94,6 @@ def make_purchase_invoice_from_supplier_quotation(source_name, target_doc=None):
 @frappe.whitelist()
 def make_purchase_receipt(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_receipt(source_name, target_doc=target_doc, args=args)
-	target_doc = set_company_contact_person("Purchase Order", source_name, target_doc)
 	target_doc = copy_enquiry_refs("Purchase Order", source_name, target_doc)
 	return set_contact_persons("Purchase Order", source_name, target_doc)
 
@@ -117,7 +101,6 @@ def make_purchase_receipt(source_name, target_doc=None, args=None):
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_invoice(source_name, target_doc=target_doc, args=args)
-	target_doc = set_company_contact_person("Purchase Order", source_name, target_doc)
 	target_doc = copy_enquiry_refs("Purchase Order", source_name, target_doc)
 	return set_contact_persons("Purchase Order", source_name, target_doc)
 
@@ -125,6 +108,5 @@ def make_purchase_invoice(source_name, target_doc=None, args=None):
 @frappe.whitelist()
 def make_purchase_invoice_from_receipt(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_invoice_from_receipt(source_name, target_doc=target_doc, args=args)
-	target_doc = set_company_contact_person("Purchase Receipt", source_name, target_doc)
 	target_doc = copy_enquiry_refs("Purchase Receipt", source_name, target_doc)
 	return set_contact_persons("Purchase Receipt", source_name, target_doc)

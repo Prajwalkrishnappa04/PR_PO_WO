@@ -11,3 +11,4 @@ po_wo_pr.patches.sync_attendance_times #2026-04-20 --007
 po_wo_pr.patches.migrate_contact_person_fields #2026-07-16 --008
 po_wo_pr.patches.backfill_outward_concern_person_contact #2026-07-24 --009
 po_wo_pr.patches.create_outward_document_email_template #2026-07-28 --010
+po_wo_pr.patches.remove_legacy_enquiry_contact_fields #2026-08-02 --011
