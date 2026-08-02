@@ -38,7 +38,6 @@ def execute():
 		frappe.delete_doc("Property Setter", ps, ignore_permissions=True, force=True)
 
 	_clean_field_order()
-	_clean_print_formats()
 
 	frappe.clear_cache()
 	frappe.db.commit()
@@ -63,50 +62,6 @@ def _log_existing_data(dt, fieldname):
 		dump[:100000],
 		"removed %s.%s (%d record(s))" % (dt, fieldname, len(rows)),
 	)
-
-
-def _clean_print_formats():
-	"""Drop the dead fields from Print Format Builder layouts.
-
-	A builder format keeps its layout as JSON in `format_data`; removing the rows
-	there is enough. A hand-written `html` format can reference the field in
-	arbitrary Jinja, so that is only reported -- a bad guess at rewriting the
-	template would break the print silently.
-	"""
-	for pf in frappe.get_all("Print Format", fields=["name", "html", "format_data"]):
-		if pf.format_data and any(f in pf.format_data for f in FIELDS):
-			try:
-				layout = frappe.parse_json(pf.format_data)
-			except Exception:
-				layout = None
-
-			if layout is not None:
-				cleaned = _strip_fields(layout)
-				frappe.db.set_value(
-					"Print Format", pf.name, "format_data", frappe.as_json(cleaned), update_modified=False
-				)
-
-		if pf.html and any(f in pf.html for f in FIELDS):
-			frappe.log_error(
-				"Print Format %s still references %s in its custom HTML -- update the template by hand."
-				% (pf.name, ", ".join(f for f in FIELDS if f in pf.html)),
-				"legacy field still in print format",
-			)
-
-
-def _strip_fields(node):
-	"""Recursively drop any dict carrying one of the dead fieldnames."""
-	if isinstance(node, list):
-		return [_strip_fields(x) for x in node if not _is_dead_field(x)]
-
-	if isinstance(node, dict):
-		return {k: _strip_fields(v) for k, v in node.items()}
-
-	return node
-
-
-def _is_dead_field(node):
-	return isinstance(node, dict) and node.get("fieldname") in FIELDS
 
 
 def _clean_field_order():
