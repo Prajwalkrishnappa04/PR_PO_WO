@@ -1,6 +1,23 @@
 frappe.ui.form.on("Supplier Quotation", {
     onload(frm) {
         hide_supplier_quotation_item_gst_fields(frm);
+
+        frm.set_query("terms", "custom_term_selection", () => {
+            return {
+                filters: {
+                    disabled: 0
+                }
+            };
+        });
+    },
+    custom_term_selection(frm) {
+        set_terms_from_selection(frm);
+    },
+    tc_name(frm) {
+        // Term Selection wins over the single Terms Template
+        if (get_selected_terms(frm).length) {
+            setTimeout(() => set_terms_from_selection(frm), 300);
+        }
     },
     refresh(frm) {
         hide_supplier_quotation_item_gst_fields(frm);
@@ -126,6 +143,40 @@ function make_work_order_entry(frm) {
         });
 
         frappe.set_route("Form", "Work Order Entry", target.name);
+    });
+}
+
+function get_selected_terms(frm) {
+    const selected = (frm.doc.custom_term_selection || [])
+        .map(row => row.terms)
+        .filter(Boolean);
+
+    // keep the order of selection, drop duplicates
+    return [...new Set(selected)];
+}
+
+function set_terms_from_selection(frm) {
+    const templates = get_selected_terms(frm);
+
+    if (!templates.length) {
+        if (frm.doc.tc_name) {
+            // fall back to the single Terms Template, if one is set
+            frm.trigger("tc_name");
+        } else {
+            frm.set_value("terms", "");
+        }
+        return;
+    }
+
+    frappe.call({
+        method: "po_wo_pr.api.setup.get_combined_terms",
+        args: {
+            templates: templates,
+            doc: frm.doc
+        },
+        callback(r) {
+            frm.set_value("terms", r.message || "");
+        }
     });
 }
 
