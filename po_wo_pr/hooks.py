@@ -373,8 +373,13 @@ fixtures = [
             "Purchase Receipt Item-custom_remarks",
             "Purchase Invoice Item-custom_challan_qty",
             "Purchase Invoice Item-custom_remarks",
-            "Purchase Order-custom_term_selection"
-            
+            "Purchase Order-custom_term_selection",
+            "Material Request-custom_term_selection",
+            "Request for Quotation-custom_term_selection",
+            "Supplier Quotation-custom_term_selection",
+            "Purchase Receipt-custom_term_selection",
+            "Purchase Invoice-custom_term_selection"
+
             ]
             ]
         ]
