@@ -126,6 +126,9 @@ class OutwardDocuments(Document):
 	def on_submit(self):
 		self.notify_concern_person()
 
+	def after_submit(self):
+		self.notify_concern_person()
+
 	def get_concern_person_email(self):
 		"""Resolve who the notification goes to.
 
