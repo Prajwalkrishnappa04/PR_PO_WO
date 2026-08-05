@@ -309,6 +309,8 @@ frappe.ui.form.on("Purchase Order", {
         }
     },
     onload(frm) {
+        set_default_branch(frm);
+
         frm.set_query("terms", "custom_term_selection", () => {
             return {
                 filters: {
@@ -410,4 +412,23 @@ function set_gl_code_filter(frm) {
             ]
         };
     });
+}
+
+function set_default_branch(frm) {
+    // The server-side `set_default_branch` hook is the authority -- it covers
+    // API creation, mappers and imports. This only mirrors the same lookup into
+    // the form so the user can see the branch, and override it, while drafting.
+    if (!frm.is_new() || frm.doc.custom_branch) {
+        return;
+    }
+
+    frappe.db.get_value("Employee", { user_id: frappe.session.user }, "branch")
+        .then(r => {
+            const branch = r && r.message && r.message.branch;
+
+            // re-check: the user may have picked a branch while this was in flight
+            if (branch && !frm.doc.custom_branch) {
+                frm.set_value("custom_branch", branch);
+            }
+        });
 }
