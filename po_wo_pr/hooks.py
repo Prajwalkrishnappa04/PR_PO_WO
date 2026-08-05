@@ -196,10 +196,26 @@ doc_events = {
 	},
 	"Purchase Order": {
 		"autoname": "po_wo_pr.api.setup.set_purchase_order_name",
-		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+		"validate": [
+			"po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no",
+			"po_wo_pr.overrides.branch_approval.set_default_branch",
+			"po_wo_pr.overrides.branch_approval.require_branch_before_approval",
+			"po_wo_pr.overrides.branch_approval.guard_branch_approval"
+		],
+		"on_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
+		"on_update_after_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
+		"on_cancel": "po_wo_pr.overrides.branch_approval.sync_approval_assignment"
 	},
 	"Supplier Quotation": {
-		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
+		"validate": [
+			"po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no",
+			"po_wo_pr.overrides.branch_approval.set_default_branch",
+			"po_wo_pr.overrides.branch_approval.require_branch_before_approval",
+			"po_wo_pr.overrides.branch_approval.guard_branch_approval"
+		],
+		"on_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
+		"on_update_after_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
+		"on_cancel": "po_wo_pr.overrides.branch_approval.sync_approval_assignment"
 	},
 	"Purchase Invoice": {
 		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
