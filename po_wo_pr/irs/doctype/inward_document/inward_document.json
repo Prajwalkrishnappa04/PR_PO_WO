@@ -161,7 +161,7 @@
    "label": "Maa Code",
    "options": "Student"
   },
-    {
+  {
    "fieldname": "udaan_maa_code",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -173,7 +173,7 @@
    "fieldname": "medium",
    "fieldtype": "Link",
    "label": "Medium",
-   "options": "Mode Of Transport Data"
+   "options": "Type of Postage Master"
   },
   {
    "depends_on": "eval:doc.project",
@@ -220,13 +220,14 @@
   {
    "fieldname": "received_date",
    "fieldtype": "Date",
-   "label": "Received Date"
+   "label": "Received Date",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-16 19:09:53.551493",
+ "modified": "2026-08-06 19:43:43.567457",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
