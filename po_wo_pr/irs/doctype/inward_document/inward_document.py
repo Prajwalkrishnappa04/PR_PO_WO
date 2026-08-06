@@ -73,18 +73,17 @@ def get_project_by_name(project_name):
 
 @frappe.whitelist()
 def get_latest_application_receive_date(maa_code, udaan=0):
-	"""Aapelaa student ni sauthi navi Inward Document ni posting date pachi aape.
+	"""Aapelaa student ni chhelle baneli Inward Document ni Received Date pachi aape.
 
 	Academic Entry ma application_receive_date aa date parthi bharay che. Date tarike
-	`date` (Posting Date) vaparyu che — Student banave tyare pan aaj field vaparaay che
-	(juo create_student_and_set_maa_code no caller), etle be jagya e ek j meaning rahe.
+	`received_date` vaparyu che, Posting Date nahi — arji kyare aavi e j sacho meaning
+	che, ane Posting Date to fakt entry kyare pade e batave.
 
 	`udaan` truthy hoy to Udaan Student vaalu `udaan_maa_code` field joay che, nahi to
 	regular Student vaalu `maa_code`. Be alag Link fields che etle key pan alag.
 
-	Sorting `date` par thay che, `creation` par nahi — user pachi thi juni date vaari
-	entry ummere to pan "latest" no matlab sauthi navi posting date j rahe. Ek j date
-	ni be entry hoy to navi banaveli (creation desc) jeete.
+	Sorting `creation` par thay che — e system set kare che, user badli nathi shakto,
+	etle "chhelle je entry padi" no jawab kayam bharoso patra rahe.
 
 	Inward Document read karva ni permission na hoy eva user pan Academic Entry bhari
 	shake — frappe.get_all() permission check nathi karto, etle e case pan chale.
@@ -100,11 +99,11 @@ def get_latest_application_receive_date(maa_code, udaan=0):
 	rows = frappe.get_all(
 		"Inward Document",
 		filters={link_field: maa_code, "docstatus": ["<", 2]},
-		fields=["date"],
-		order_by="date desc, creation desc",
+		fields=["received_date"],
+		order_by="creation desc",
 		limit=1,
 	)
-	return rows[0].date if rows else None
+	return rows[0].received_date if rows else None
 
 
 @frappe.whitelist()
