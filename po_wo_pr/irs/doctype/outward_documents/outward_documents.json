@@ -205,7 +205,7 @@
    "read_only": 1
   },
   {
-   "fieldname": "remaks",
+   "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remaks"
   },
