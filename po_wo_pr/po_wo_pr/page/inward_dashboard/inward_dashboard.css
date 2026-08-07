@@ -1,0 +1,37 @@
+.inward-dashboard {
+	padding: 10px 15px;
+}
+
+.inward-dashboard .cards-row {
+	flex-wrap: wrap;
+}
+
+.inward-dashboard .cards-row > div {
+	min-width: 160px;
+}
+
+.inward-dashboard .chart-box {
+	background: #fff;
+	border: 1px solid #d1d8dd;
+	border-radius: 8px;
+	padding: 16px;
+	box-sizing: border-box;
+}
+
+.inward-dashboard .chart-box select#location-level {
+	padding: 4px 8px;
+	border-radius: 4px;
+	border: 1px solid #d1d8dd;
+	font-size: 13px;
+}
+
+.inward-dashboard .chart-container {
+	width: 100%;
+}
+
+@media (max-width: 900px) {
+	.inward-dashboard .charts-row .chart-box,
+	.inward-dashboard .chart-box[style*="94%"] {
+		width: 100% !important;
+	}
+}
