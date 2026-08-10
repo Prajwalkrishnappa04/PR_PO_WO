@@ -493,7 +493,7 @@
    "name": "Payment Request-custom_payment_supporting_details",
    "no_copy": 0,
    "non_negative": 0,
-   "options": "Payment Supporting Details",
+   "options": "Payment Supporting Details Selector",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
