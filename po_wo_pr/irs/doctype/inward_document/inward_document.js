@@ -252,9 +252,12 @@ frappe.ui.form.on("Inward Document", {
     },
 
     received_date(frm) {
-        // Parent received_date badle to badhi child rows ni receiving_date same karo.
+        // Parent received_date badle to fakt khaali receiving_date vala rows ma bharo.
+        // Je rows ma user e already alag date set kari hoy e ne touch na karvu.
         (frm.doc.document_records || []).forEach(row => {
-            frappe.model.set_value(row.doctype, row.name, "receiving_date", frm.doc.received_date);
+            if (!row.receiving_date) {
+                frappe.model.set_value(row.doctype, row.name, "receiving_date", frm.doc.received_date);
+            }
         });
         frm.refresh_field("document_records");
     },
