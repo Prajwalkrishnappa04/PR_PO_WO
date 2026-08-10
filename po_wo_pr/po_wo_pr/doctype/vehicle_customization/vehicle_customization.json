@@ -1,0 +1,249 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-08-10 11:04:08.321493",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "vehicle_section",
+  "naming_series",
+  "license_plate",
+  "employee",
+  "column_break_5wyk",
+  "project",
+  "destination",
+  "driver",
+  "section_break_wscm",
+  "column_break_7",
+  "model",
+  "make",
+  "odometer_reading",
+  "date",
+  "odometer",
+  "column_break_12",
+  "last_odometer",
+  "refuelling_details",
+  "fuel_qty",
+  "price",
+  "fuel_amount",
+  "column_break_15",
+  "supplier",
+  "invoice",
+  "fast_tag_details_amt",
+  "service_details",
+  "service_detail",
+  "amended_from",
+  "section_break_bbkc"
+ ],
+ "fields": [
+  {
+   "fieldname": "vehicle_section",
+   "fieldtype": "Section Break",
+   "options": "fa fa-user"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "HR-VLOG-.YYYY.-",
+   "print_hide": 1,
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "license_plate",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "License Plate",
+   "options": "Vehicle",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "license_plate.employee",
+   "fetch_if_empty": 1,
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "license_plate.model",
+   "fieldname": "model",
+   "fieldtype": "Read Only",
+   "label": "Model"
+  },
+  {
+   "fetch_from": "license_plate.make",
+   "fieldname": "make",
+   "fieldtype": "Read Only",
+   "label": "Make"
+  },
+  {
+   "fieldname": "odometer_reading",
+   "fieldtype": "Section Break",
+   "label": "Odometer Reading"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "odometer",
+   "fieldtype": "Int",
+   "label": "Current Odometer value ",
+   "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "refuelling_details",
+   "fieldtype": "Section Break",
+   "label": "Refuelling Details"
+  },
+  {
+   "fieldname": "fuel_qty",
+   "fieldtype": "Float",
+   "label": "Fuel Qty"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Fuel Price"
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "invoice",
+   "fieldtype": "Data",
+   "label": "Invoice Ref"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "service_details",
+   "fieldtype": "Section Break",
+   "label": "Service Details"
+  },
+  {
+   "fieldname": "service_detail",
+   "fieldtype": "Table",
+   "options": "Vehicle Service"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Customization",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "license_plate.last_odometer",
+   "fieldname": "last_odometer",
+   "fieldtype": "Int",
+   "label": "Last Odometer Value ",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Customization",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_bbkc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
+  },
+  {
+   "fieldname": "fuel_amount",
+   "fieldtype": "Currency",
+   "label": "Fuel Amount"
+  },
+  {
+   "fieldname": "fast_tag_details_amt",
+   "fieldtype": "Currency",
+   "label": "Fast Tag Details (Amt)"
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "Driver",
+   "options": "Driver"
+  },
+  {
+   "fieldname": "column_break_5wyk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_wscm",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-08-10 11:31:30.794402",
+ "modified_by": "Administrator",
+ "module": "Po Wo Pr",
+ "name": "Vehicle Customization",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

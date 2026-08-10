@@ -12,6 +12,7 @@
   "inward",
   "maa_code",
   "student_name",
+  "udaan_code",
   "column_break_rknx",
   "place",
   "taluka",
@@ -36,9 +37,9 @@
   "date",
   "column_break_doc2",
   "entry_by",
-  "remaks",
   "mail_sent",
-  "amended_from"
+  "amended_from",
+  "remarks"
  ],
  "fields": [
   {
@@ -207,7 +208,7 @@
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remaks"
+   "label": "Remarks"
   },
   {
    "fieldname": "inward",
@@ -250,13 +251,20 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "udaan_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Udaan Code",
+   "options": "Udaan Student"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-28 14:29:24.692510",
+ "modified": "2026-08-08 14:36:47.008747",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",
