@@ -23,9 +23,9 @@
  "report_name": "Pending Inward Documents",
  "report_type": "Query Report",
  "roles": [
-  {
-   "role": "System Manager"
-  }
+  { "role": "System Manager" },
+  { "role": "IRS Manager" },
+  { "role": "IRS User" }
  ],
  "snapshot_report": 0,
  "timeout": 0
