@@ -105,6 +105,27 @@ def get_latest_application_receive_date(maa_code, udaan=0):
 	)
 	return rows[0].received_date if rows else None
 
+@frappe.whitelist()
+def get_latest_medium(maa_code, udaan=0):
+    """Return medium from the latest Inward Document for the student."""
+
+    if not maa_code:
+        return None
+
+    link_field = "udaan_maa_code" if frappe.utils.cint(udaan) else "maa_code"
+
+    rows = frappe.get_all(
+        "Inward Document",
+        filters={
+            link_field: maa_code,
+            "docstatus": ["<", 2]
+        },
+        fields=["medium"],
+        order_by="creation desc",
+        limit=1,
+    )
+
+    return rows[0].medium if rows else None
 
 @frappe.whitelist()
 def create_student_and_set_maa_code(student_name, gender, interview_place, application_receive_date, maa_branch=None):
