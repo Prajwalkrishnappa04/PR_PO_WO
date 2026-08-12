@@ -82,7 +82,7 @@ def execute(filters=None):
             "label": "Udaan Maa Code",
             "fieldname": "udaan_maa_code",
             "fieldtype": "Link",
-            "options":"Udaan Student"
+            "options":"Udaan Student",
             "width": 150
         },
         {
