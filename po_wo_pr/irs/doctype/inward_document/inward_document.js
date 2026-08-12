@@ -348,7 +348,7 @@ udaan_maa_code(frm) {
             }
             frm.set_value("mob_no", r.phone_no || "");
 
-            const mc = (r.maa_code || "").toUpperCase();   // ✅ match key name here too
+            const mc = (r.maa_code || "").toUpperCase(); 
             if (mc.startsWith("MFBH") || mc.startsWith("MFVA")) {
                 set_vidhya_project(frm);
             }
