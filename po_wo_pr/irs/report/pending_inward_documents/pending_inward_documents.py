@@ -10,12 +10,15 @@ def execute(filters=None):
             pi.maa_code,
             pi.udaan_maa_code,
             pi.sender,
-            pi.project,
+            p.project_name as project,
             ci.document_name
         FROM `tabInward Document` pi
         LEFT JOIN `tabInward Details` ci
             ON pi.name = ci.parent
-        WHERE ci.received = 0
+        LEFT JOIN `tabIRS Project` p
+            ON pi.project = p.name
+        WHERE ci.received = 0 
+            AND pi.project IN ('IRS-PROJ-0001', 'IRS-PROJ-0002')
         ORDER BY pi.name
     """, as_dict=True)
 
@@ -64,19 +67,22 @@ def execute(filters=None):
         {
             "label": "Place",
             "fieldname": "place",
-            "fieldtype": "Data",
+            "fieldtype": "Link",
+            "options":"Town Village",
             "width": 150
         },
         {
             "label": "Maa Code",
             "fieldname": "maa_code",
-            "fieldtype": "Data",
+            "fieldtype": "Link",
+            "options":"Student",
             "width": 120
         },
         {
             "label": "Udaan Maa Code",
             "fieldname": "udaan_maa_code",
-            "fieldtype": "Data",
+            "fieldtype": "Link",
+            "options":"Udaan Student"
             "width": 150
         },
         {

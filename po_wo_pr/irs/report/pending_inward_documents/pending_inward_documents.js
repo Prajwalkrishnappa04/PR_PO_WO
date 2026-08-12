@@ -1,6 +1,16 @@
 frappe.query_reports["Pending Inward Documents"] = {
     filters: [],
 
+    onload: function(report) {
+        $("<style>")
+            .text(`
+                .query-report .dt-cell__content {
+                    text-align: center !important;
+                }
+            `)
+            .appendTo("head");
+    },
+
     formatter: function(value, row, column, data, default_formatter) {
         value = default_formatter(value, row, column, data);
 
@@ -11,7 +21,6 @@ frappe.query_reports["Pending Inward Documents"] = {
 
             let mobile = String(data.mobile_no).replace(/\D/g, "");
 
-            // If mobile is a 10-digit Indian number
             if (mobile.length === 10) {
                 mobile = "91" + mobile;
             }
@@ -20,7 +29,7 @@ frappe.query_reports["Pending Inward Documents"] = {
 			The following documents are pending:
 			${data.pending_doc_str}
 			Please submit the pending documents.
-			Maa Foundatio, Bhavnagar`;
+			Maa Foundation, Bhavnagar`;
 
 			let url =
 				"https://wa.me/" +
@@ -30,9 +39,9 @@ frappe.query_reports["Pending Inward Documents"] = {
 
             return `
                 <a href="${url}"
-                   target="_blank"
-                   title="Send WhatsApp message"
-                   style="font-size: 20px;">
+                    target="_blank"
+                    title="Send WhatsApp message"
+                    style="font-size: 30px; color: #25D366;">
                     <i class="fa fa-whatsapp"></i>
                 </a>
             `;
