@@ -10,8 +10,9 @@ def get_number_cards(project=None, subject=None, month=None, academic_year=None)
         SELECT
             COUNT(*) AS total,
             SUM(CASE WHEN application_status='Pending' THEN 1 ELSE 0 END) AS pending,
-            SUM(CASE WHEN application_status='Approved' THEN 1 ELSE 0 END) AS approved,
-            SUM(CASE WHEN application_status='Rejected' THEN 1 ELSE 0 END) AS rejected
+            SUM(CASE WHEN application_status='Accept' THEN 1 ELSE 0 END) AS approved,
+            SUM(CASE WHEN application_status='Reject' THEN 1 ELSE 0 END) AS rejected,
+            SUM(CASE WHEN application_status='Repeat Reject' THEN 1 ELSE 0 END) AS repeat_rejected
         FROM `tabInward Document`
         {where}
     """, values, as_dict=True)[0]
@@ -32,20 +33,22 @@ def get_status_summary(project=None, subject=None, month=None, academic_year=Non
 
 
 @frappe.whitelist()
-def get_workflow_summary(project=None, subject=None, month=None, academic_year=None):
+def get_application_status_summary(project=None, subject=None, month=None, academic_year=None):
     where, values = get_conditions(project, subject, month, academic_year)
 
+    status_condition = "application_status IN ('Accept', 'Reject', 'Repeat Reject')"
+
     if where:
-        where += " AND workflow_state IS NOT NULL"
+        where += f" AND {status_condition}"
     else:
-        where = "WHERE workflow_state IS NOT NULL"
+        where = f"WHERE {status_condition}"
 
     return frappe.db.sql(f"""
-        SELECT workflow_state AS label,
+        SELECT application_status AS label,
                COUNT(*) AS count
         FROM `tabInward Document`
         {where}
-        GROUP BY workflow_state
+        GROUP BY application_status
         ORDER BY count DESC
     """, values, as_dict=True)
 
