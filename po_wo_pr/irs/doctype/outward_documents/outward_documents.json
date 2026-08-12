@@ -157,7 +157,7 @@
    "fieldname": "meduium",
    "fieldtype": "Link",
    "label": "Medium",
-   "options": "Mode Of Transport Data"
+   "options": "Type of Postage Master"
   },
   {
    "fieldname": "subject",
