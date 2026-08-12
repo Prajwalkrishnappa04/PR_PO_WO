@@ -1,5 +1,6 @@
 import frappe
 
+
 def execute(filters=None):
     data = frappe.db.sql("""
         SELECT
@@ -19,26 +20,32 @@ def execute(filters=None):
     """, as_dict=True)
 
     rows = []
-    comparision_doc = data[0]["name"]
-    i = -1
 
-    for row in data:
-        if comparision_doc == row["name"] and i != -1:
-            rows[i]["document_names"].append(row["document_name"])
-        else:
-            i = i + 1
-            comparision_doc = row["name"]
+    if data:
+        comparision_doc = data[0]["name"]
+        i = -1
 
-            rows.append({
-                "name": row["name"],
-                "mob_no": row["mob_no"],
-                "place": row["place"],
-                "maa_code": row["maa_code"],
-                "udaan_maa_code": row["udaan_maa_code"],
-                "sender": row["sender"],
-                "project": row["project"],
-                "document_names": [row["document_name"]]
-            })
+        for row in data:
+            if comparision_doc == row["name"] and i != -1:
+                if row["document_name"]:
+                    rows[i]["document_names"].append(row["document_name"])
+            else:
+                i = i + 1
+                comparision_doc = row["name"]
+
+                rows.append({
+                    "name": row["name"],
+                    "mob_no": row["mob_no"],
+                    "place": row["place"],
+                    "maa_code": row["maa_code"],
+                    "udaan_maa_code": row["udaan_maa_code"],
+                    "sender": row["sender"],
+                    "project": row["project"],
+                    "document_names": []
+                })
+
+                if row["document_name"]:
+                    rows[i]["document_names"].append(row["document_name"])
 
     columns = [
         {
