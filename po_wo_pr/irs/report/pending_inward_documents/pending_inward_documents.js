@@ -41,7 +41,7 @@ frappe.query_reports["Pending Inward Documents"] = {
                 <a href="${url}"
                     target="_blank"
                     title="Send WhatsApp message"
-                    style="font-size: 30px; color: #25D366;">
+                    style="font-size: 20px; color: #25D366;">
                     <i class="fa fa-whatsapp"></i>
                 </a>
             `;
