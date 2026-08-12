@@ -33,7 +33,6 @@ class InwardDashboard {
 			change: () => this.refresh()
 		});
 
-		// Month Filter (pick any date within the target month)
 		// Month Filter (dropdown of month names)
 		this.month = this.page.add_field({
 			label: __("Month"),
@@ -43,12 +42,7 @@ class InwardDashboard {
 				"", "January", "February", "March", "April", "May", "June",
 				"July", "August", "September", "October", "November", "December"
 			],
-			change: () => {
-				if (this.month.get_value()) {
-					this.academic_year.set_value("");
-				}
-				this.refresh();
-			}
+			change: () => this.refresh()
 		});
 
 		// Academic Year Filter
@@ -57,13 +51,8 @@ class InwardDashboard {
 			fieldname: "academic_year",
 			fieldtype: "Link",
 			options: "Academic Year",
-			change: () => {
-				if (this.academic_year.get_value()) {
-					this.month.set_value("");
-				}
-				this.refresh();
-			}
-		});		
+			change: () => this.refresh()
+		});	
 
 		this.body = $(`
 			<div class="inward-dashboard">
@@ -167,25 +156,26 @@ load_missing_docs_chart() {
 			}).then(r => r.message);
 		}
 
-	load_cards() {
-		this.call("get_number_cards").then(data => {
-			const cards = [
-				{ label: "Total", value: data.total, color: "#5e64ff" },
-				{ label: "Pending", value: data.pending, color: "#ffa00a" },
-				{ label: "Approved", value: data.approved, color: "#28a745" },
-				{ label: "Rejected", value: data.rejected, color: "#e03131" }
-			];
+load_cards() {
+    this.call("get_number_cards").then(data => {
+        const cards = [
+            { label: "Total", value: data.total, color: "#5e64ff" },
+            { label: "Pending", value: data.pending, color: "#ffa00a" },
+            { label: "Accepted", value: data.approved, color: "#28a745" },
+            { label: "Rejected", value: data.rejected, color: "#e03131" },
+            { label: "Repeat Rejected", value: data.repeat_rejected, color: "#9c1f1f" }
+        ];
 
-			this.body.find(".cards-row").html(
-				cards.map(card => `
-					<div style="flex:1;padding:16px;border-radius:8px;background:${card.color}15;border-left:4px solid ${card.color};">
-						<div style="font-size:24px;font-weight:600;">${card.value || 0}</div>
-						<div style="color:#666;">${card.label}</div>
-					</div>
-				`).join("")
-			);
-		});
-	}
+        this.body.find(".cards-row").html(
+            cards.map(card => `
+                <div style="flex:1;padding:16px;border-radius:8px;background:${card.color}15;border-left:4px solid ${card.color};">
+                    <div style="font-size:24px;font-weight:600;">${card.value || 0}</div>
+                    <div style="color:#666;">${card.label}</div>
+                </div>
+            `).join("")
+        );
+    });
+}
 
 	load_status_chart() {
 		this.call("get_status_summary").then(data => {
@@ -194,8 +184,8 @@ load_missing_docs_chart() {
 	}
 
 	load_workflow_chart() {
-		this.call("get_workflow_summary").then(data => {
-			this.render_bar("workflow-chart", "By Workflow State", data);
+		this.call("get_application_status_summary").then(data => {
+			this.render_bar("workflow-chart", "By Application Status (Accept / Reject / Repeat Reject)", data);
 		});
 	}
 
