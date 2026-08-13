@@ -154,7 +154,8 @@ after_migrate = "po_wo_pr.api.setup.set_buying_naming_series"
 
 override_doctype_class = {
 	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee",
-	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.CustomRequestforQuotation"
+	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.CustomRequestforQuotation",
+     "Leave Application": "po_wo_pr.overrides.leave_application.CustomLeaveApplication"
 }
 
 # Document Events
