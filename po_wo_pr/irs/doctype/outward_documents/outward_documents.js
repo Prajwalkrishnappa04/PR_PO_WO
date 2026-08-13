@@ -22,22 +22,22 @@ function load_project_subjects(frm) {
 }
 
 function set_row_wise_tab(frm) {
-    // Frappe no default Tab order field-definition order pramane chale — etle e aakho
-    // left column pahelo firey, pachi j right column. Aa function tabindex pachho
-    // assign kare che jethi Tab visual row-wise chale: ek row na badha fields
-    // left -> right, e row puri thay pachi next row.
+    // Frappe's default Tab order follows field-definition order — so it walks the
+    // entire left column first, and only then the right column. This function
+    // reassigns tabindex so that Tab moves visually row-wise: all fields of one row
+    // left -> right, and once that row is done, on to the next row.
     //
-    // Order field-order ke column-index thi nahi, pan input ni on-screen position
-    // (getBoundingClientRect) thi nakki thay che. Etle koi field depends_on thi
-    // hide/show thay, ke be column ma alag alag field count hoy, to pan sequence
-    // sachi rahe.
-    const ROW_TOLERANCE = 12; // px — aa andar na top values ne same row ganvi
+    // The order is determined not by field-order or column-index, but by the input's
+    // on-screen position (getBoundingClientRect). So even if some field is hidden or
+    // shown via depends_on, or the two columns have different field counts, the
+    // sequence stays correct.
+    const ROW_TOLERANCE = 12; // px — top values within this are treated as the same row
 
     const inputs = frm.$wrapper
         .find(".form-layout input:visible, .form-layout textarea:visible, .form-layout select:visible")
         .filter(function () {
-            // Grid (child table) ne chhodi devu — ena Tab behaviour ne aa function
-            // touch nathi karto.
+            // Skip grids (child tables) — this function does not touch their Tab
+            // behaviour.
             if ($(this).closest(".grid-body, .form-grid, .grid-row").length) return false;
             if (this.disabled || this.readOnly || this.type === "hidden") return false;
             const rect = this.getBoundingClientRect();
@@ -48,13 +48,13 @@ function set_row_wise_tab(frm) {
             const rect = el.getBoundingClientRect();
             return {
                 el,
-                // Page-relative, jethi scroll position no farak na pade.
+                // Page-relative, so the scroll position makes no difference.
                 top: rect.top + window.scrollY,
                 left: rect.left + window.scrollX
             };
         });
 
-    // Rows ma group karo: top lagbhag same hoy e badha ek row.
+    // Group into rows: everything with roughly the same top is one row.
     inputs.sort((a, b) => a.top - b.top || a.left - b.left);
 
     const rows = [];
@@ -71,8 +71,8 @@ function set_row_wise_tab(frm) {
     rows.forEach(row => {
         row.items.sort((a, b) => a.left - b.left);
         row.items.forEach(item => {
-            // Value ej hoy to setAttribute na karvu — observer ne khali-khali
-            // trigger karva no koi matlab nathi.
+            // Don't setAttribute if the value is the same — there's no point
+            // triggering the observer for nothing.
             const next = String(tab++);
             if (item.el.getAttribute("tabindex") !== next) {
                 item.el.setAttribute("tabindex", next);
@@ -82,21 +82,21 @@ function set_row_wise_tab(frm) {
 }
 
 function watch_row_wise_tab(frm) {
-    // depends_on thi field hide/show thay, section collapse thay, ke navu HTML render
-    // thay tyare sequence pachhi banavvi pade. Ek j observer per form — refresh par
-    // vaar vaar na banave.
+    // The sequence must be rebuilt when depends_on hides/shows a field, a section
+    // collapses, or new HTML renders. Only one observer per form — don't create it
+    // over and over on refresh.
     const layout = frm.$wrapper.find(".form-layout")[0];
     if (!layout) return;
 
-    // Frappe form re-render kare tyare .form-layout node badlai jay che — etle node
-    // par pan check karvo pade, nahi to observer detached node par lagelo rahi jay.
+    // When Frappe re-renders the form the .form-layout node is replaced — so the node
+    // must be checked too, otherwise the observer stays attached to a detached node.
     if (frm.__row_wise_tab_node === layout) return;
     if (frm.__row_wise_tab_observer) frm.__row_wise_tab_observer.disconnect();
 
     let pending = null;
     const rebuild = () => {
         clearTimeout(pending);
-        // Debounce — ek batch na DOM changes mate ek j vaar chale.
+        // Debounce — runs only once for a batch of DOM changes.
         pending = setTimeout(() => set_row_wise_tab(frm), 150);
     };
 
