@@ -66,6 +66,7 @@ class InwardDashboard {
 					<div class="chart-box" id="workflow-chart" style="width:45%;"></div>
 
 					<div class="chart-box" id="medium-chart" style="width:45%;"></div>
+					<div class="chart-box" id="subject-pie-chart" style="width:45%;"></div>
 					<div class="chart-box" id="rejection-chart" style="width:45%;"></div>
 					<div class="chart-box" id="missing-docs-chart" style="width:45%;"></div>
 
@@ -79,7 +80,6 @@ class InwardDashboard {
 
 					<div class="chart-box" id="trend-chart" style="width:94%;"></div>
 
-					<div class="chart-box" id="subject-pie-chart" style="width:45%;"></div>
 
 				</div>
 			</div>
