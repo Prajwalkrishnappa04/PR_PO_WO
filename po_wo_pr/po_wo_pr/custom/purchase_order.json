@@ -301,7 +301,7 @@
    "name": "Purchase Order-custom_dispatch_mode",
    "no_copy": 0,
    "non_negative": 0,
-   "options": "Mode Of Transport Data",
+   "options": "Type of Postage Master",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
