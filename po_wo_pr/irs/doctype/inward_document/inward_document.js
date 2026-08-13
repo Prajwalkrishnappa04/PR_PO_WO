@@ -140,7 +140,7 @@ function set_vidhya_project(frm) {
                 // finish (after_ajax), then ensure the option exists and set it so the
                 // autocomplete both stores and displays the value.
                 frappe.after_ajax(() => {
-                    const target = "Vidya - Application";
+                    const target = "Vidhya - Application";
                     const field = frm.fields_dict["subject"];
                     const opts = (frm.get_field("subject").df.options || "")
                         .split("\n").filter(Boolean);
@@ -334,27 +334,27 @@ frappe.ui.form.on("Inward Document", {
         );
     },
 
-udaan_maa_code(frm) {
-    if (!frm.doc.udaan_maa_code) return;
+    udaan_maa_code(frm) {
+        if (!frm.doc.udaan_maa_code) return;
 
-    frappe.db.get_value("Udaan Student", frm.doc.udaan_maa_code,
-        ["student_name", "townvillage", "application_receive_date", "phone_no", "maa_code"],  // ✅ use actual fieldname
-        (r) => {
-            if (!r) return;
-            frm.set_value("sender", r.student_name || "");
-            frm.set_value("place", r.townvillage || "");
-            if (!frm.doc.date) {
-                frm.set_value("date", r.application_receive_date || frappe.datetime.get_today());
-            }
-            frm.set_value("mob_no", r.phone_no || "");
+        frappe.db.get_value("Udaan Student", frm.doc.udaan_maa_code,
+            ["student_name", "townvillage", "application_receive_date", "phone_no", "maa_code"],  // ✅ use actual fieldname
+            (r) => {
+                if (!r) return;
+                frm.set_value("sender", r.student_name || "");
+                frm.set_value("place", r.townvillage || "");
+                if (!frm.doc.date) {
+                    frm.set_value("date", r.application_receive_date || frappe.datetime.get_today());
+                }
+                frm.set_value("mob_no", r.phone_no || "");
 
-            const mc = (r.maa_code || "").toUpperCase(); 
-            if (mc.startsWith("MFBH") || mc.startsWith("MFVA")) {
-                set_vidhya_project(frm);
+                const mc = (r.maa_code || "").toUpperCase();
+                if (mc.startsWith("MFBH") || mc.startsWith("MFVA")) {
+                    set_vidhya_project(frm);
+                }
             }
-        }
-    );
-},
+        );
+    },
 
     application_status(frm) {
         frm.refresh();
