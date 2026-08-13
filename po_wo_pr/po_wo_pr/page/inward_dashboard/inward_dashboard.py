@@ -199,3 +199,39 @@ def get_missing_documents_summary(project=None, subject=None, month=None, academ
         GROUP BY det.document_name
         ORDER BY count DESC
     """, values, as_dict=True)
+
+@frappe.whitelist()
+def get_subject_summary(
+    project=None,
+    subject=None,
+    month=None,
+    academic_year=None
+):
+    where, values = get_conditions(
+        project,
+        subject,
+        month,
+        academic_year
+    )
+
+    if not project:
+        return []
+
+    if where:
+        where += " AND subject IS NOT NULL"
+    else:
+        where = "WHERE subject IS NOT NULL"
+
+    return frappe.db.sql(
+        f"""
+        SELECT
+            subject AS label,
+            COUNT(*) AS count
+        FROM `tabInward Document`
+        {where}
+        GROUP BY subject
+        ORDER BY count DESC
+        """,
+        values,
+        as_dict=True
+    )
