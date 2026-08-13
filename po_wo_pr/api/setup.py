@@ -35,28 +35,40 @@ BUYING_NAMING_SERIES = {
         "default": "MF-MR-.##.-.MFY",
     },
     "Request for Quotation": {
-        "options": "MF-RFQ-.##.-.MFY",
-        "default": "MF-RFQ-.##.-.MFY",
+        "options": "\n".join([
+            "MF-RFQ-.##.-.MFY",
+            "MF-RFQ-WO.##.-.MFY",
+        ])
+        # "default": "MF-RFQ-WO.##.-.MFY",
     },
     "Supplier Quotation": {
-        "options": "MF-SQ-.##.-.MFY",
-        "default": "MF-SQ-.##.-.MFY",
+        "options": "\n".join([
+            "MF-SQ-.##.-.MFY",
+            "MF-SQ-WO.##.-.MFY",
+        ]) 
+        # "default": "MF-SQ-.##.-.MFY",
     },
     "Purchase Order": {
         "options": "\n".join([
             "MF-PO-CON-.##.-.MFY",
             "MF-PO-CPX-.##.-.MFY",
-            "MF-PO-SER-.##.-.MFY",
+            "MF-WO-SER-.##.-.MFY",
             "MF-PO-ASSET-.##.-.MFY",
         ]),
         "default": "MF-PO-CPX-.##.-.MFY",
     },
     "Purchase Receipt": {
-        "options": "MF-MRN-.##.-.MFY",
+        "options": "\n".join([
+            "MF-MRN-.##.-.MFY"
+            "MF-MRN-WO.##.-.MFY"
+        ]),
         "default": "MF-MRN-.##.-.MFY",
     },
     "Purchase Invoice": {
-        "options": "MF-PI-.##.-.MFY",
+        "options": "\n".join([
+            "MF-PI-.##.-.MFY",
+            "MF-PI-WO.##.-.MFY"
+        ]),
         "default": "MF-PI-.##.-.MFY",
     },
     "Payment Request": {
