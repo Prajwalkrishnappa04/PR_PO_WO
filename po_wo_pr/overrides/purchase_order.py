@@ -51,12 +51,12 @@ def copy_supplier_quotation_taxes(source_name, target_doc):
 
 
 def set_supplier_quotation_no(source_name, target_doc):
-	"""Supplier e aapelo quotation number (SQ nu `quotation_number`) PO par mukvo.
+	"""Put the quotation number given by the supplier (the SQ's `quotation_number`) on the PO.
 
-	PO nu `custom_supplier_quotation_no` read-only + mandatory che, etle ene fakt ahi
-	thi j value made che — matlab PO Supplier Quotation mathi banyo hoy tyare j. Sidha
-	banaveli PO ma user e jate bharvu pade (field read-only hovathi e shakya nathi),
-	etle aa field vaali PO hammesha SQ mathi j aavvi joie.
+	The PO's `custom_supplier_quotation_no` is read-only + mandatory, so it only gets a
+	value from here — meaning only when the PO was created from a Supplier Quotation. On
+	a directly created PO the user would have to fill it manually (which isn't possible
+	since the field is read-only), so a PO with this field must always come from an SQ.
 	"""
 	if not target_doc.meta.has_field(SUPPLIER_QUOTATION_NO_FIELD):
 		return target_doc

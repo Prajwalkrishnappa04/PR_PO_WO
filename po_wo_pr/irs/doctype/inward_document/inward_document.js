@@ -30,11 +30,11 @@ function is_application_subject(subject) {
 }
 
 function fill_document_records(frm) {
-    // Project na Document List mathi document names document_records ma bharo.
+    // Fill document_records with the document names from the Project's Document List.
     //
-    // Aa FAKT navi entry ma j chale (frm.is_new()). Save thai gaya pachi kyare y
-    // nahi chale — etle jo user ne koi document ni jarur na hoy ane e row delete
-    // kari de, to e row pachi kyare y fetch nahi thay.
+    // This runs ONLY on a new entry (frm.is_new()). It never runs after the doc has
+    // been saved — so if the user doesn't need a document and deletes that row, the
+    // row will never be fetched again.
     if (!frm.is_new()) return;
     if (!frm.doc.project) return;
     if (!is_application_subject(frm.doc.subject)) return;
@@ -50,7 +50,7 @@ function fill_document_records(frm) {
                 .filter(Boolean);
             if (!names.length) return;
 
-            // Pahela thi rahel document names — duplicate rokva mate.
+            // Document names already present — used to prevent duplicates.
             const existing = new Set(
                 (frm.doc.document_records || [])
                     .map(row => (row.document_name || "").trim().toLowerCase())
@@ -74,8 +74,8 @@ function fill_document_records(frm) {
 }
 
 function setup_received_all_button(frm) {
-    // document_records grid ma "Add Row" ni jamni baaju "Received All" button,
-    // je badhi child rows nu Received checkbox tick kari de.
+    // A "Received All" button to the right of "Add Row" in the document_records grid,
+    // which ticks the Received checkbox on all child rows.
     const grid = frm.fields_dict.document_records && frm.fields_dict.document_records.grid;
     if (!grid) return;
 
@@ -91,14 +91,14 @@ function setup_received_all_button(frm) {
         frm.refresh_field("document_records");
     });
 
-    // add_custom_button prepend kare che, etle Add Row pachi khasedvu pade.
+    // add_custom_button prepends, so it has to be moved after Add Row.
     $btn.removeClass("hidden").insertAfter(grid.wrapper.find(".grid-add-row"));
 }
 
 function validate_unique_document_records(frm) {
-    // document_records ma ek j Document Name be vaar na aavvu joie.
-    // Comparison trim + lowercase par, jethi "SSC Certificate" ane
-    // "  ssc certificate  " ne pan duplicate ganay.
+    // The same Document Name must not appear twice in document_records.
+    // Comparison is on trim + lowercase, so that "SSC Certificate" and
+    // "  ssc certificate  " also count as duplicates.
     const seen = {};
     const messages = [];
 
@@ -155,22 +155,22 @@ function set_vidhya_project(frm) {
 }
 
 function set_row_wise_tab(frm) {
-    // Frappe no default Tab order field-definition order pramane chale — etle e aakho
-    // left column pahelo firey, pachi j right column. Aa function tabindex pachho
-    // assign kare che jethi Tab visual row-wise chale: ek row na badha fields
-    // left -> right, e row puri thay pachi next row.
+    // Frappe's default Tab order follows field-definition order — so it walks the
+    // entire left column first, and only then the right column. This function
+    // reassigns tabindex so that Tab moves visually row-wise: all fields of one row
+    // left -> right, and once that row is done, on to the next row.
     //
-    // Order field-order ke column-index thi nahi, pan input ni on-screen position
-    // (getBoundingClientRect) thi nakki thay che. Etle koi field depends_on thi
-    // hide/show thay, ke be column ma alag alag field count hoy, to pan sequence
-    // sachi rahe.
-    const ROW_TOLERANCE = 12; // px — aa andar na top values ne same row ganvi
+    // The order is determined not by field-order or column-index, but by the input's
+    // on-screen position (getBoundingClientRect). So even if some field is hidden or
+    // shown via depends_on, or the two columns have different field counts, the
+    // sequence stays correct.
+    const ROW_TOLERANCE = 12; // px — top values within this are treated as the same row
 
     const inputs = frm.$wrapper
         .find(".form-layout input:visible, .form-layout textarea:visible, .form-layout select:visible")
         .filter(function () {
-            // Grid (child table) ne chhodi devu — ena Tab behaviour ne aa function
-            // touch nathi karto.
+            // Skip grids (child tables) — this function does not touch their Tab
+            // behaviour.
             if ($(this).closest(".grid-body, .form-grid, .grid-row").length) return false;
             if (this.disabled || this.readOnly || this.type === "hidden") return false;
             const rect = this.getBoundingClientRect();
@@ -181,13 +181,13 @@ function set_row_wise_tab(frm) {
             const rect = el.getBoundingClientRect();
             return {
                 el,
-                // Page-relative, jethi scroll position no farak na pade.
+                // Page-relative, so the scroll position makes no difference.
                 top: rect.top + window.scrollY,
                 left: rect.left + window.scrollX
             };
         });
 
-    // Rows ma group karo: top lagbhag same hoy e badha ek row.
+    // Group into rows: everything with roughly the same top is one row.
     inputs.sort((a, b) => a.top - b.top || a.left - b.left);
 
     const rows = [];
@@ -204,8 +204,8 @@ function set_row_wise_tab(frm) {
     rows.forEach(row => {
         row.items.sort((a, b) => a.left - b.left);
         row.items.forEach(item => {
-            // Value ej hoy to setAttribute na karvu — observer ne khali-khali
-            // trigger karva no koi matlab nathi.
+            // Don't setAttribute if the value is the same — there's no point
+            // triggering the observer for nothing.
             const next = String(tab++);
             if (item.el.getAttribute("tabindex") !== next) {
                 item.el.setAttribute("tabindex", next);
@@ -215,21 +215,21 @@ function set_row_wise_tab(frm) {
 }
 
 function watch_row_wise_tab(frm) {
-    // depends_on thi field hide/show thay, section collapse thay, ke navu HTML render
-    // thay tyare sequence pachhi banavvi pade. Ek j observer per form — refresh par
-    // vaar vaar na banave.
+    // The sequence must be rebuilt when depends_on hides/shows a field, a section
+    // collapses, or new HTML renders. Only one observer per form — don't create it
+    // over and over on refresh.
     const layout = frm.$wrapper.find(".form-layout")[0];
     if (!layout) return;
 
-    // Frappe form re-render kare tyare .form-layout node badlai jay che — etle node
-    // par pan check karvo pade, nahi to observer detached node par lagelo rahi jay.
+    // When Frappe re-renders the form the .form-layout node is replaced — so the node
+    // must be checked too, otherwise the observer stays attached to a detached node.
     if (frm.__row_wise_tab_node === layout) return;
     if (frm.__row_wise_tab_observer) frm.__row_wise_tab_observer.disconnect();
 
     let pending = null;
     const rebuild = () => {
         clearTimeout(pending);
-        // Debounce — ek batch na DOM changes mate ek j vaar chale.
+        // Debounce — runs only once for a batch of DOM changes.
         pending = setTimeout(() => set_row_wise_tab(frm), 150);
     };
 
@@ -252,8 +252,8 @@ frappe.ui.form.on("Inward Document", {
     },
 
     received_date(frm) {
-        // Parent received_date badle to fakt khaali receiving_date vala rows ma bharo.
-        // Je rows ma user e already alag date set kari hoy e ne touch na karvu.
+        // When the parent received_date changes, fill only rows with an empty
+        // receiving_date. Don't touch rows where the user already set a different date.
         (frm.doc.document_records || []).forEach(row => {
             if (!row.receiving_date) {
                 frappe.model.set_value(row.doctype, row.name, "receiving_date", frm.doc.received_date);
@@ -263,7 +263,7 @@ frappe.ui.form.on("Inward Document", {
     },
 
     document_records_add(frm, cdt, cdn) {
-        // Navi row add thay to parent no received_date ema set karo.
+        // When a new row is added, set the parent's received_date on it.
         if (frm.doc.received_date) {
             frappe.model.set_value(cdt, cdn, "receiving_date", frm.doc.received_date);
         }
@@ -366,7 +366,7 @@ udaan_maa_code(frm) {
         load_project_subjects(frm);
         setup_received_all_button(frm);
 
-        // Form kholta: received_date hoy to je rows ni receiving_date khaali che ema bharo.
+        // On form open: if received_date is set, fill it into rows whose receiving_date is empty.
         if (frm.doc.received_date) {
             (frm.doc.document_records || []).forEach(row => {
                 if (!row.receiving_date) {
