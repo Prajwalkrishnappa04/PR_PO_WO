@@ -389,16 +389,24 @@ udaan_maa_code(frm) {
 
         if (frm.is_new() || frm.doc.application_status !== "Accept" || frm.is_dirty()) return;
 
-        frm.add_custom_button("Add Student Entry", () => {
-            if (frm.doc.maa_code) {
+        frm.remove_custom_button("Add Student Entry");
+        frm.remove_custom_button("View Student");
+        if (frm.doc.maa_code) {
+            frm.add_custom_button("View Student", () => {
                 frappe.set_route("Form", "Student", frm.doc.maa_code);
-                return;
-            }
+            });
+
+            return;
+        }
+        
+        frm.add_custom_button("Add Student Entry", () => {
             frappe.call({
                 method: "frappe.client.get_value",
                 args: {
                     doctype: "Employee",
-                    filters: { user_id: frappe.session.user },
+                    filters: {
+                        user_id: frappe.session.user
+                    },
                     fieldname: ["branch"]
                 },
                 callback(r) {
@@ -431,6 +439,7 @@ udaan_maa_code(frm) {
                         ],
 
                         primary_action_label: "Submit",
+
                         primary_action(values) {
                             frappe.call({
                                 method: "po_wo_pr.irs.doctype.inward_document.inward_document.create_student_and_set_maa_code",
@@ -441,13 +450,31 @@ udaan_maa_code(frm) {
                                     maa_branch: values.maa_branch,
                                     application_receive_date: frm.doc.date
                                 },
+
                                 callback(res) {
                                     if (!res.exc && res.message) {
+
+                                        // Server should return the Student document name
+                                        let student_id = res.message;
+
                                         d.hide();
-                                        frappe.model.set_value(frm.doctype, frm.docname, "maa_code", res.message);
-                                        frm.save().then(() => {
-                                            frappe.msgprint(__("Student Entry Created"));
+
+                                        // Remove the Create button
+                                        frm.remove_custom_button("Add Student Entry");
+
+                                        // Immediately replace it with View Student
+                                        frm.add_custom_button("View Student", () => {
+                                            frappe.set_route(
+                                                "Form",
+                                                "Student",
+                                                student_id
+                                            );
                                         });
+
+                                        // Show success message
+                                        frappe.msgprint(
+                                            __("Student Entry Created")
+                                        );
                                     }
                                 }
                             });
@@ -455,6 +482,11 @@ udaan_maa_code(frm) {
                     });
 
                     d.show();
+
+                    // Optional: prefill branch from logged-in Employee
+                    if (employee_branch) {
+                        d.set_value("maa_branch", employee_branch);
+                    }
                 }
             });
         });
