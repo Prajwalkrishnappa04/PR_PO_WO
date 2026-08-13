@@ -6,7 +6,9 @@ def execute(filters=None):
         SELECT
             pi.name,
             pi.mob_no,
-            pi.place,
+            tv.townvillage,
+            t.taluka,
+            d.district,
             pi.maa_code,
             pi.udaan_maa_code,
             pi.sender,
@@ -17,6 +19,12 @@ def execute(filters=None):
             ON pi.name = ci.parent
         LEFT JOIN `tabIRS Project` p
             ON pi.project = p.name
+        LEFT JOIN `tabTown Village` tv
+            ON pi.place = tv.name
+        LEFT JOIN `tabTaluka` t
+            ON pi.taluka = t.name
+        LEFT JOIN `tabDistrict` d
+            ON pi.district = d.name
         WHERE ci.received = 0 
             AND pi.project IN ('IRS-PROJ-0001', 'IRS-PROJ-0002')
         ORDER BY pi.name
@@ -39,7 +47,9 @@ def execute(filters=None):
                 rows.append({
                     "name": row["name"],
                     "mob_no": row["mob_no"],
-                    "place": row["place"],
+                    "townvillage": row["townvillage"],
+                    "taluka": row["taluka"],
+                    "district": row["district"],
                     "maa_code": row["maa_code"],
                     "udaan_maa_code": row["udaan_maa_code"],
                     "sender": row["sender"],
@@ -66,10 +76,21 @@ def execute(filters=None):
         },
         {
             "label": "Place",
-            "fieldname": "place",
-            "fieldtype": "Link",
-            "options":"Town Village",
-            "width": 150
+            "fieldname": "townvillage",
+            "fieldtype": "Data",
+            "width": 100
+        },
+        {
+            "label": "Taluka",
+            "fieldname": "taluka",
+            "fieldtype": "Data",
+            "width": 100
+        },
+        {
+            "label": "District",
+            "fieldname": "district",
+            "fieldtype": "Data",
+            "width": 100
         },
         {
             "label": "Maa Code",
@@ -119,7 +140,9 @@ def execute(filters=None):
         data.append({
             "document_name": row["name"],
             "mobile_no": row["mob_no"],
-            "place": row["place"],
+            "townvillage": row["townvillage"],
+            "taluka": row["taluka"],
+            "district": row["district"],
             "maa_code": row["maa_code"],
             "udaan_maa_code": row["udaan_maa_code"],
             "sender": row["sender"],

@@ -2,13 +2,10 @@ frappe.query_reports["Pending Inward Documents"] = {
     filters: [],
 
     onload: function(report) {
-        $("<style>")
-            .text(`
-                .query-report .dt-cell__content {
-                    text-align: center !important;
-                }
-            `)
-            .appendTo("head");
+        report.page.wrapper.find(".dt-cell__content").css({
+            "text-align": "center",
+            "justify-content": "center"
+        });
     },
 
     formatter: function(value, row, column, data, default_formatter) {
