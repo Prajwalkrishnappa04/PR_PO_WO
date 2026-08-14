@@ -427,7 +427,6 @@ fixtures = [
     {
         "dt": "Workflow",
         "filters": [["name", "in", [
-            "Inward Document",
             "Supplier Quotation Approval",
             "Purchase Order Approval",
         ]]]
