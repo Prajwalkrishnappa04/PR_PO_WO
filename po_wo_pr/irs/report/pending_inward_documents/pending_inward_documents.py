@@ -69,6 +69,12 @@ def execute(filters=None):
             "width": 150
         },
         {
+            "label": "Sender",
+            "fieldname": "sender",
+            "fieldtype": "Data",
+            "width": 150
+        },
+        {
             "label": "Mobile No",
             "fieldname": "mobile_no",
             "fieldtype": "Data",
@@ -97,20 +103,14 @@ def execute(filters=None):
             "fieldname": "maa_code",
             "fieldtype": "Link",
             "options":"Student",
-            "width": 120
+            "width": 100
         },
         {
             "label": "Udaan Maa Code",
             "fieldname": "udaan_maa_code",
             "fieldtype": "Link",
             "options":"Udaan Student",
-            "width": 150
-        },
-        {
-            "label": "Sender",
-            "fieldname": "sender",
-            "fieldtype": "Data",
-            "width": 150
+            "width": 100
         },
         {
             "label": "Project",
@@ -128,7 +128,7 @@ def execute(filters=None):
             "label": "WhatsApp",
             "fieldname": "whatsapp",
             "fieldtype": "Data",
-            "width": 80
+            "width": 60
         }
     ]
 
