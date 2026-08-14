@@ -269,15 +269,31 @@ frappe.ui.form.on("Inward Document", {
         }
     },
 
-    taluka(frm) {
-        frm.set_value("place", "");
+taluka(frm) {
+    frm.set_value("place", "");
+
+    if (!frm.doc.taluka) {
         frm.set_value("district", "");
         frm.set_value("state", "");
-        frm.set_query("place", () => ({
-            query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_town_village",
-            filters: frm.doc.taluka ? { taluka: frm.doc.taluka } : {}
-        }));
-    },
+    } else {
+        frappe.db.get_value(
+            "Taluka",
+            frm.doc.taluka,
+            ["district", "state"],
+            (r) => {
+                if (r) {
+                    frm.set_value("district", r.district || "");
+                    frm.set_value("state", r.state || "");
+                }
+            }
+        );
+    }
+
+    frm.set_query("place", () => ({
+        query: "po_wo_pr.irs.doctype.inward_document.inward_document.search_town_village",
+        filters: frm.doc.taluka ? { taluka: frm.doc.taluka } : {}
+    }));
+},
 
     place(frm) {
         if (frm.doc.place) {
