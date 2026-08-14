@@ -60,7 +60,8 @@ doctype_js = {
     "Supplier Quotation": ["public/js/supplier_quotation.js", "public/js/enquiry_ref.js"],
     "Purchase Receipt": ["public/js/purchase_receipt.js", "public/js/enquiry_ref.js"],
     "Purchase Invoice": ["public/js/purchase_invoice.js", "public/js/enquiry_ref.js"],
-    "Payment Entry": "public/js/payment_entry.js"
+    "Payment Entry": "public/js/payment_entry.js",
+    "Leave Application": "public/js/leave_application.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -274,6 +275,7 @@ override_whitelisted_methods = {
 	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt": "po_wo_pr.overrides.purchase_order.make_purchase_receipt",
 	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice",
 	"erpnext.stock.doctype.purchase_receipt.purchase_receipt.make_purchase_invoice": "po_wo_pr.overrides.purchase_order.make_purchase_invoice_from_receipt",
+	"hrms.hr.doctype.leave_application.leave_application.get_leave_details": "po_wo_pr.overrides.leave_application.get_leave_details",
 }
 #
 # each overriding function accepts a `data` argument;
