@@ -140,7 +140,7 @@ function set_vidhya_project(frm) {
                 // finish (after_ajax), then ensure the option exists and set it so the
                 // autocomplete both stores and displays the value.
                 frappe.after_ajax(() => {
-                    const target = "Vidya - Application";
+                    const target = "Vidhya - Application";
                     const field = frm.fields_dict["subject"];
                     const opts = (frm.get_field("subject").df.options || "")
                         .split("\n").filter(Boolean);
