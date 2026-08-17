@@ -155,10 +155,17 @@ class InwardDocument(Document):
 				if not row.receiving_date:
 					row.receiving_date = self.received_date
 
+	def add_branch(self):
+		current_user = frappe.session.user
+		branch = frappe.db.get_value("Employee", {"user_id":current_user}, "branch")
+		self.maa_branch = branch
+
 	#before save hook
 	def before_save(self):
 		self.save_entry_By()
 		self.set_receiving_dates()
+		self.add_branch()
+
 	def autoname(self):
 		employee = frappe.db.get_value(
 			"Employee",

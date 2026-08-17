@@ -39,7 +39,9 @@
   "entry_by",
   "mail_sent",
   "amended_from",
-  "remarks"
+  "remarks",
+  "section_break_xqwz",
+  "maa_branch"
  ],
  "fields": [
   {
@@ -262,13 +264,23 @@
    "in_list_view": 1,
    "label": "Udaan Code",
    "options": "Udaan Student"
+  },
+  {
+   "fieldname": "section_break_xqwz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "maa_branch",
+   "fieldtype": "Link",
+   "label": "Maa Branch",
+   "options": "Branch"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-13 13:54:58.337525",
+ "modified": "2026-08-17 16:00:41.854972",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Outward Documents",

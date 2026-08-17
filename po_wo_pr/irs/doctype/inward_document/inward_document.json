@@ -32,7 +32,9 @@
   "remarks",
   "date",
   "section_break_plnu",
-  "document_records"
+  "document_records",
+  "section_break_duyy",
+  "maa_branch"
  ],
  "fields": [
   {
@@ -221,12 +223,23 @@
    "fieldtype": "Date",
    "label": "Received Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_duyy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "maa_branch",
+   "fieldtype": "Link",
+   "label": "Maa Branch",
+   "options": "Branch",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-06 19:43:43.567457",
+ "modified": "2026-08-17 15:59:54.661655",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
