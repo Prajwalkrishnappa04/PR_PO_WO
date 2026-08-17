@@ -41,6 +41,13 @@ app_license = "mit"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
+
+permission_query_conditions = { 
+    "Outward Documents": "po_wo_pr.irs.api.outward_documents_permission",
+    "Inward Documents": "po_wo_pr.irs.api.inward_documents_permission"
+}
+
+
 doctype_list_js = {
     "Inward Document": "public/js/inward_list.js",
     "Attendance": "public/js/attendance_list.js"
