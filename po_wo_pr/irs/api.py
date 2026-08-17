@@ -21,7 +21,7 @@ def outward_documents_permission(user):
     employee_branch = frappe.db.get_value("Employee", {"user_id": user}, "branch")
     if not employee_branch:
         return "1 = 0"
-    return f"(`tabOutward Documents`.`branch` = '{employee_branch}')"
+    return f"(`tabOutward Documents`.`maa_branch` = '{employee_branch}')"
 
 def inward_documents_permission(user):
     if not user:
@@ -31,4 +31,4 @@ def inward_documents_permission(user):
     employee_branch = frappe.db.get_value("Employee", {"user_id": user}, "branch")
     if not employee_branch:
         return "1 = 0"
-    return f"(`tabInward Documents`.`branch` = '{employee_branch}')"
+    return f"(`tabInward Documents`.`maa_branch` = '{employee_branch}')"
