@@ -1,6 +1,7 @@
 frappe.ui.form.on("Material Request", {
     refresh(frm) {
         update_all_stock_balances(frm);
+        update_contact_numbers(frm);
     },
 
     onload(frm) {
@@ -30,6 +31,10 @@ frappe.ui.form.on("Material Request", {
         if (get_selected_terms(frm).length) {
             setTimeout(() => set_terms_from_selection(frm), 300);
         }
+    },
+
+    custom_contact_person(frm) {
+        update_contact_numbers(frm);
     }
 });
 
@@ -106,6 +111,40 @@ function update_stock_balance(frm, cdt, cdn) {
         },
         callback(r) {
             frappe.model.set_value(cdt, cdn, "custom_stock_balance_qty", flt(r.message));
+        }
+    });
+}
+
+function update_contact_numbers(frm) {
+    let rows = frm.doc.custom_contact_person || [];
+
+    if (!rows.length) {
+        frm.set_value('custom_contact_numbers', '');
+        return;
+    }
+
+    let names = rows.map(r => r.contact_person).filter(Boolean);
+
+    if (!names.length) {
+        frm.set_value('custom_contact_numbers', '');
+        return;
+    }
+
+    frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+            doctype: 'Contact person',
+            filters: [['name', 'in', names]],
+            fields: ['name', 'name1', 'custom_contact_number']
+        },
+        callback: function(r) {
+            console.log('Contact person fetch result:', r.message);
+            if (r.message) {
+                let lines = r.message.map(
+                    d => `${d.name1}: ${d.custom_contact_number || '—'}`
+                );
+                frm.set_value('custom_contact_numbers', lines.join('\n'));
+            }
         }
     });
 }
