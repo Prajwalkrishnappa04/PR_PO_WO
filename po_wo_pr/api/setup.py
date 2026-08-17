@@ -30,6 +30,10 @@ def set_purchase_order_name(doc, method=None):
 
 
 BUYING_NAMING_SERIES = {
+    "Employee":{
+        "options": "CON-.###.",
+        # "default": "CON-.###.",
+    },
     "Material Request": {
         "options": "MF-MR-.##.-.MFY",
         "default": "MF-MR-.##.-.MFY",
@@ -59,7 +63,7 @@ BUYING_NAMING_SERIES = {
     },
     "Purchase Receipt": {
         "options": "\n".join([
-            "MF-MRN-.##.-.MFY"
+            "MF-MRN-.##.-.MFY",
             "MF-MRN-WO.##.-.MFY"
         ]),
         "default": "MF-MRN-.##.-.MFY",
