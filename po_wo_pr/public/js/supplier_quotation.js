@@ -10,6 +10,11 @@ frappe.ui.form.on("Supplier Quotation", {
                 }
             };
         });
+
+        if (frm.is_new()) {
+            frm._last_fetched_rfq = null;
+            fetch_contact_details(frm);
+        }
     },
     custom_term_selection(frm) {
         set_terms_from_selection(frm);
@@ -18,6 +23,26 @@ frappe.ui.form.on("Supplier Quotation", {
         // Term Selection wins over the single Terms Template
         if (get_selected_terms(frm).length) {
             setTimeout(() => set_terms_from_selection(frm), 300);
+        }
+    },
+    custom_payment_terms_template(frm) {
+        if (frm.doc.custom_payment_terms_template) {
+            frappe.call({
+                method: "erpnext.controllers.accounts_controller.get_payment_terms",
+                args: {
+                    terms_template: frm.doc.custom_payment_terms_template,
+                    posting_date: frm.doc.transaction_date,
+                    grand_total: frm.doc.rounded_total || frm.doc.grand_total,
+                    base_grand_total: frm.doc.base_rounded_total || frm.doc.base_grand_total,
+                },
+                callback: function(r) {
+                    if (r.message && !r.exc) {
+                        frm.set_value("custom_payment_schedule", r.message);
+                    }
+                }
+            });
+        } else {
+            frm.set_value("custom_payment_schedule", []);
         }
     },
     refresh(frm) {
@@ -40,6 +65,10 @@ frappe.ui.form.on("Supplier Quotation", {
     },
     items_add(frm) {
         hide_supplier_quotation_item_gst_fields(frm);
+        fetch_contact_details(frm);
+    },
+    items_remove(frm) {
+        fetch_contact_details(frm);
     }
 });
 
@@ -239,6 +268,48 @@ function set_default_branch(frm) {
             // re-check: the user may have picked a branch while this was in flight
             if (branch && !frm.doc.custom_branch) {
                 frm.set_value("custom_branch", branch);
+            }
+        });
+}
+
+// Pulls contact persons and contact numbers text from the Request for
+// Quotation the first item row came from. Runs once per RFQ -- the guard
+// keeps repeated items_add events from re-fetching the same values.
+function fetch_contact_details(frm) {
+    if (!frm.doc.items || !frm.doc.items.length) return;
+    let rfq_name = frm.doc.items[0].request_for_quotation;
+    if (!rfq_name) return;
+    if (frm._last_fetched_rfq === rfq_name) return;
+    frm._last_fetched_rfq = rfq_name;
+
+    frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+            doctype: "MR Contact Person",
+            parent: "Request for Quotation",
+            filters: {
+                parent: rfq_name,
+                parenttype: "Request for Quotation"
+            },
+            fields: ["contact_person"],
+            limit_page_length: 0
+        },
+        callback: function(r) {
+            if (r.message && r.message.length) {
+                frm.clear_table("custom_contact_personss");
+                r.message.forEach(function(row) {
+                    let child = frm.add_child("custom_contact_personss");
+                    child.contact_person = row.contact_person;
+                });
+                frm.refresh_field("custom_contact_personss");
+            }
+        }
+    });
+
+    frappe.db.get_value("Request for Quotation", rfq_name, "custom_contact_numbers")
+        .then(r => {
+            if (r.message && r.message.custom_contact_numbers) {
+                frm.set_value("custom_contact_numbers", r.message.custom_contact_numbers);
             }
         });
 }
