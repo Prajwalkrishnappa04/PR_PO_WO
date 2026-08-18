@@ -7,6 +7,11 @@ frappe.ui.form.on("Purchase Receipt", {
                 }
             };
         });
+
+        if (frm.is_new()) {
+            frm._last_fetched_po = null;
+            fetch_contact_details(frm);
+        }
     },
 
     onload_post_render(frm) {
@@ -16,6 +21,7 @@ frappe.ui.form.on("Purchase Receipt", {
     refresh(frm) {
         set_transport_section_width(frm);
         schedule_submitted_create_buttons(frm);
+        bind_modal_autoexpand();
     },
 
     set_warehouse(frm) {
@@ -31,6 +37,14 @@ frappe.ui.form.on("Purchase Receipt", {
         if (get_selected_terms(frm).length) {
             setTimeout(() => set_terms_from_selection(frm), 300);
         }
+    },
+
+    items_add(frm) {
+        fetch_contact_details(frm);
+    },
+
+    items_remove(frm) {
+        fetch_contact_details(frm);
     }
 });
 
@@ -231,5 +245,75 @@ function open_purchase_return(frm) {
     frappe.model.open_mapped_doc({
         method: "erpnext.stock.doctype.purchase_receipt.purchase_receipt.make_purchase_return",
         frm: frm
+    });
+}
+
+function bind_modal_autoexpand() {
+    $(document).off("shown.bs.modal.autoexpand").on("shown.bs.modal.autoexpand", ".modal", function () {
+        setTimeout(() => {
+            const modal = $(this);
+
+            // Auto-expand
+            const expandBtn = modal.find('button[data-fieldname="option_toggle_button"]');
+            if (expandBtn.length) expandBtn.trigger("click");
+
+            setTimeout(() => {
+                const emailTemplateInput = modal.find('input[data-fieldname="email_template"]');
+                if (emailTemplateInput.length) {
+                    // Set value and trigger input to load awesomplete list
+                    emailTemplateInput.val("Rejected item");
+                    emailTemplateInput.trigger("input");
+
+                    setTimeout(() => {
+                        // Find the exact <div role="option"> with title="Rejected item" and click it
+                        const option = modal.find('ul[role="listbox"] div[role="option"] p[title="Rejected item"]');
+                        if (option.length) {
+                            option.trigger("click");
+                        }
+                    }, 500); // wait for awesomplete list to populate
+                }
+            }, 400); // wait for expand to finish
+        }, 300);
+    });
+}
+
+function fetch_contact_details(frm) {
+    if (!frm.doc.items || !frm.doc.items.length) return;
+
+    let po_name = frm.doc.items[0].purchase_order;
+    if (!po_name) return;
+    if (frm._last_fetched_po === po_name) return;
+    frm._last_fetched_po = po_name;
+
+    frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+            doctype: "MR Contact Person",
+            parent: "Purchase Order",
+            filters: {
+                parent: po_name,
+                parenttype: "Purchase Order"
+            },
+            fields: ["contact_person"],
+            limit_page_length: 0
+        },
+        callback: function (r) {
+            if (r.message && r.message.length) {
+                frm.clear_table("custom_contact_personss");
+                r.message.forEach(function (row) {
+                    let child = frm.add_child("custom_contact_personss");
+                    child.contact_person = row.contact_person;
+                });
+                frm.refresh_field("custom_contact_personss");
+            }
+        }
+    });
+
+    frappe.db.get_value("Purchase Order", po_name, [
+        "custom_contact_numbers"
+    ]).then(r => {
+        if (r.message && r.message.custom_contact_numbers) {
+            frm.set_value("custom_contact_numbers", r.message.custom_contact_numbers);
+        }
     });
 }
