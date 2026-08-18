@@ -16,6 +16,21 @@ frappe.ui.form.on("Purchase Order Item", {
 
     warehouse(frm, cdt, cdn) {
         refresh_stock_balance(frm, cdt, cdn);
+    },
+
+    material_request(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        if (row.material_request) {
+            frappe.db.get_value(
+                "Material Request",
+                row.material_request,
+                "schedule_date"
+            ).then(r => {
+                if (r.message && r.message.schedule_date) {
+                    frm.set_value("schedule_date", r.message.schedule_date);
+                }
+            });
+        }
     }
 });
 
@@ -285,6 +300,7 @@ function render_po_comparison(frm, data) {
 
     field.$wrapper.html(html);
 }
+
 frappe.ui.form.on("Purchase Order", {
     refresh(frm) {
         refresh_all_stock_balances(frm);
@@ -301,6 +317,7 @@ frappe.ui.form.on("Purchase Order", {
             });
         }
     },
+
     transaction_date(frm) {
         if (frm.doc.transaction_date) {
             let tran = frappe.datetime.str_to_obj(frm.doc.transaction_date);
@@ -308,6 +325,7 @@ frappe.ui.form.on("Purchase Order", {
             frm.set_value("schedule_date", frappe.datetime.obj_to_str(week_later));
         }
     },
+
     onload(frm) {
         set_default_branch(frm);
 
@@ -324,19 +342,28 @@ frappe.ui.form.on("Purchase Order", {
             let week_later = frappe.datetime.add_days(tran, 7);
             frm.set_value("schedule_date", frappe.datetime.obj_to_str(week_later));
         }
+
+        if (frm.is_new()) {
+            frm._last_fetched_sq = null;
+            fetch_contact_details(frm);
+        }
     },
+
     set_warehouse(frm) {
         refresh_all_stock_balances(frm);
     },
+
     custom_term_selection(frm) {
         set_terms_from_selection(frm);
     },
+
     tc_name(frm) {
         // Term Selection wins over the single Terms Template
         if (get_selected_terms(frm).length) {
             setTimeout(() => set_terms_from_selection(frm), 300);
         }
     },
+
     cost_center(frm) {
         if (!frm.doc.cost_center) {
             frm.allowed_gl_codes = [];
@@ -359,6 +386,14 @@ frappe.ui.form.on("Purchase Order", {
 
             set_gl_code_filter(frm);
         });
+    },
+
+    items_add(frm, cdt, cdn) {
+        fetch_contact_details(frm);
+    },
+
+    items_remove(frm) {
+        fetch_contact_details(frm);
     }
 });
 
@@ -431,4 +466,55 @@ function set_default_branch(frm) {
                 frm.set_value("custom_branch", branch);
             }
         });
+}
+
+function fetch_contact_details(frm) {
+    if (!frm.doc.items || !frm.doc.items.length) return;
+
+    let sq_name = frm.doc.items[0].supplier_quotation;
+    let mr_name = frm.doc.items[0].material_request;
+
+    if (sq_name && frm._last_fetched_sq !== sq_name) {
+        frm._last_fetched_sq = sq_name;
+
+        frappe.call({
+            method: "frappe.client.get_list",
+            args: {
+                doctype: "MR Contact Person",
+                parent: "Supplier Quotation",
+                filters: {
+                    parent: sq_name,
+                    parenttype: "Supplier Quotation"
+                },
+                fields: ["contact_person"],
+                limit_page_length: 0
+            },
+            callback: function (r) {
+                if (r.message && r.message.length) {
+                    frm.clear_table("custom_contact_personss");
+                    r.message.forEach(function (row) {
+                        let child = frm.add_child("custom_contact_personss");
+                        child.contact_person = row.contact_person;
+                    });
+                    frm.refresh_field("custom_contact_personss");
+                }
+            }
+        });
+
+        frappe.db.get_value("Supplier Quotation", sq_name, "custom_contact_numbers")
+            .then(r => {
+                if (r.message && r.message.custom_contact_numbers) {
+                    frm.set_value("custom_contact_numbers", r.message.custom_contact_numbers);
+                }
+            });
+    }
+
+    if (mr_name) {
+        frappe.db.get_value("Material Request", mr_name, "custom_person_responsible")
+            .then(r => {
+                if (r.message && r.message.custom_person_responsible) {
+                    frm.set_value("custom_our_enquiry_ref", r.message.custom_person_responsible);
+                }
+            });
+    }
 }
