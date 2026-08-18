@@ -404,7 +404,8 @@ fixtures = [
             "Request for Quotation-custom_term_selection",
             "Supplier Quotation-custom_term_selection",
             "Purchase Receipt-custom_term_selection",
-            "Purchase Invoice-custom_term_selection"
+            "Purchase Invoice-custom_term_selection",
+            "Purchase Order Item-custom_no_of_service"
 
             ]
             ]
