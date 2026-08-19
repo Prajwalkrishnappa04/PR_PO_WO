@@ -35,7 +35,7 @@ BUYING_NAMING_SERIES = {
         "CON.####.",
         "MF.####.",
         ]),
-        "default":"MF.####"
+        "default":"MF.####."
     },
     "Material Request": {
         "options": "MF-MR-.##.-.MFY",
