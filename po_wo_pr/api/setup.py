@@ -31,8 +31,11 @@ def set_purchase_order_name(doc, method=None):
 
 BUYING_NAMING_SERIES = {
     "Employee":{
-        "options": "CON-.###.",
-        # "default": "CON-.###.",
+        "options": "\n".join([
+        "CON.####.",
+        "MF.####.",
+        ]),
+        "default":"MF.####"
     },
     "Material Request": {
         "options": "MF-MR-.##.-.MFY",
