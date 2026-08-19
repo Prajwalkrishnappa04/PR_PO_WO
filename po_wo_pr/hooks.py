@@ -50,7 +50,8 @@ permission_query_conditions = {
 
 doctype_list_js = {
     "Inward Document": "public/js/inward_list.js",
-    "Attendance": "public/js/attendance_list.js"
+    "Attendance": "public/js/attendance_list.js",
+    "Purchase Order": "public/js/purchase_order_list.js"
 }
 
 # include js in doctype views
