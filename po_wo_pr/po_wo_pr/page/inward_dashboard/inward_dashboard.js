@@ -20,6 +20,7 @@ class InwardDashboard {
 			options: "IRS Project",
 			change: () => {
 				this.load_subjects();
+				this.load_subject_pie_chart();
 				this.refresh();
 			}
 		});
@@ -52,7 +53,7 @@ class InwardDashboard {
 			fieldtype: "Link",
 			options: "Academic Year",
 			change: () => this.refresh()
-		});	
+		});
 
 		this.body = $(`
 			<div class="inward-dashboard">
@@ -65,6 +66,7 @@ class InwardDashboard {
 					<div class="chart-box" id="workflow-chart" style="width:45%;"></div>
 
 					<div class="chart-box" id="medium-chart" style="width:45%;"></div>
+					<div class="chart-box" id="subject-pie-chart" style="width:45%;"></div>
 					<div class="chart-box" id="rejection-chart" style="width:45%;"></div>
 					<div class="chart-box" id="missing-docs-chart" style="width:45%;"></div>
 
@@ -77,6 +79,7 @@ class InwardDashboard {
 					</div>
 
 					<div class="chart-box" id="trend-chart" style="width:94%;"></div>
+
 
 				</div>
 			</div>
@@ -124,19 +127,20 @@ class InwardDashboard {
 	}
 
 	load_rejection_chart() {
-    this.call("get_rejection_reason_summary").then(data => {
-        this.render_bar("rejection-chart", "By Reason of Rejection", data);
-    });
-}
-load_missing_docs_chart() {
-    this.call("get_missing_documents_summary").then(data => {
-        this.render_bar("missing-docs-chart", "Missing / Not Received Documents", data);
-    });
-}
+		this.call("get_rejection_reason_summary").then(data => {
+			this.render_bar("rejection-chart", "By Reason of Rejection", data);
+		});
+	}
+	load_missing_docs_chart() {
+		this.call("get_missing_documents_summary").then(data => {
+			this.render_bar("missing-docs-chart", "Missing / Not Received Documents", data);
+		});
+	}
 	refresh() {
 		this.load_cards();
 		this.load_status_chart();
 		this.load_workflow_chart();
+		this.load_subject_pie_chart();
 		this.load_medium_chart();
 		this.load_location_chart(this.body.find("#location-level").val() || "district");
 		this.load_trend_chart();
@@ -144,38 +148,38 @@ load_missing_docs_chart() {
 		this.load_missing_docs_chart();
 	}
 
-		call(method, args = {}) {
-			args.project = this.project.get_value();
-			args.subject = this.subject.get_value();
-			args.month = this.month.get_value();
-			args.academic_year = this.academic_year.get_value();
+	call(method, args = {}) {
+		args.project = this.project.get_value();
+		args.subject = this.subject.get_value();
+		args.month = this.month.get_value();
+		args.academic_year = this.academic_year.get_value();
 
-			return frappe.call({
-				method: "po_wo_pr.po_wo_pr.page.inward_dashboard.inward_dashboard." + method,
-				args: args
-			}).then(r => r.message);
-		}
+		return frappe.call({
+			method: "po_wo_pr.po_wo_pr.page.inward_dashboard.inward_dashboard." + method,
+			args: args
+		}).then(r => r.message);
+	}
 
-load_cards() {
-    this.call("get_number_cards").then(data => {
-        const cards = [
-            { label: "Total", value: data.total, color: "#5e64ff" },
-            { label: "Pending", value: data.pending, color: "#ffa00a" },
-            { label: "Accepted", value: data.approved, color: "#28a745" },
-            { label: "Rejected", value: data.rejected, color: "#e03131" },
-            { label: "Repeat Rejected", value: data.repeat_rejected, color: "#9c1f1f" }
-        ];
+	load_cards() {
+		this.call("get_number_cards").then(data => {
+			const cards = [
+				{ label: "Total", value: data.total, color: "#5e64ff" },
+				{ label: "Pending", value: data.pending, color: "#ffa00a" },
+				{ label: "Accepted", value: data.approved, color: "#28a745" },
+				{ label: "Rejected", value: data.rejected, color: "#e03131" },
+				{ label: "Repeat Rejected", value: data.repeat_rejected, color: "#9c1f1f" }
+			];
 
-        this.body.find(".cards-row").html(
-            cards.map(card => `
+			this.body.find(".cards-row").html(
+				cards.map(card => `
                 <div style="flex:1;padding:16px;border-radius:8px;background:${card.color}15;border-left:4px solid ${card.color};">
                     <div style="font-size:24px;font-weight:600;">${card.value || 0}</div>
                     <div style="color:#666;">${card.label}</div>
                 </div>
             `).join("")
-        );
-    });
-}
+			);
+		});
+	}
 
 	load_status_chart() {
 		this.call("get_status_summary").then(data => {
@@ -204,6 +208,37 @@ load_cards() {
 				`By ${frappe.utils.to_title_case(level)}`,
 				data
 			);
+		});
+	}
+
+	load_subject_pie_chart() {
+		const project = this.project.get_value();
+
+		const wrapper = this.body.find("#subject-pie-chart")[0];
+
+		// Clear chart when no project is selected
+		if (!project) {
+			$(wrapper).empty();
+			return;
+		}
+
+		this.call("get_subject_summary").then(data => {
+			$(wrapper).empty();
+
+			const container = $("<div class='chart-container'></div>")
+				.appendTo(wrapper)[0];
+
+			new frappe.Chart(container, {
+				title: "Applications by Subject",
+				data: {
+					labels: data.map(d => d.label),
+					datasets: [{
+						values: data.map(d => d.count)
+					}]
+				},
+				type: "pie",
+				height: 300
+			});
 		});
 	}
 

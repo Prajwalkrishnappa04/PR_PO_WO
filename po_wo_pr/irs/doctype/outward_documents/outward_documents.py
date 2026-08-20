@@ -120,8 +120,14 @@ class OutwardDocuments(Document):
 		if not self.entry_by:
 			self.entry_by = frappe.db.get_value("User", frappe.session.user, "full_name") or frappe.session.user
 
+	def add_branch(self):
+		current_user = frappe.session.user
+		branch = frappe.db.get_value("Employee", {"user_id":current_user}, "branch")
+		self.maa_branch = branch
+
 	def before_save(self):
 		self.save_entry_By()
+		self.add_branch()
 
 	def on_submit(self):
 		self.notify_concern_person()

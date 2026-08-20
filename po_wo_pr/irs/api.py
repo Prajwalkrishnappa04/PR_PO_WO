@@ -12,3 +12,23 @@ def bulk_inward_to_outward(docnames,extra_data=None):
             "date": extra_data.date,
         }).insert()
     return "ok"
+
+def outward_documents_permission(user):
+    if not user:
+        user = frappe.session.user
+    if user == "Administrator":
+        return ""
+    employee_branch = frappe.db.get_value("Employee", {"user_id": user}, "branch")
+    if not employee_branch:
+        return "1 = 0"
+    return f"(`tabOutward Documents`.`maa_branch` = '{employee_branch}')"
+
+def inward_documents_permission(user):
+    if not user:
+        user = frappe.session.user
+    if user == "Administrator":
+        return ""
+    employee_branch = frappe.db.get_value("Employee", {"user_id": user}, "branch")
+    if not employee_branch:
+        return "1 = 0"
+    return f"(`tabInward Document`.`maa_branch` = '{employee_branch}')"

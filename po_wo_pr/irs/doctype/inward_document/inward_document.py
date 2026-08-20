@@ -73,27 +73,27 @@ def get_project_by_name(project_name):
 
 @frappe.whitelist()
 def get_latest_application_receive_date(maa_code, udaan=0):
-	"""Aapelaa student ni chhelle baneli Inward Document ni Received Date pachi aape.
+	"""Return the Received Date of the given student's most recently created Inward Document.
 
-	Academic Entry ma application_receive_date aa date parthi bharay che. Date tarike
-	`received_date` vaparyu che, Posting Date nahi — arji kyare aavi e j sacho meaning
-	che, ane Posting Date to fakt entry kyare pade e batave.
+	application_receive_date in Academic Entry is filled from this date. `received_date`
+	is used as the date, not Posting Date — when the application actually arrived is the
+	correct meaning, whereas Posting Date only shows when the entry was made.
 
-	`udaan` truthy hoy to Udaan Student vaalu `udaan_maa_code` field joay che, nahi to
-	regular Student vaalu `maa_code`. Be alag Link fields che etle key pan alag.
+	If `udaan` is truthy it looks at the Udaan Student `udaan_maa_code` field, otherwise
+	the regular Student `maa_code`. They are two separate Link fields, so the key differs.
 
-	Sorting `creation` par thay che — e system set kare che, user badli nathi shakto,
-	etle "chhelle je entry padi" no jawab kayam bharoso patra rahe.
+	Sorting is on `creation` — that is set by the system and cannot be changed by the
+	user, so the answer to "which entry was made last" stays reliable.
 
-	Inward Document read karva ni permission na hoy eva user pan Academic Entry bhari
-	shake — frappe.get_all() permission check nathi karto, etle e case pan chale.
-	Return fakt ek date j thay che, biju koi data leak nathi thatu.
+	A user without read permission on Inward Document can still fill an Academic Entry —
+	frappe.get_all() does not enforce permission checks, so that case works too.
+	Only a single date is returned, no other data leaks.
 	"""
 	if not maa_code:
 		return None
 
-	# cint() etle "0" jevi string pan sachi rite False ganay — frappe.call thi
-	# arguments string tarike aave che.
+	# cint() so that a string like "0" is also correctly treated as False — arguments
+	# come through frappe.call as strings.
 	link_field = "udaan_maa_code" if frappe.utils.cint(udaan) else "maa_code"
 
 	rows = frappe.get_all(
@@ -148,17 +148,24 @@ class InwardDocument(Document):
 			self.entry_by = frappe.db.get_value("User", frappe.session.user, "full_name") or frappe.session.user
 
 	def set_receiving_dates(self):
-		# received_date fakt khaali receiving_date vala rows ma bharo — user e je rows ma
-		# alag date set kari hoy tene overwrite na karvu.
+		# Fill received_date only into rows with an empty receiving_date — don't
+		# overwrite rows where the user has set a different date.
 		if self.received_date:
 			for row in self.document_records:
 				if not row.receiving_date:
 					row.receiving_date = self.received_date
 
+	def add_branch(self):
+		current_user = frappe.session.user
+		branch = frappe.db.get_value("Employee", {"user_id":current_user}, "branch")
+		self.maa_branch = branch
+
 	#before save hook
 	def before_save(self):
 		self.save_entry_By()
 		self.set_receiving_dates()
+		self.add_branch()
+
 	def autoname(self):
 		employee = frappe.db.get_value(
 			"Employee",

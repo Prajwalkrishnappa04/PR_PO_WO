@@ -41,6 +41,13 @@ app_license = "mit"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
+
+permission_query_conditions = { 
+    "Outward Documents": "po_wo_pr.irs.api.outward_documents_permission",
+    "Inward Documents": "po_wo_pr.irs.api.inward_documents_permission"
+}
+
+
 doctype_list_js = {
     "Inward Document": "public/js/inward_list.js",
     "Attendance": "public/js/attendance_list.js",
@@ -207,7 +214,8 @@ doc_events = {
 		],
 		"on_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
 		"on_update_after_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
-		"on_cancel": "po_wo_pr.overrides.branch_approval.sync_approval_assignment"
+		"on_cancel": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
+        "on_update": "po_wo_pr.overrides.purchase_order.create_mrn_on_po_approval"
 	},
 	"Supplier Quotation": {
 		"validate": [
@@ -398,7 +406,8 @@ fixtures = [
             "Request for Quotation-custom_term_selection",
             "Supplier Quotation-custom_term_selection",
             "Purchase Receipt-custom_term_selection",
-            "Purchase Invoice-custom_term_selection"
+            "Purchase Invoice-custom_term_selection",
+            "Purchase Order Item-custom_no_of_service"
 
             ]
             ]
@@ -428,7 +437,6 @@ fixtures = [
     {
         "dt": "Workflow",
         "filters": [["name", "in", [
-            "Inward Document",
             "Supplier Quotation Approval",
             "Purchase Order Approval",
         ]]]
