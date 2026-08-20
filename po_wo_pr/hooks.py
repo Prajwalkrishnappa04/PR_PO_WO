@@ -214,7 +214,8 @@ doc_events = {
 		],
 		"on_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
 		"on_update_after_submit": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
-		"on_cancel": "po_wo_pr.overrides.branch_approval.sync_approval_assignment"
+		"on_cancel": "po_wo_pr.overrides.branch_approval.sync_approval_assignment",
+        "on_update": "po_wo_pr.overrides.purchase_order.create_mrn_on_po_approval"
 	},
 	"Supplier Quotation": {
 		"validate": [
