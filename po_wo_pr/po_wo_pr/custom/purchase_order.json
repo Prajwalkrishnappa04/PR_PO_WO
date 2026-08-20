@@ -1,4 +1,5 @@
 {
+
     "custom_fields": [
         {
             "_assign": null,
@@ -1655,4 +1656,5 @@
         }
     ],
     "sync_on_migrate": 1
+
 }
