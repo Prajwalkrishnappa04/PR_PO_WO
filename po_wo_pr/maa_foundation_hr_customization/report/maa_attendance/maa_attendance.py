@@ -98,8 +98,6 @@ def get_data(filters):
 
 def get_employees(filters):
     conditions = {"status": "Active"}
-    if filters.get("branch"):
-        conditions["custom_maa_branch"] = filters.branch
     return frappe.get_all(
         "Employee", filters=conditions,
         fields=["name", "employee_name"], order_by="employee_name asc"
@@ -111,9 +109,7 @@ def get_attendance_map(filters):
     values = {"from_date": filters.from_date, "to_date": filters.to_date}
 
     if filters.get("branch"):
-        conditions.append(
-            "employee in (select name from `tabEmployee` where custom_maa_branch = %(branch)s)"
-        )
+        conditions.append("custom_branch = %(branch)s")
         values["branch"] = filters.branch
 
     records = frappe.db.sql(f"""
