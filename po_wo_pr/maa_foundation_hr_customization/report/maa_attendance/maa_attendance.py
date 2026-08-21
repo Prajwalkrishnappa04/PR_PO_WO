@@ -64,6 +64,8 @@ def get_data(filters):
             key = "date_" + d.strftime("%Y_%m_%d")
             rec = emp_records.get(d)
 
+            is_sunday = d.weekday() == 6  # Monday=0 ... Sunday=6
+
             if rec:
                 punch_in[key] = rec.in_time.strftime("%H:%M") if rec.in_time else "--"
                 punch_out[key] = rec.out_time.strftime("%H:%M") if rec.out_time else "--"
@@ -74,6 +76,14 @@ def get_data(filters):
                     working_days += 1
                 if rec.status in ("On Leave", "Absent"):
                     leaves += 1
+
+            elif is_sunday:
+                punch_in[key] = "--"
+                punch_out[key] = "--"
+                hours[key] = "--"
+                status[key] = "Present"
+                working_days += 1
+
             else:
                 punch_in[key] = punch_out[key] = hours[key] = "--"
                 status[key] = "Missed"
@@ -89,7 +99,7 @@ def get_data(filters):
 def get_employees(filters):
     conditions = {"status": "Active"}
     if filters.get("branch"):
-        conditions["branch"] = filters.branch  # adjust to your custom fieldname if needed
+        conditions["custom_maa_branch"] = filters.branch
     return frappe.get_all(
         "Employee", filters=conditions,
         fields=["name", "employee_name"], order_by="employee_name asc"
@@ -101,7 +111,9 @@ def get_attendance_map(filters):
     values = {"from_date": filters.from_date, "to_date": filters.to_date}
 
     if filters.get("branch"):
-        conditions.append("employee in (select name from `tabEmployee` where branch = %(branch)s)")
+        conditions.append(
+            "employee in (select name from `tabEmployee` where custom_maa_branch = %(branch)s)"
+        )
         values["branch"] = filters.branch
 
     records = frappe.db.sql(f"""
