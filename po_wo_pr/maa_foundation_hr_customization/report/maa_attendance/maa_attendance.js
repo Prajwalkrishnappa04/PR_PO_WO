@@ -27,7 +27,6 @@ frappe.query_reports["Maa Attendance"] = {
 
 		if (!data) return value;
 
-		// Employee header row: "MF0001 - Amanullah Chauhan (Vapi)"
 		if (
 			column.fieldname === "employee_label" &&
 			data.employee_label &&
@@ -37,7 +36,6 @@ frappe.query_reports["Maa Attendance"] = {
 			value = `<b>${value}</b>`;
 		}
 
-		// Status column values (date columns)
 		if (
 			data.employee_label === "Status" &&
 			column.fieldname.startsWith("date_")
@@ -48,13 +46,16 @@ frappe.query_reports["Maa Attendance"] = {
 				value = `<span style="color: var(--green-500)">${value}</span>`;
 			} else if (value === "Holiday") {
 				value = `<span style="color: var(--blue-500)">${value}</span>`;
+			} else if (value === "Week Off") {
+				value = `<span style="color: var(--gray-500)">${value}</span>`;
+			} else if (value === "On Leave") {
+				value = `<span style="color: var(--orange-500)">${value}</span>`;
 			}
 		}
 
-		// Totals columns on the Status row
 		if (
 			data.employee_label === "Status" &&
-			(column.fieldname === "total_working_days" || column.fieldname === "total_leaves")
+			["total_present", "total_absent", "total_holidays", "total_week_off"].includes(column.fieldname)
 		) {
 			value = `<b>${value}</b>`;
 		}
