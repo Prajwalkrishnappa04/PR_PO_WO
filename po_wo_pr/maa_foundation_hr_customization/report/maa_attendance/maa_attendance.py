@@ -37,6 +37,16 @@ def format_time(value):
     return str(value)
 
 
+def format_hours(value):
+    """custom_work_hours is a Data (string) field, not Float — cast safely."""
+    if not value:
+        return "--"
+    try:
+        return f"{float(value):.2f}"
+    except (ValueError, TypeError):
+        return str(value)
+
+
 def get_columns(filters):
     columns = [{
         "label": "Employee Code/Name",
@@ -100,7 +110,7 @@ def get_data(filters):
             if rec:
                 punch_in[key] = format_time(rec.custom_exact_in_time)
                 punch_out[key] = format_time(rec.custom_exact_out_time)
-                hours[key] = f"{rec.custom_work_hours:.2f}" if rec.custom_work_hours else "--"
+                hours[key] = format_hours(rec.custom_work_hours)
                 status[key] = rec.status or "--"
 
                 if rec.status in ("Present", "Work From Home", "Half Day"):
