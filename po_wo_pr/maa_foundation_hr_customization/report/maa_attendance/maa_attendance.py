@@ -1,5 +1,6 @@
 import frappe
 from frappe.utils import getdate, add_days
+from datetime import timedelta
 
 
 def execute(filters=None):
@@ -20,20 +21,51 @@ def get_date_list(filters):
     return dates
 
 
+def format_time(value):
+    """Convert Time fieldtype (timedelta) or string into clean HH:MM."""
+    if not value:
+        return "--"
+    if isinstance(value, timedelta):
+        total_seconds = int(value.total_seconds())
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes = remainder // 60
+        return f"{hours:02d}:{minutes:02d}"
+    # fallback if it's already a string like "09:12:00"
+    parts = str(value).split(":")
+    if len(parts) >= 2:
+        return f"{parts[0]:0>2}:{parts[1]:0>2}"
+    return str(value)
+
+
 def get_columns(filters):
     columns = [{
         "label": "Employee Code/Name",
         "fieldname": "employee_label",
         "fieldtype": "Data",
-        "width": 220
+        "width": 260
     }]
+
     for d in get_date_list(filters):
         columns.append({
-            "label": f"{d.strftime('%d-%b')}<br>{d.strftime('%A')}",
+            "label": d.strftime("%d-%b-%Y"),
             "fieldname": "date_" + d.strftime("%Y_%m_%d"),
             "fieldtype": "Data",
-            "width": 110
+            "width": 100
         })
+
+    columns.append({
+        "label": "Total Working Days",
+        "fieldname": "total_working_days",
+        "fieldtype": "Data",
+        "width": 140
+    })
+    columns.append({
+        "label": "Total Leaves",
+        "fieldname": "total_leaves",
+        "fieldtype": "Data",
+        "width": 120
+    })
+
     return columns
 
 
@@ -48,8 +80,7 @@ def get_data(filters):
     data = []
     for emp in employees:
         emp_records = attendance_map.get(emp.name, {})
-
-        data.append({"employee_label": f"{emp.name} - {emp.employee_name}"})
+        branch = emp.get("custom_maa_branch") or "--"
 
         punch_in, punch_out, hours, status = (
             {"employee_label": "Punch In"},
@@ -64,12 +95,12 @@ def get_data(filters):
             key = "date_" + d.strftime("%Y_%m_%d")
             rec = emp_records.get(d)
 
-            is_sunday = d.weekday() == 6  # Monday=0 ... Sunday=6
+            is_sunday = d.weekday() == 6
 
             if rec:
-                punch_in[key] = rec.in_time.strftime("%H:%M") if rec.in_time else "--"
-                punch_out[key] = rec.out_time.strftime("%H:%M") if rec.out_time else "--"
-                hours[key] = f"{rec.working_hours:.2f}" if rec.working_hours else "--"
+                punch_in[key] = format_time(rec.custom_exact_in_time)
+                punch_out[key] = format_time(rec.custom_exact_out_time)
+                hours[key] = f"{rec.custom_work_hours:.2f}" if rec.custom_work_hours else "--"
                 status[key] = rec.status or "--"
 
                 if rec.status in ("Present", "Work From Home", "Half Day"):
@@ -88,9 +119,17 @@ def get_data(filters):
                 punch_in[key] = punch_out[key] = hours[key] = "--"
                 status[key] = "Missed"
 
+        emp_header = {
+            "employee_label": f"{emp.name} - {emp.employee_name} ({branch})",
+            "total_working_days": "",
+            "total_leaves": "",
+        }
+
+        status["total_working_days"] = working_days
+        status["total_leaves"] = leaves
+
+        data.append(emp_header)
         data += [punch_in, punch_out, hours, status]
-        data.append({"employee_label": f"Total Working Days: {working_days}"})
-        data.append({"employee_label": f"Total Leaves: {leaves}"})
         data.append({"employee_label": ""})  # spacer
 
     return data
@@ -100,7 +139,8 @@ def get_employees(filters):
     conditions = {"status": "Active"}
     return frappe.get_all(
         "Employee", filters=conditions,
-        fields=["name", "employee_name"], order_by="employee_name asc"
+        fields=["name", "employee_name", "custom_maa_branch"],
+        order_by="employee_name asc"
     )
 
 
@@ -113,7 +153,8 @@ def get_attendance_map(filters):
         values["branch"] = filters.branch
 
     records = frappe.db.sql(f"""
-        select employee, attendance_date, status, in_time, out_time, working_hours
+        select employee, attendance_date, status,
+               custom_exact_in_time, custom_exact_out_time, custom_work_hours
         from `tabAttendance`
         where {' and '.join(conditions)}
     """, values, as_dict=True)

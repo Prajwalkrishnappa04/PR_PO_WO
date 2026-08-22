@@ -27,30 +27,20 @@ frappe.query_reports["Maa Attendance"] = {
 
 		if (!data) return value;
 
-		// Employee header row: "EMP001 - Rahul"
+		// Employee header row: "MF0001 - Amanullah (Maa Foundation - Bhavnagar)"
 		if (
 			column.fieldname === "employee_label" &&
 			data.employee_label &&
 			data.employee_label.includes(" - ") &&
-			!data.employee_label.startsWith("Punch") &&
-			!data.employee_label.startsWith("Total")
+			!["Punch In", "Punch Out", "Total Work Hours", "Status"].includes(data.employee_label)
 		) {
 			value = `<b>${value}</b>`;
 		}
 
-		// Summary rows: Total Working Days / Total Leaves
-		if (
-			column.fieldname === "employee_label" &&
-			data.employee_label &&
-			data.employee_label.startsWith("Total")
-		) {
-			value = `<span style="color: var(--text-muted)">${value}</span>`;
-		}
-
-		// Status column values
+		// Status column values (date columns)
 		if (
 			data.employee_label === "Status" &&
-			column.fieldname !== "employee_label"
+			column.fieldname.startsWith("date_")
 		) {
 			if (value === "Absent") {
 				value = `<span style="color: var(--red-500)">${value}</span>`;
@@ -59,6 +49,14 @@ frappe.query_reports["Maa Attendance"] = {
 			} else if (value === "Missed") {
 				value = `<span style="color: var(--orange-500)">${value}</span>`;
 			}
+		}
+
+		// Totals columns on the Status row
+		if (
+			data.employee_label === "Status" &&
+			(column.fieldname === "total_working_days" || column.fieldname === "total_leaves")
+		) {
+			value = `<b>${value}</b>`;
 		}
 
 		return value;
