@@ -70,18 +70,12 @@ def get_columns(filters):
             "width": 100
         })
 
-    columns.append({
-        "label": "Total Working Days",
-        "fieldname": "total_working_days",
-        "fieldtype": "Data",
-        "width": 140
-    })
-    columns.append({
-        "label": "Total Leaves",
-        "fieldname": "total_leaves",
-        "fieldtype": "Data",
-        "width": 120
-    })
+    columns += [
+        {"label": "Total Present", "fieldname": "total_present", "fieldtype": "Data", "width": 120},
+        {"label": "Total Absent", "fieldname": "total_absent", "fieldtype": "Data", "width": 120},
+        {"label": "Total Holidays", "fieldname": "total_holidays", "fieldtype": "Data", "width": 120},
+        {"label": "Total Week Off", "fieldname": "total_week_off", "fieldtype": "Data", "width": 120},
+    ]
 
     return columns
 
@@ -92,13 +86,14 @@ def get_data(filters):
         return []
 
     employees = get_employees(filters)
-    attendance_map = get_attendance_map(filters)
+    employee_names = [e.name for e in employees]
+    attendance_map = get_attendance_map(filters, employee_names)
     holiday_map = get_holiday_map(filters)  # {date: description}, Sundays excluded
 
     data = []
     for emp in employees:
         emp_records = attendance_map.get(emp.name, {})
-        branch = emp.get("custom_maa_branch") or "--"
+        branch = emp.get("branch") or "--"
         branch_short = short_branch_name(branch)
 
         punch_in, punch_out, hours, status = (
@@ -108,7 +103,7 @@ def get_data(filters):
             {"employee_label": "Status"},
         )
 
-        working_days, leaves = 0, 0
+        present_count, absent_count, holiday_count, week_off_count = 0, 0, 0, 0
 
         for d in date_list:
             key = "date_" + d.strftime("%Y_%m_%d")
@@ -124,36 +119,41 @@ def get_data(filters):
                 status[key] = rec.status or "--"
 
                 if rec.status in ("Present", "Work From Home", "Half Day"):
-                    working_days += 1
-                if rec.status in ("On Leave", "Absent"):
-                    leaves += 1
+                    present_count += 1
+                elif rec.status in ("Absent", "On Leave"):
+                    absent_count += 1
 
             elif is_sunday:
                 punch_in[key] = "--"
                 punch_out[key] = "--"
                 hours[key] = "--"
-                status[key] = "Present"
-                working_days += 1
+                status[key] = "Week Off"
+                week_off_count += 1
 
             elif is_holiday:
                 punch_in[key] = "--"
                 punch_out[key] = "--"
                 hours[key] = "--"
                 status[key] = "Holiday"
+                holiday_count += 1
 
             else:
                 punch_in[key] = punch_out[key] = hours[key] = "--"
                 status[key] = "Absent"
-                leaves += 1
+                absent_count += 1
 
         emp_header = {
             "employee_label": f"{emp.name} - {emp.employee_name} ({branch_short})",
-            "total_working_days": "",
-            "total_leaves": "",
+            "total_present": "",
+            "total_absent": "",
+            "total_holidays": "",
+            "total_week_off": "",
         }
 
-        status["total_working_days"] = working_days
-        status["total_leaves"] = leaves
+        status["total_present"] = present_count
+        status["total_absent"] = absent_count
+        status["total_holidays"] = holiday_count
+        status["total_week_off"] = week_off_count
 
         data.append(emp_header)
         data += [punch_in, punch_out, hours, status]
@@ -165,28 +165,33 @@ def get_data(filters):
 def get_employees(filters):
     conditions = {"status": "Active"}
     if filters.get("branch"):
-        conditions["custom_maa_branch"] = filters.branch
+        conditions["branch"] = filters.branch
     return frappe.get_all(
         "Employee", filters=conditions,
-        fields=["name", "employee_name", "custom_maa_branch"],
+        fields=["name", "employee_name", "branch"],
         order_by="employee_name asc"
     )
 
 
-def get_attendance_map(filters):
-    conditions = ["attendance_date between %(from_date)s and %(to_date)s", "docstatus = 1"]
-    values = {"from_date": filters.from_date, "to_date": filters.to_date}
+def get_attendance_map(filters, employee_names):
+    """Filter Attendance by employee list (reliable — resolved via Employee.branch),
+    never by Attendance's own custom_branch — that's a fetch_from field and can be
+    blank/stale on records saved before the branch was set."""
+    if not employee_names:
+        return {}
 
-    if filters.get("branch"):
-        conditions.append("custom_branch = %(branch)s")
-        values["branch"] = filters.branch
-
-    records = frappe.db.sql(f"""
+    records = frappe.db.sql("""
         select employee, attendance_date, status,
                custom_exact_in_time, custom_exact_out_time, custom_work_hours
         from `tabAttendance`
-        where {' and '.join(conditions)}
-    """, values, as_dict=True)
+        where attendance_date between %(from_date)s and %(to_date)s
+          and docstatus = 1
+          and employee in %(employees)s
+    """, {
+        "from_date": filters.from_date,
+        "to_date": filters.to_date,
+        "employees": tuple(employee_names),
+    }, as_dict=True)
 
     m = {}
     for r in records:
