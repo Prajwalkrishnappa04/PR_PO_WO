@@ -30,7 +30,6 @@ def format_time(value):
         hours, remainder = divmod(total_seconds, 3600)
         minutes = remainder // 60
         return f"{hours:02d}:{minutes:02d}"
-    # fallback if it's already a string like "09:12:00"
     parts = str(value).split(":")
     if len(parts) >= 2:
         return f"{parts[0]:0>2}:{parts[1]:0>2}"
@@ -45,6 +44,14 @@ def format_hours(value):
         return f"{float(value):.2f}"
     except (ValueError, TypeError):
         return str(value)
+
+
+def short_branch_name(branch):
+    """'Maa Foundation HO - Vapi' -> 'Vapi'. Takes the last ' - ' segment."""
+    if not branch or branch == "--":
+        return "--"
+    parts = branch.split(" - ")
+    return parts[-1].strip() if len(parts) > 1 else branch
 
 
 def get_columns(filters):
@@ -86,11 +93,13 @@ def get_data(filters):
 
     employees = get_employees(filters)
     attendance_map = get_attendance_map(filters)
+    holiday_map = get_holiday_map(filters)  # {date: description}, Sundays excluded
 
     data = []
     for emp in employees:
         emp_records = attendance_map.get(emp.name, {})
         branch = emp.get("custom_maa_branch") or "--"
+        branch_short = short_branch_name(branch)
 
         punch_in, punch_out, hours, status = (
             {"employee_label": "Punch In"},
@@ -106,6 +115,7 @@ def get_data(filters):
             rec = emp_records.get(d)
 
             is_sunday = d.weekday() == 6
+            is_holiday = d in holiday_map
 
             if rec:
                 punch_in[key] = format_time(rec.custom_exact_in_time)
@@ -125,12 +135,19 @@ def get_data(filters):
                 status[key] = "Present"
                 working_days += 1
 
+            elif is_holiday:
+                punch_in[key] = "--"
+                punch_out[key] = "--"
+                hours[key] = "--"
+                status[key] = "Holiday"
+
             else:
                 punch_in[key] = punch_out[key] = hours[key] = "--"
-                status[key] = "Missed"
+                status[key] = "Absent"
+                leaves += 1
 
         emp_header = {
-            "employee_label": f"{emp.name} - {emp.employee_name} ({branch})",
+            "employee_label": f"{emp.name} - {emp.employee_name} ({branch_short})",
             "total_working_days": "",
             "total_leaves": "",
         }
@@ -147,6 +164,8 @@ def get_data(filters):
 
 def get_employees(filters):
     conditions = {"status": "Active"}
+    if filters.get("branch"):
+        conditions["custom_maa_branch"] = filters.branch
     return frappe.get_all(
         "Employee", filters=conditions,
         fields=["name", "employee_name", "custom_maa_branch"],
@@ -173,3 +192,36 @@ def get_attendance_map(filters):
     for r in records:
         m.setdefault(r.employee, {})[r.attendance_date] = r
     return m
+
+
+def get_holiday_list_parents(filters):
+    """Build likely Holiday List parent names (e.g. '2026-2027') covering the date range."""
+    start_year = getdate(filters.from_date).year
+    end_year = getdate(filters.to_date).year
+
+    parents = set()
+    for y in range(start_year - 1, end_year + 1):
+        parents.add(f"{y}-{y + 1}")
+    return list(parents)
+
+
+def get_holiday_map(filters):
+    """Return {date: description} for real holidays (excludes Sunday) within the date range,
+    scoped to the relevant Holiday List(s) only — keeps the query small."""
+    parents = get_holiday_list_parents(filters)
+    if not parents:
+        return {}
+
+    records = frappe.db.sql("""
+        select holiday_date, description
+        from `tabHoliday`
+        where parent in %(parents)s
+          and holiday_date between %(from_date)s and %(to_date)s
+          and description != 'Sunday'
+    """, {
+        "parents": tuple(parents),
+        "from_date": filters.from_date,
+        "to_date": filters.to_date,
+    }, as_dict=True)
+
+    return {r.holiday_date: r.description for r in records}
