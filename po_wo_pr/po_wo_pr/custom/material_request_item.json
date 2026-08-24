@@ -45,7 +45,7 @@
    "name": "Material Request Item-custom_parent_cost_center",
    "no_copy": 0,
    "non_negative": 0,
-   "options": "Segment",
+   "options": "Cost Center",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
@@ -109,7 +109,7 @@
    "name": "Material Request Item-custom_segment",
    "no_copy": 0,
    "non_negative": 0,
-   "options": "Segment",
+   "options": "Accounting Dimension",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
@@ -282,7 +282,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -305,7 +305,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -328,7 +328,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -351,7 +351,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -397,7 +397,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -443,7 +443,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -466,7 +466,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -489,7 +489,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -512,7 +512,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -535,7 +535,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   }
  ],
  "sync_on_migrate": 1

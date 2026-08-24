@@ -109,7 +109,7 @@
    "name": "Material Request-custom_cc",
    "no_copy": 0,
    "non_negative": 0,
-   "options": "Segment",
+   "options": "Cost Center",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
@@ -237,7 +237,7 @@
    "name": "Material Request-custom_cost_centre",
    "no_copy": 0,
    "non_negative": 0,
-   "options": "Segment",
+   "options": "Cost Center",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
@@ -666,7 +666,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -712,7 +712,7 @@
    "property": "hidden",
    "property_type": "",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -850,7 +850,7 @@
    "property": "hidden",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
@@ -942,7 +942,7 @@
    "property": "reqd",
    "property_type": "Check",
    "row_name": null,
-   "value": "1"
+   "value": "0"
   },
   {
    "_assign": null,
