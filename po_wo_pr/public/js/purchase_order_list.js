@@ -1,223 +1,141 @@
 frappe.listview_settings["Purchase Order"] = {
 	onload(listview) {
-		// Reject selected Purchase Orders
-		listview.page.add_action_item(__("Reject"), async function () {
-			const selected = listview.get_checked_items();
-
-			if (!selected || selected.length === 0) {
-				frappe.msgprint(__("Please select at least one Purchase Order."));
-				return;
-			}
-
-			// Check that all selected documents are Pending Approval
-			const invalid = [];
-
-			for (const row of selected) {
-				const doc = await frappe.db.get_doc("Purchase Order", row.name);
-
-				if (doc.workflow_state !== "Pending Approval") {
-					invalid.push(
-						`${row.name} (${doc.workflow_state || "No Workflow State"})`
-					);
-				}
-			}
-
-			if (invalid.length > 0) {
-				frappe.msgprint({
-					title: __("Cannot Reject"),
-					message:
-						__("Only Purchase Orders in Pending Approval can be rejected.") +
-						"<br><br>" +
-						invalid.join("<br>"),
-					indicator: "red",
-				});
-				return;
-			}
-
-			// Confirmation
-			frappe.confirm(
-				__(
-					"Are you sure you want to reject {0} selected Purchase Order(s)?",
-					[selected.length]
-				),
-				async function () {
-					frappe.show_progress(
-						__("Rejecting Purchase Orders"),
-						0,
-						selected.length
-					);
-
-					let success = 0;
-					let failed = [];
-
-					for (const row of selected) {
-						try {
-							const doc = await frappe.db.get_doc(
-								"Purchase Order",
-								row.name
-							);
-
-							await frappe.xcall(
-								"frappe.model.workflow.apply_workflow",
-								{
-									doc: doc,
-									action: "Reject",
-								}
-							);
-
-							success++;
-
-							frappe.show_progress(
-								__("Rejecting Purchase Orders"),
-								success,
-								selected.length
-							);
-						} catch (error) {
-							failed.push(row.name);
-							console.error(
-								"Failed to reject Purchase Order:",
-								row.name,
-								error
-							);
-						}
-					}
-
-					frappe.hide_progress();
-
-					if (failed.length > 0) {
-						frappe.msgprint({
-							title: __("Reject Completed with Errors"),
-							message:
-								__("Successfully rejected: {0}", [success]) +
-								"<br>" +
-								__("Failed: {0}", [failed.length]) +
-								"<br><br>" +
-								failed.join("<br>"),
-							indicator: "orange",
-						});
-					} else {
-						frappe.show_alert({
-							message: __(
-								"{0} Purchase Order(s) rejected successfully.",
-								[success]
-							),
-							indicator: "green",
-						});
-					}
-
-					listview.refresh();
-				}
+		// Only show these actions to users who can actually submit workflow transitions
+		if (frappe.user.has_role(["Purchase Manager", "System Manager"])) {
+			listview.page.add_action_item(__("Reject"), () =>
+				handle_workflow_action(listview, {
+					action: "Reject",
+					required_state: "Pending Approval",
+					confirm_msg: "Are you sure you want to reject {0} selected Purchase Order(s)?",
+					progress_title: "Rejecting Purchase Orders",
+					success_msg: "{0} Purchase Order(s) rejected successfully.",
+					error_title: "Reject Completed with Errors",
+					invalid_title: "Cannot Reject",
+					invalid_msg: "Only Purchase Orders in Pending Approval can be rejected.",
+				})
 			);
-		});
 
-		// Cancel selected Purchase Orders
-		listview.page.add_action_item(__("Cancel"), async function () {
-			const selected = listview.get_checked_items();
-
-			if (!selected || selected.length === 0) {
-				frappe.msgprint(__("Please select at least one Purchase Order."));
-				return;
-			}
-
-			// Check that all selected documents are Approved
-			const invalid = [];
-
-			for (const row of selected) {
-				const doc = await frappe.db.get_doc("Purchase Order", row.name);
-
-				if (doc.workflow_state !== "Approved") {
-					invalid.push(
-						`${row.name} (${doc.workflow_state || "No Workflow State"})`
-					);
-				}
-			}
-
-			if (invalid.length > 0) {
-				frappe.msgprint({
-					title: __("Cannot Cancel"),
-					message:
-						__("Only Purchase Orders in Approved state can be cancelled.") +
-						"<br><br>" +
-						invalid.join("<br>"),
-					indicator: "red",
-				});
-				return;
-			}
-
-			// Confirmation
-			frappe.confirm(
-				__(
-					"Are you sure you want to cancel {0} selected Purchase Order(s)?",
-					[selected.length]
-				),
-				async function () {
-					frappe.show_progress(
-						__("Cancelling Purchase Orders"),
-						0,
-						selected.length
-					);
-
-					let success = 0;
-					let failed = [];
-
-					for (const row of selected) {
-						try {
-							const doc = await frappe.db.get_doc(
-								"Purchase Order",
-								row.name
-							);
-
-							await frappe.xcall(
-								"frappe.model.workflow.apply_workflow",
-								{
-									doc: doc,
-									action: "Cancel",
-								}
-							);
-
-							success++;
-
-							frappe.show_progress(
-								__("Cancelling Purchase Orders"),
-								success,
-								selected.length
-							);
-						} catch (error) {
-							failed.push(row.name);
-							console.error(
-								"Failed to cancel Purchase Order:",
-								row.name,
-								error
-							);
-						}
-					}
-
-					frappe.hide_progress();
-
-					if (failed.length > 0) {
-						frappe.msgprint({
-							title: __("Cancel Completed with Errors"),
-							message:
-								__("Successfully cancelled: {0}", [success]) +
-								"<br>" +
-								__("Failed: {0}", [failed.length]) +
-								"<br><br>" +
-								failed.join("<br>"),
-							indicator: "orange",
-						});
-					} else {
-						frappe.show_alert({
-							message: __(
-								"{0} Purchase Order(s) cancelled successfully.",
-								[success]
-							),
-							indicator: "green",
-						});
-					}
-
-					listview.refresh();
-				}
+			listview.page.add_action_item(__("Cancel"), () =>
+				handle_workflow_action(listview, {
+					action: "Cancel",
+					required_state: "Approved",
+					confirm_msg: "Are you sure you want to cancel {0} selected Purchase Order(s)?",
+					progress_title: "Cancelling Purchase Orders",
+					success_msg: "{0} Purchase Order(s) cancelled successfully.",
+					error_title: "Cancel Completed with Errors",
+					invalid_title: "Cannot Cancel",
+					invalid_msg: "Only Purchase Orders in Approved state can be cancelled.",
+				})
 			);
-		});
+		}
 	},
 };
+
+async function handle_workflow_action(listview, opts) {
+	const {
+		action,
+		required_state,
+		confirm_msg,
+		progress_title,
+		success_msg,
+		error_title,
+		invalid_title,
+		invalid_msg,
+	} = opts;
+
+	const selected = listview.get_checked_items();
+
+	if (!selected || selected.length === 0) {
+		frappe.msgprint(__("Please select at least one Purchase Order."));
+		return;
+	}
+
+	// Fetch every selected doc once, in parallel, and reuse it for both
+	// validation and the workflow call. Guard against individual fetch
+	// failures (deleted doc, permission error, etc.) so one bad row
+	// doesn't blow up the whole handler.
+	const fetches = await Promise.all(
+		selected.map(async (row) => {
+			try {
+				const doc = await frappe.db.get_doc("Purchase Order", row.name);
+				return { name: row.name, doc, error: null };
+			} catch (error) {
+				return { name: row.name, doc: null, error };
+			}
+		})
+	);
+
+	const fetch_failed = fetches.filter((f) => f.error);
+	if (fetch_failed.length > 0) {
+		frappe.msgprint({
+			title: __("Could Not Load Some Purchase Orders"),
+			message: fetch_failed.map((f) => f.name).join("<br>"),
+			indicator: "red",
+		});
+		return;
+	}
+
+	// Validate workflow state
+	const invalid = fetches.filter((f) => f.doc.workflow_state !== required_state);
+
+	if (invalid.length > 0) {
+		frappe.msgprint({
+			title: __(invalid_title),
+			message:
+				__(invalid_msg) +
+				"<br><br>" +
+				invalid
+					.map((f) => `${f.name} (${f.doc.workflow_state || __("No Workflow State")})`)
+					.join("<br>"),
+			indicator: "red",
+		});
+		return;
+	}
+
+	frappe.confirm(__(confirm_msg, [selected.length]), async function () {
+		frappe.show_progress(__(progress_title), 0, fetches.length);
+
+		let success = 0;
+		const failed = [];
+
+		// Sequential on purpose: apply_workflow triggers doc-level hooks and
+		// notifications server-side, so we avoid hammering the server with
+		// a burst of parallel writes on large selections.
+		for (const { name, doc } of fetches) {
+			try {
+				await frappe.xcall("frappe.model.workflow.apply_workflow", {
+					doc,
+					action,
+				});
+				success++;
+			} catch (error) {
+				failed.push(name);
+				console.error(`Failed to ${action.toLowerCase()} Purchase Order:`, name, error);
+			} finally {
+				frappe.show_progress(__(progress_title), success + failed.length, fetches.length);
+			}
+		}
+
+		frappe.hide_progress();
+
+		if (failed.length > 0) {
+			frappe.msgprint({
+				title: __(error_title),
+				message:
+					__("Successfully processed: {0}", [success]) +
+					"<br>" +
+					__("Failed: {0}", [failed.length]) +
+					"<br><br>" +
+					failed.join("<br>"),
+				indicator: "orange",
+			});
+		} else {
+			frappe.show_alert({
+				message: __(success_msg, [success]),
+				indicator: "green",
+			});
+		}
+
+		listview.refresh();
+	});
+}

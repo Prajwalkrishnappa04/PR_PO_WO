@@ -25,7 +25,8 @@ def execute(filters=None):
             ON pi.taluka = t.name
         LEFT JOIN `tabDistrict` d
             ON pi.district = d.name
-        WHERE ci.received = 0 
+        WHERE ci.received = 0
+            AND application_status = 'Pending'
             AND pi.project IN ('IRS-PROJ-0001', 'IRS-PROJ-0002')
         ORDER BY pi.name
     """, as_dict=True)

@@ -12,6 +12,9 @@ from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
 	make_purchase_invoice as erpnext_make_purchase_invoice_from_receipt,
 )
 
+from frappe.model.mapper import get_mapped_doc
+
+
 
 from po_wo_pr.overrides.enquiry_ref import copy_enquiry_refs
 
@@ -110,3 +113,61 @@ def make_purchase_invoice_from_receipt(source_name, target_doc=None, args=None):
 	target_doc = erpnext_make_purchase_invoice_from_receipt(source_name, target_doc=target_doc, args=args)
 	target_doc = copy_enquiry_refs("Purchase Receipt", source_name, target_doc)
 	return set_contact_persons("Purchase Receipt", source_name, target_doc)
+
+
+def create_mrn_on_po_approval(doc, method=None):
+    if doc.workflow_state != "Approved":
+        return
+
+    # Check if a Purchase Receipt already exists to prevent duplicate execution
+    existing_pr = frappe.db.get_value(
+        "Purchase Receipt Item",
+        {"purchase_order": doc.name, "docstatus": ["!=", 2]},
+        "parent"
+    )
+
+    if existing_pr:
+        return
+
+    created_pr_names = []
+
+    # Loop through each item in the Purchase Order
+    for item in doc.items:
+        no_of_services = int(item.get("custom_no_of_service") or 1)
+
+        # Loop N times to create N individual Purchase Receipt documents
+        for i in range(no_of_services):
+            pr = get_mapped_doc("Purchase Order", doc.name, {
+                "Purchase Order": {
+                    "doctype": "Purchase Receipt",
+                    "field_map": {
+                        "supplier": "supplier",
+                        "company": "company"
+                    }
+                },
+                "Purchase Order Item": {
+                    "doctype": "Purchase Receipt Item",
+                    "field_map": {
+                        "name": "purchase_order_item",
+                        "parent": "purchase_order",
+                        "qty": "qty"
+                    },
+                    # Filter: mapped PR will only include THIS specific PO item
+                    "condition": lambda d: d.name == item.name
+                }
+            })
+
+            # Force individual item quantity to 1 per document
+            for pr_item in pr.items:
+                pr_item.qty = 1
+                pr_item.stock_qty = 1
+                pr_item.amount = pr_item.rate * 1
+                pr_item.base_amount = pr_item.base_rate * 1
+
+            # Insert individual draft Purchase Receipt
+            pr.insert(ignore_permissions=True)
+            created_pr_names.append(pr.name)
+
+    if created_pr_names:
+        pr_list = ", ".join([f"<b>{name}</b>" for name in created_pr_names])
+        frappe.msgprint(f"Created {len(created_pr_names)} MRN_Material Received Note document(s): {pr_list}")

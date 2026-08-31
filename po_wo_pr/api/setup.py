@@ -34,6 +34,8 @@ BUYING_NAMING_SERIES = {
         "options": "\n".join([
         "CON.####.",
         "MF.####.",
+		"UM.####.",
+		"DP.####.",
         ]),
         "default":"MF.####."
     },
