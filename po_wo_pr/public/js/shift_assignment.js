@@ -5,7 +5,7 @@ frappe.ui.form.on("Shift Assignment", {
         if (frm.doc.docstatus === 1) {
             frm.add_custom_button(__('Manage Locations'), function () {
                 open_manage_locations_dialog(frm);
-            }, __('Actions'));
+            }, __('Add Locations'));
         }
     }
 });
