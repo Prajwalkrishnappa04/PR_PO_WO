@@ -199,7 +199,8 @@ doc_events = {
 		"on_update_after_submit": "po_wo_pr.api.attendance_utils.apply_attendance_request_times"
 	},
 	"Employee Checkin": {
-		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time"
+		"before_save": "po_wo_pr.api.attendance_utils.update_custom_exact_time",
+        "before_insert": "po_wo_pr.irs.api.calculate_checkin_distance",
 	},
 	"Purchase Receipt": {
 		"after_insert": "po_wo_pr.api.setup.set_purchase_receipt_po_fields",

@@ -1,6 +1,7 @@
 from frappe.desk.form.linked_with import get_linked_docs
 from frappe import _
 import frappe
+import math
 import re
 
 @frappe.whitelist()
@@ -379,3 +380,60 @@ def update_shift_locations(parent_doc, locations):
 
     frappe.db.commit()
     return True
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    """Calculate distance in kilometers between two GPS coordinates."""
+    if not all([lat1, lon1, lat2, lon2]):
+        return 0.0
+    
+    R = 6371.0  # Earth radius in kilometers
+    dlat = math.radians(float(lat2) - float(lat1))
+    dlon = math.radians(float(lon2) - float(lon1))
+    
+    a = (math.sin(dlat / 2) ** 2 +
+         math.cos(math.radians(float(lat1))) * math.cos(math.radians(float(lat2))) * math.sin(dlon / 2) ** 2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    
+    return round(R * c, 2)  # Distance in Km
+
+
+def calculate_checkin_distance(doc, method=None):
+    """Triggered on `before_save` or `before_insert` of Employee Checkin."""
+    if not doc.latitude or not doc.longitude or not doc.employee:
+        return
+
+    # 1. Fetch active Shift Assignment for the employee & check-in date
+    checkin_date = doc.time.date() if doc.time else frappe.utils.today()
+    
+    shift_assignment = frappe.db.get_value(
+        "Shift Assignment",
+        {
+            "employee": doc.employee,
+            "docstatus": 1,
+            "start_date": ("<=", checkin_date),
+            "end_date": (">=", checkin_date)
+        },
+        ["shift_location"],
+        as_dict=True
+    )
+
+    if not shift_assignment or not shift_assignment.get("shift_location"):
+        return
+
+    # 2. Fetch latitude and longitude from Shift Location DocType
+    shift_coords = frappe.db.get_value(
+        "Shift Location",
+        shift_assignment.shift_location,
+        ["latitude", "longitude"],
+        as_dict=True
+    )
+
+    if shift_coords and shift_coords.get("latitude") and shift_coords.get("longitude"):
+        distance = haversine_distance(
+            doc.latitude,
+            doc.longitude,
+            shift_coords.latitude,
+            shift_coords.longitude
+        )
+        # Store in custom distance field
+        doc.custom_distance_to_shift_location = distance
