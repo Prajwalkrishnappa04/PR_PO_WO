@@ -355,11 +355,14 @@ def force_bulk_delete_sqs(sq_names):
     return {"deleted": deleted, "failed": failed}
 
 @frappe.whitelist()
-def update_shift_locations(parent_doc, locations):
+def update_shift_locations(parent_doc, locations, allow_multiple_shift_location=0):
     if isinstance(locations, str):
         locations = frappe.parse_json(locations)
 
     doc = frappe.get_doc("Shift Assignment", parent_doc)
+
+    # Update checkbox state on the parent document
+    doc.custom_allow_multiple_shift_location = frappe.cint(allow_multiple_shift_location)
 
     # Clear existing child records in memory
     doc.set("custom_multiple_shift_location", [])
