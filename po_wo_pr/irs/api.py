@@ -1,4 +1,5 @@
 from frappe.desk.form.linked_with import get_linked_docs
+from frappe.utils import getdate, today
 from frappe import _
 import frappe
 import math
@@ -398,13 +399,12 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 
 def calculate_checkin_distance(doc, method=None):
-    """Triggered on `before_save` or `before_insert` of Employee Checkin."""
     if not doc.latitude or not doc.longitude or not doc.employee:
         return
 
-    # 1. Fetch active Shift Assignment for the employee & check-in date
-    checkin_date = doc.time.date() if doc.time else frappe.utils.today()
-    
+    # Convert string datetime to date safely
+    checkin_date = getdate(doc.time) if doc.time else getdate(today())
+
     shift_assignment = frappe.db.get_value(
         "Shift Assignment",
         {
@@ -420,7 +420,6 @@ def calculate_checkin_distance(doc, method=None):
     if not shift_assignment or not shift_assignment.get("shift_location"):
         return
 
-    # 2. Fetch latitude and longitude from Shift Location DocType
     shift_coords = frappe.db.get_value(
         "Shift Location",
         shift_assignment.shift_location,
@@ -435,5 +434,4 @@ def calculate_checkin_distance(doc, method=None):
             shift_coords.latitude,
             shift_coords.longitude
         )
-        # Store in custom distance field
         doc.custom_distance_to_shift_location = distance
