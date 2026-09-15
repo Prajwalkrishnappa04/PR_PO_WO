@@ -115,6 +115,9 @@ def make_purchase_invoice_from_receipt(source_name, target_doc=None, args=None):
 	return set_contact_persons("Purchase Receipt", source_name, target_doc)
 
 
+import frappe
+from frappe.model.mapper import get_mapped_doc
+
 def create_mrn_on_po_approval(doc, method=None):
     if doc.workflow_state != "Approved":
         return
@@ -150,15 +153,16 @@ def create_mrn_on_po_approval(doc, method=None):
                     "field_map": {
                         "name": "purchase_order_item",
                         "parent": "purchase_order",
-                        "qty": "qty"
+                        "qty": "custom_total_quantity"  # Maps PO Item qty -> PR Item custom_total_quantity
                     },
                     # Filter: mapped PR will only include THIS specific PO item
                     "condition": lambda d: d.name == item.name
                 }
             })
 
-            # Force individual item quantity to 1 per document
+            # Force individual item quantity to 1 per document while maintaining total quantity reference
             for pr_item in pr.items:
+                pr_item.custom_total_quantity = item.qty  # Ensures PO item qty is set explicitly
                 pr_item.qty = 1
                 pr_item.stock_qty = 1
                 pr_item.amount = pr_item.rate * 1
