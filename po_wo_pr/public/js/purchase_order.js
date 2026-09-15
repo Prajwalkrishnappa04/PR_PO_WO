@@ -518,3 +518,26 @@ function fetch_contact_details(frm) {
             });
     }
 }
+
+frappe.ui.form.on('Purchase Order', {
+    onload_post_render: function (frm) {
+        if (frm.is_new()) {
+            // Clear both template link and text area field
+            frm.set_value('tc_name', '');
+            frm.set_value('terms', '');
+        }
+    },
+    tc_name: function (frm) {
+        // If system fetches a default template during setup of new form, clear it immediately
+        if (frm.is_new() && !frm.doc.__user_changed_terms) {
+            frm.set_value('tc_name', '');
+            frm.set_value('terms', '');
+        }
+    },
+    terms: function (frm) {
+        // Flag to allow typing if user manually enters terms before saving
+        if (frm.is_new() && frm.doc.terms) {
+            frm.doc.__user_changed_terms = true;
+        }
+    }
+});
