@@ -302,8 +302,34 @@ function render_po_comparison(frm, data) {
 }
 
 frappe.ui.form.on("Purchase Order", {
+    onload_post_render: function (frm) {
+        if (frm.is_new()) {
+            // Clear both template link and text area field
+            frm.set_value('tc_name', '');
+            frm.set_value('terms', '');
+        }
+    },
+    tc_name: function (frm) {
+        // If system fetches a default template during setup of new form, clear it immediately
+        if (frm.is_new() && !frm.doc.__user_changed_terms) {
+            frm.set_value('tc_name', '');
+            frm.set_value('terms', '');
+        }
+    },
+    terms: function (frm) {
+        // Flag to allow typing if user manually enters terms before saving
+        if (frm.is_new() && frm.doc.terms) {
+            frm.doc.__user_changed_terms = true;
+        }
+    },
+
+    naming_series(frm) {
+        toggle_no_of_service_field(frm);
+    },
+
     refresh(frm) {
         refresh_all_stock_balances(frm);
+        toggle_no_of_service_field(frm);
 
         if (!frm.is_new()) {
             frappe.call({
@@ -396,6 +422,30 @@ frappe.ui.form.on("Purchase Order", {
         fetch_contact_details(frm);
     }
 });
+
+function toggle_no_of_service_field(frm) {
+    const target_series = "MF-WO-SER-.##.-.MFY";
+
+    // Check if the current naming series matches the target
+    const is_service_wo = (frm.doc.naming_series === target_series);
+
+    // Toggle read-only state for the child table field 'custom_no_of_service'
+    // read_only = false enables the field; read_only = true disables it
+    frm.fields_dict["items"].grid.update_docfield_property(
+        "custom_no_of_service",
+        "read_only",
+        !is_service_wo
+    );
+
+    // Optional: Reset value to 1 or 0 when disabled
+    if (!is_service_wo) {
+        (frm.doc.items || []).forEach(row => {
+            frappe.model.set_value(row.doctype, row.name, "custom_no_of_service", 1);
+        });
+    }
+
+    frm.refresh_field("items");
+}
 
 function get_selected_terms(frm) {
     const selected = (frm.doc.custom_term_selection || [])
@@ -518,26 +568,3 @@ function fetch_contact_details(frm) {
             });
     }
 }
-
-frappe.ui.form.on('Purchase Order', {
-    onload_post_render: function (frm) {
-        if (frm.is_new()) {
-            // Clear both template link and text area field
-            frm.set_value('tc_name', '');
-            frm.set_value('terms', '');
-        }
-    },
-    tc_name: function (frm) {
-        // If system fetches a default template during setup of new form, clear it immediately
-        if (frm.is_new() && !frm.doc.__user_changed_terms) {
-            frm.set_value('tc_name', '');
-            frm.set_value('terms', '');
-        }
-    },
-    terms: function (frm) {
-        // Flag to allow typing if user manually enters terms before saving
-        if (frm.is_new() && frm.doc.terms) {
-            frm.doc.__user_changed_terms = true;
-        }
-    }
-});

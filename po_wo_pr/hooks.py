@@ -69,7 +69,7 @@ doctype_js = {
     "Attendance": "public/js/attendance.js",
     "Employee Checkin": "public/js/employee_checkin.js",
     "Supplier Quotation": ["public/js/supplier_quotation.js", "public/js/enquiry_ref.js"],
-    "Purchase Receipt": ["public/js/purchase_receipt.js", "public/js/enquiry_ref.js"],
+    "Purchase Receipt": ["public/js/purchase_receipt.js", "public/js/enquiry_ref.js", "public/js/purchase_receipt_item.js"],
     "Purchase Invoice": ["public/js/purchase_invoice.js", "public/js/enquiry_ref.js"],
     "Payment Entry": "public/js/payment_entry.js",
     "Leave Application": "public/js/leave_application.js"
@@ -167,7 +167,7 @@ after_migrate = "po_wo_pr.api.setup.set_buying_naming_series"
 override_doctype_class = {
 	"Employee": "po_wo_pr.overrides.custom_employee_class.CustomEmployee",
 	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.CustomRequestforQuotation",
-     "Leave Application": "po_wo_pr.overrides.leave_application.CustomLeaveApplication"
+    "Leave Application": "po_wo_pr.overrides.leave_application.CustomLeaveApplication"
 }
 
 # Document Events
