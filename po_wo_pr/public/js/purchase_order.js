@@ -325,11 +325,17 @@ frappe.ui.form.on("Purchase Order", {
 
     naming_series(frm) {
         toggle_no_of_service_field(frm);
+        toggle_print_format_field(frm);
     },
 
     refresh(frm) {
+        toggle_print_format_field(frm);
         refresh_all_stock_balances(frm);
         toggle_no_of_service_field(frm);
+
+        if (frm.doc.select_print_format) {
+            frm.meta.default_print_format = frm.doc.select_print_format;
+        }
 
         if (!frm.is_new()) {
             frappe.call({
@@ -566,5 +572,15 @@ function fetch_contact_details(frm) {
                     frm.set_value("custom_our_enquiry_ref", r.message.custom_person_responsible);
                 }
             });
+    }
+}
+
+function toggle_print_format_field(frm) {
+    // Check if naming_series starts with 'MF-WO-SER-'
+    if (frm.doc.naming_series && frm.doc.naming_series.startsWith('MF-WO-SER-')) {
+        // Change fieldname to 'custom_select_print_format' if your custom field includes the prefix
+        frm.toggle_display('select_print_format', true);
+    } else {
+        frm.toggle_display('select_print_format', false);
     }
 }
