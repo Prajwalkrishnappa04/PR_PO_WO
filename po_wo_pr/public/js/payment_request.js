@@ -115,3 +115,39 @@ function set_gl_code_filter(frm) {
         };
     });
 }
+
+frappe.ui.form.on("Payment Request", {
+    onload(frm) {
+        set_sanction_filter(frm);
+    },
+
+    refresh(frm) {
+        set_sanction_filter(frm);
+    },
+
+    party_type(frm) {
+        frm.set_value("custom_scholarship_sanction", "");
+        set_sanction_filter(frm);
+    },
+
+    party(frm) {
+        frm.set_value("custom_scholarship_sanction", "");
+        set_sanction_filter(frm);
+    }
+});
+
+function set_sanction_filter(frm) {
+    frm.set_query("custom_scholarship_sanction", function () {
+        if (frm.doc.party_type !== "Student" || !frm.doc.party) {
+            return {
+                filters: [["Scholarship Sanction", "name", "=", ""]]
+            };
+        }
+
+        return {
+            filters: {
+                student_record: frm.doc.party
+            }
+        };
+    });
+}
