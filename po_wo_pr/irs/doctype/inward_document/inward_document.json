@@ -24,6 +24,7 @@
   "refered_by",
   "column_break_leyt",
   "maa_code",
+  "maa_series",
   "udaan_maa_code",
   "medium",
   "concern_person",
@@ -31,10 +32,39 @@
   "outward_entry",
   "remarks",
   "date",
+  "office_note_section",
+  "case",
+  "student_name",
+  "collegeschool_name",
+  "hostel_fees",
+  "father_occupation",
+  "mother_occupation",
+  "total_family_members",
+  "no_of_earning_member",
+  "other_family_members",
+  "column_break_xiyf",
+  "category",
+  "previous_",
+  "collegeschool_fees",
+  "food_expenses",
+  "father_yearly_income",
+  "mother_yearly_income",
+  "no_of_children",
+  "total_family_income",
+  "column_break_gfhq",
+  "community",
+  "previous_year_course",
+  "present_course",
+  "agricultural_land",
+  "crops",
+  "agricultural_land_yearly_income",
+  "office_note",
   "section_break_plnu",
   "document_records",
-  "section_break_duyy",
-  "maa_branch"
+  "section_break_tbiy",
+  "maa_branch",
+  "section_break_ulfu",
+  "student_entry"
  ],
  "fields": [
   {
@@ -225,21 +255,178 @@
    "reqd": 1
   },
   {
-   "fieldname": "section_break_duyy",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "maa_branch",
    "fieldtype": "Link",
    "label": "Maa Branch",
    "options": "Branch",
    "read_only": 1
+  },
+  {
+   "fetch_from": "concern_person.custom_ma_code_prefix",
+   "fieldname": "maa_series",
+   "fieldtype": "Data",
+   "label": "Maa Series"
+  },
+  {
+   "fieldname": "section_break_tbiy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_ulfu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "student_entry",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Student Entry",
+   "options": "Student"
+  },
+  {
+   "fieldname": "office_note_section",
+   "fieldtype": "Section Break",
+   "label": "Office Note"
+  },
+  {
+   "fieldname": "case",
+   "fieldtype": "Select",
+   "label": "Case",
+   "options": "\nGeneral\nGirls Scholarship\nWidow\nOrphan\nSingle"
+  },
+  {
+   "fieldname": "column_break_xiyf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "options": "\nGeneral\nOBC\nSC\nST\nSEBC"
+  },
+  {
+   "fieldname": "student_name",
+   "fieldtype": "Link",
+   "label": "Student Name",
+   "options": "Student"
+  },
+  {
+   "fieldname": "collegeschool_name",
+   "fieldtype": "Link",
+   "label": "College/School Name",
+   "options": "School College"
+  },
+  {
+   "fieldname": "previous_",
+   "fieldtype": "Data",
+   "label": "Previous %"
+  },
+  {
+   "fieldname": "column_break_gfhq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "community",
+   "fieldtype": "Data",
+   "label": "Community"
+  },
+  {
+   "fieldname": "previous_year_course",
+   "fieldtype": "Link",
+   "label": "Previous Year Course",
+   "options": "Course Master"
+  },
+  {
+   "fieldname": "present_course",
+   "fieldtype": "Link",
+   "label": "Present Course",
+   "options": "Course Master"
+  },
+  {
+   "fieldname": "hostel_fees",
+   "fieldtype": "Data",
+   "label": "Hostel Fees"
+  },
+  {
+   "fieldname": "father_occupation",
+   "fieldtype": "Data",
+   "label": "Father Occupation"
+  },
+  {
+   "fieldname": "mother_occupation",
+   "fieldtype": "Data",
+   "label": "Mother Occupation"
+  },
+  {
+   "fieldname": "total_family_members",
+   "fieldtype": "Data",
+   "label": "Total Family Members"
+  },
+  {
+   "fieldname": "no_of_earning_member",
+   "fieldtype": "Data",
+   "label": "No. of Earning Member"
+  },
+  {
+   "fieldname": "other_family_members",
+   "fieldtype": "Select",
+   "label": "Other Family Members",
+   "options": "\nBrother\nSister"
+  },
+  {
+   "fieldname": "collegeschool_fees",
+   "fieldtype": "Data",
+   "label": "College/School Fees"
+  },
+  {
+   "fieldname": "food_expenses",
+   "fieldtype": "Data",
+   "label": "Food Expenses"
+  },
+  {
+   "fieldname": "father_yearly_income",
+   "fieldtype": "Data",
+   "label": "Father Yearly Income"
+  },
+  {
+   "fieldname": "mother_yearly_income",
+   "fieldtype": "Data",
+   "label": "Mother Yearly Income"
+  },
+  {
+   "fieldname": "no_of_children",
+   "fieldtype": "Data",
+   "label": "No. of Children"
+  },
+  {
+   "fieldname": "total_family_income",
+   "fieldtype": "Data",
+   "label": "Total Family Income"
+  },
+  {
+   "fieldname": "agricultural_land",
+   "fieldtype": "Data",
+   "label": "Agricultural Land"
+  },
+  {
+   "fieldname": "crops",
+   "fieldtype": "Data",
+   "label": "Crops"
+  },
+  {
+   "fieldname": "office_note",
+   "fieldtype": "Data",
+   "label": "Office Note"
+  },
+  {
+   "fieldname": "agricultural_land_yearly_income",
+   "fieldtype": "Data",
+   "label": "Agricultural Land Yearly Income"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-17 15:59:54.661655",
+ "modified": "2026-09-18 15:19:49.109609",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
