@@ -152,4 +152,27 @@ def execute(filters=None):
             "whatsapp": row["mob_no"]
         })
 
-    return columns, data
+    total_pending = len(rows)
+    total_udaan = len([r for r in rows if r["project"] == "Udaan"])
+    total_vidhya = len([r for r in rows if r["project"] == "Vidhya"])
+
+    report_summary = [
+        {
+            "value": total_pending,
+            "label": "Total Pending",
+            "indicator": "orange"
+        },
+        {
+            "value": total_udaan,
+            "label": "Total Udaan",
+            "indicator": "blue"
+        },
+        {
+            "value": total_vidhya,
+            "label": "Total Vidhya",
+            "indicator": "green"
+        }
+    ]
+
+    
+    return columns, data, None, None, report_summary
