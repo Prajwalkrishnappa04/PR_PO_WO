@@ -232,7 +232,6 @@
   {
    "fieldname": "maa_branch",
    "fieldtype": "Link",
-   "hidden": 1,
    "label": "Maa Branch",
    "options": "Branch",
    "read_only": 1
@@ -247,7 +246,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-23 12:04:55.487119",
+ "modified": "2026-09-23 12:50:31.779163",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
