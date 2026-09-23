@@ -46,21 +46,41 @@ def search_student(doctype, txt, searchfield, start, page_len, filters):
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def search_town_village(doctype, txt, searchfield, start, page_len, filters):
-	# Search only by the townvillage field (not by name/taluka).
-	conditions = ["townvillage LIKE %(txt)s"]
-	values = {"txt": f"%{txt}%", "start": start, "page_len": page_len}
-	if filters and filters.get("taluka"):
-		conditions.append("taluka = %(taluka)s")
-		values["taluka"] = filters.get("taluka")
+    # Get the current user's Maa Branch
+    maa_branch = frappe.get_value(
+        "Employee",
+        {"user_id": frappe.session.user},
+        "custom_maa_branch"
+    )
 
-	return frappe.db.sql(
-		"""SELECT name, townvillage
-		FROM `tabTown Village`
-		WHERE {conditions}
-		ORDER BY townvillage
-		LIMIT %(start)s, %(page_len)s""".format(conditions=" AND ".join(conditions)),
-		values,
-	)
+    conditions = [
+        "townvillage LIKE %(txt)s",
+        "branch = %(maa_branch)s"
+    ]
+
+    values = {
+        "txt": f"%{txt}%",
+        "maa_branch": maa_branch,
+        "start": start,
+        "page_len": page_len
+    }
+
+    if filters and filters.get("taluka"):
+        conditions.append("taluka = %(taluka)s")
+        values["taluka"] = filters.get("taluka")
+
+    return frappe.db.sql(
+        """
+        SELECT name, townvillage
+        FROM `tabTown Village`
+        WHERE {conditions}
+        ORDER BY townvillage
+        LIMIT %(start)s, %(page_len)s
+        """.format(
+            conditions=" AND ".join(conditions)
+        ),
+        values,
+    )
 
 
 @frappe.whitelist()
