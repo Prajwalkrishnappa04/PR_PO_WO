@@ -1,266 +1,273 @@
 {
-    "actions": [],
-    "autoname": "naming_series:",
-    "creation": "2025-11-04 11:46:49.448241",
-    "doctype": "DocType",
-    "engine": "InnoDB",
-    "field_order": [
-        "naming_series",
-        "received_date",
-        "place",
-        "taluka",
-        "district",
-        "state",
-        "inter_office",
-        "sender",
-        "from_branch",
-        "mob_no",
-        "project",
-        "subject",
-        "application_status",
-        "reason_for_rejection",
-        "entry_by",
-        "reference_case",
-        "refered_by",
-        "column_break_leyt",
-        "maa_code",
-        "udaan_maa_code",
-        "medium",
-        "concern_person",
-        "handover_to",
-        "outward_entry",
-        "remarks",
-        "date",
-        "section_break_plnu",
-        "document_records",
-        "section_break_duyy",
-        "maa_branch"
-    ],
-    "fields": [
-        {
-            "default": "INB-.#####.-.YYYY.",
-            "fieldname": "naming_series",
-            "fieldtype": "Select",
-            "hidden": 1,
-            "label": "Series",
-            "options": "INB-.#####.-.YYYY."
-        },
-        {
-            "default": "Today",
-            "fieldname": "date",
-            "fieldtype": "Date",
-            "label": "Posting Date",
-            "read_only": 1,
-            "reqd": 1
-        },
-        {
-            "fieldname": "taluka",
-            "fieldtype": "Link",
-            "label": "Taluka",
-            "options": "Taluka"
-        },
-        {
-            "fieldname": "place",
-            "fieldtype": "Link",
-            "in_standard_filter": 1,
-            "label": "Place",
-            "options": "Town Village"
-        },
-        {
-            "fetch_from": "place.district",
-            "fieldname": "district",
-            "fieldtype": "Data",
-            "label": "District",
-            "read_only": 1
-        },
-        {
-            "fetch_from": "place.state",
-            "fieldname": "state",
-            "fieldtype": "Data",
-            "label": "State",
-            "read_only": 1
-        },
-        {
-            "default": "0",
-            "fieldname": "inter_office",
-            "fieldtype": "Check",
-            "label": "Inter Office"
-        },
-        {
-            "fieldname": "sender",
-            "fieldtype": "Data",
-            "in_list_view": 1,
-            "in_standard_filter": 1,
-            "label": "Sender",
-            "mandatory_depends_on": "eval:!doc.inter_office"
-        },
-        {
-            "depends_on": "eval:doc.inter_office",
-            "fieldname": "from_branch",
-            "fieldtype": "Link",
-            "label": "From (Branch)",
-            "mandatory_depends_on": "eval:doc.inter_office",
-            "options": "Branch"
-        },
-        {
-            "fieldname": "mob_no",
-            "fieldtype": "Data",
-            "label": "Mob. No.",
-            "options": "Phone"
-        },
-        {
-            "fieldname": "project",
-            "fieldtype": "Link",
-            "in_standard_filter": 1,
-            "label": "Project",
-            "options": "IRS Project"
-        },
-        {
-            "default": "Pending",
-            "depends_on": "eval:doc.subject && doc.subject.toLowerCase().includes('application')",
-            "fieldname": "application_status",
-            "fieldtype": "Select",
-            "label": "Application Status",
-            "options": "\nPending\nAccept\nReject\nRepeat Reject"
-        },
-        {
-            "depends_on": "eval:doc.application_status === 'Reject' || doc.application_status === 'Repeat Reject'",
-            "fieldname": "reason_for_rejection",
-            "fieldtype": "Link",
-            "label": "Reason for Rejection",
-            "options": "Reason Of Rejection"
-        },
-        {
-            "fieldname": "entry_by",
-            "fieldtype": "Data",
-            "label": "Entry By",
-            "read_only": 1
-        },
-        {
-            "default": "0",
-            "fieldname": "reference_case",
-            "fieldtype": "Check",
-            "label": "Reference Case"
-        },
-        {
-            "depends_on": "eval:doc.reference_case",
-            "fieldname": "refered_by",
-            "fieldtype": "Link",
-            "label": "Refered By",
-            "link_filters": "[[\"Reference\",\"disabled\",\"=\",0]]",
-            "options": "Reference"
-        },
-        {
-            "fieldname": "column_break_leyt",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "maa_code",
-            "fieldtype": "Link",
-            "in_list_view": 1,
-            "in_standard_filter": 1,
-            "label": "Maa Code",
-            "options": "Student"
-        },
-        {
-            "fieldname": "udaan_maa_code",
-            "fieldtype": "Link",
-            "in_list_view": 1,
-            "in_standard_filter": 1,
-            "label": "Udaan Maa Code",
-            "options": "Udaan Student"
-        },
-        {
-            "fieldname": "medium",
-            "fieldtype": "Link",
-            "label": "Medium",
-            "options": "Type of Postage Master"
-        },
-        {
-            "depends_on": "eval:doc.project",
-            "fieldname": "subject",
-            "fieldtype": "Autocomplete",
-            "label": "Subject"
-        },
-        {
-            "fieldname": "concern_person",
-            "fieldtype": "Link",
-            "ignore_user_permissions": 1,
-            "in_standard_filter": 1,
-            "label": "Concern Person",
-            "options": "Employee"
-        },
-        {
-            "fieldname": "handover_to",
-            "fieldtype": "Link",
-            "ignore_user_permissions": 1,
-            "label": "Handover To",
-            "options": "Employee"
-        },
-        {
-            "fieldname": "outward_entry",
-            "fieldtype": "Link",
-            "label": "Outward Entry",
-            "options": "Outward Documents"
-        },
-        {
-            "fieldname": "remarks",
-            "fieldtype": "Small Text",
-            "label": "Remarks"
-        },
-        {
-            "fieldname": "section_break_plnu",
-            "fieldtype": "Section Break"
-        },
-        {
-            "fieldname": "document_records",
-            "fieldtype": "Table",
-            "label": "Document Records",
-            "options": "Inward Details"
-        },
-        {
-            "fieldname": "received_date",
-            "fieldtype": "Date",
-            "label": "Received Date",
-            "reqd": 1
-        },
-        {
-            "fieldname": "section_break_duyy",
-            "fieldtype": "Section Break"
-        },
-        {
-            "fieldname": "maa_branch",
-            "fieldtype": "Link",
-            "label": "Maa Branch",
-            "options": "Branch",
-            "read_only": 1
-        }
-    ],
-    "grid_page_length": 50,
-    "index_web_pages_for_search": 1,
-    "links": [],
-    "modified": "2026-08-17 15:59:54.661655",
-    "modified_by": "Administrator",
-    "module": "IRS",
-    "name": "Inward Document",
-    "naming_rule": "By \"Naming Series\" field",
-    "owner": "Administrator",
-    "permissions": [
-        {
-            "create": 1,
-            "delete": 1,
-            "email": 1,
-            "export": 1,
-            "print": 1,
-            "read": 1,
-            "report": 1,
-            "role": "System Manager",
-            "share": 1,
-            "write": 1
-        }
-    ],
-    "row_format": "Dynamic",
-    "sort_field": "modified",
-    "sort_order": "DESC",
-    "states": []
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2025-11-04 11:46:49.448241",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "maa_series",
+  "naming_series",
+  "received_date",
+  "place",
+  "taluka",
+  "district",
+  "state",
+  "inter_office",
+  "sender",
+  "from_branch",
+  "mob_no",
+  "project",
+  "subject",
+  "application_status",
+  "reason_for_rejection",
+  "entry_by",
+  "reference_case",
+  "refered_by",
+  "column_break_leyt",
+  "maa_code",
+  "udaan_maa_code",
+  "medium",
+  "concern_person",
+  "handover_to",
+  "outward_entry",
+  "remarks",
+  "date",
+  "section_break_plnu",
+  "document_records",
+  "section_break_duyy",
+  "maa_branch"
+ ],
+ "fields": [
+  {
+   "default": "INB-.#####.-.YYYY.",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "INB-.#####.-.YYYY."
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "taluka",
+   "fieldtype": "Link",
+   "label": "Taluka",
+   "options": "Taluka"
+  },
+  {
+   "fieldname": "place",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Place",
+   "options": "Town Village"
+  },
+  {
+   "fetch_from": "place.district",
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "label": "District",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "place.state",
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "inter_office",
+   "fieldtype": "Check",
+   "label": "Inter Office"
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sender",
+   "mandatory_depends_on": "eval:!doc.inter_office"
+  },
+  {
+   "depends_on": "eval:doc.inter_office",
+   "fieldname": "from_branch",
+   "fieldtype": "Link",
+   "label": "From (Branch)",
+   "mandatory_depends_on": "eval:doc.inter_office",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "mob_no",
+   "fieldtype": "Data",
+   "label": "Mob. No.",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "IRS Project"
+  },
+  {
+   "default": "Pending",
+   "depends_on": "eval:doc.subject && doc.subject.toLowerCase().includes('application')",
+   "fieldname": "application_status",
+   "fieldtype": "Select",
+   "label": "Application Status",
+   "options": "\nPending\nAccept\nReject\nRepeat Reject"
+  },
+  {
+   "depends_on": "eval:doc.application_status === 'Reject' || doc.application_status === 'Repeat Reject'",
+   "fieldname": "reason_for_rejection",
+   "fieldtype": "Link",
+   "label": "Reason for Rejection",
+   "options": "Reason Of Rejection"
+  },
+  {
+   "fieldname": "entry_by",
+   "fieldtype": "Data",
+   "label": "Entry By",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "reference_case",
+   "fieldtype": "Check",
+   "label": "Reference Case"
+  },
+  {
+   "depends_on": "eval:doc.reference_case",
+   "fieldname": "refered_by",
+   "fieldtype": "Link",
+   "label": "Refered By",
+   "link_filters": "[[\"Reference\",\"disabled\",\"=\",0]]",
+   "options": "Reference"
+  },
+  {
+   "fieldname": "column_break_leyt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "maa_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Maa Code",
+   "options": "Student"
+  },
+  {
+   "fieldname": "udaan_maa_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Udaan Maa Code",
+   "options": "Udaan Student"
+  },
+  {
+   "fieldname": "medium",
+   "fieldtype": "Link",
+   "label": "Medium",
+   "options": "Type of Postage Master"
+  },
+  {
+   "depends_on": "eval:doc.project",
+   "fieldname": "subject",
+   "fieldtype": "Autocomplete",
+   "label": "Subject"
+  },
+  {
+   "fieldname": "concern_person",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_standard_filter": 1,
+   "label": "Concern Person",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "handover_to",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Handover To",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "outward_entry",
+   "fieldtype": "Link",
+   "label": "Outward Entry",
+   "options": "Outward Documents"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_plnu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "document_records",
+   "fieldtype": "Table",
+   "label": "Document Records",
+   "options": "Inward Details"
+  },
+  {
+   "fieldname": "received_date",
+   "fieldtype": "Date",
+   "label": "Received Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_duyy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "maa_branch",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Maa Branch",
+   "options": "Branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "maa_series",
+   "fieldtype": "Data",
+   "label": "Maa Series"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-23 11:29:56.395240",
+ "modified_by": "Administrator",
+ "module": "IRS",
+ "name": "Inward Document",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
 }
