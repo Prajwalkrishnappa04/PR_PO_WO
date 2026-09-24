@@ -18,15 +18,29 @@ frappe.listview_settings['Inward Document'] = {
         },
     },
 
+
     onload(listview) {
+
         if (frappe.session.user !== "Administrator") {
-            frappe.db.get_value("Employee", { user_id: frappe.session.user }, "name").then(r => {
-                if (r.message && r.message.name) {
-                    listview.filter_area.add([
-                        ["Inward Document", "concern_person", "=", r.message.name]
-                    ]);
-                }
-            });
+            frappe.db.get_value("Employee", { user_id: frappe.session.user }, ["name", "branch"])
+                .then(r => {
+                    if (r && r.message) {
+                        const employee_name = r.message.name;
+                        const branch = r.message.branch;
+
+                        if (employee_name) {
+                            listview.filter_area.add([
+                                ["Inward Document", "concern_person", "=", employee_name]
+                            ]);
+                        }
+
+                        if (branch) {
+                            listview.filter_area.add([
+                                ["Inward Document", "maa_branch", "=", branch]
+                            ]);
+                        }
+                    }
+                });
         }
 
         listview.page.add_action_item(__("Create Outward Action"), function () {
