@@ -44,7 +44,7 @@ app_license = "mit"
 
 permission_query_conditions = { 
     "Outward Documents": "po_wo_pr.irs.api.outward_documents_permission",
-    "Inward Documents": "po_wo_pr.irs.api.inward_documents_permission",
+    "Inward Document": "po_wo_pr.irs.api.inward_documents_permission",
     "Inward Outward Transit": "po_wo_pr.irs.api.get_transit_permission_conditions",
 }
 
