@@ -129,6 +129,30 @@ def create_transit_records(docs, target_branch):
     for doc_name in docs:
         outward_doc = frappe.get_doc("Outward Documents", doc_name)
 
+        # 1. Fetch Sender's Full Name (from frappe.session.user email)
+        sender_full_name = frappe.utils.get_fullname(frappe.session.user)
+
+        # 2. Fetch Concern Person's Full Name
+        # If concern_person ("MF4002") is an Employee ID, User ID, or User Link
+        concern_person_code = getattr(outward_doc, "concern_person", None)
+        concern_person_name = concern_person_code
+
+        if concern_person_code:
+            # Check if concern_person exists in Employee DocType
+            if frappe.db.exists("Employee", concern_person_code):
+                concern_person_name = frappe.db.get_value("Employee", concern_person_code, "employee_name") or concern_person_code
+            # Check if concern_person exists in User DocType
+            elif frappe.db.exists("User", concern_person_code):
+                concern_person_name = frappe.utils.get_fullname(concern_person_code)
+            # Fallback: check by concern_person_email if available on Outward Document
+            elif getattr(outward_doc, "concern_person_email", None):
+                concern_person_name = frappe.utils.get_fullname(outward_doc.concern_person_email)
+
+        # Validate subject Link field gracefully
+        subject_val = getattr(outward_doc, "subject", None)
+        if subject_val and not frappe.db.exists("Project Subject", subject_val):
+            subject_val = None
+
         # Check if already in transit
         existing_transit = frappe.db.exists(
             "Inward Outward Transit",
@@ -141,24 +165,23 @@ def create_transit_records(docs, target_branch):
             frappe.msgprint(_("Outward document {0} is already in transit. Skipping.").format(outward_doc.name))
             continue
 
-        # Create Transit Document with mapped fields
+        # Create Transit Document
         transit_doc = frappe.get_doc({
             "doctype": "Inward Outward Transit",
             "outward_reference": outward_doc.name,
             "sender_branch": sender_branch or getattr(outward_doc, "maa_branch", None),
             "receiver_branch": target_branch,
-            "sender": frappe.session.user,  # Sender is the user who sends it
+            "sender": sender_full_name,  # Stores full name (e.g. "Yamini Bhatt")
             "date_of_sending": frappe.utils.today(),
             "maaudaan_code": getattr(outward_doc, "maa_code", None),
             "mediumpostage": getattr(outward_doc, "meduium", getattr(outward_doc, "medium", None)),
-            "concern_person_name": getattr(outward_doc, "concern_person", None),
+            "concern_person_name": concern_person_name,  # Stores full name (e.g. "Viraj Shukla")
             "student_name": getattr(outward_doc, "student_name", None),
-            "subject": getattr(outward_doc, "subject", None),
+            "subject": subject_val,
             "status": "In Transit"
         })
         transit_doc.insert(ignore_permissions=True)
         
-        # Update original Outward Document status if field exists
         if hasattr(outward_doc, "status"):
             frappe.db.set_value("Outward Documents", outward_doc.name, "status", "In Transit")
 
@@ -229,7 +252,7 @@ def receive_transit_to_inward(transit_names):
         created_inwards.append(inward_doc.name)
 
     return created_inwards
-    
+
 @frappe.whitelist()
 def force_bulk_delete_pos(po_names):
     if isinstance(po_names, str):
