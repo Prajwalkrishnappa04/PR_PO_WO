@@ -86,9 +86,8 @@
   },
   {
    "fieldname": "sender",
-   "fieldtype": "Link",
-   "label": "Sender",
-   "options": "User"
+   "fieldtype": "Data",
+   "label": "Sender"
   },
   {
    "fieldname": "date_of_sending",
@@ -140,7 +139,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 11:31:41.710223",
+ "modified": "2026-09-25 12:26:22.863127",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Outward Transit",
