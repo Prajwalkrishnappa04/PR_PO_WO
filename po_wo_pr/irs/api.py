@@ -110,7 +110,6 @@ def get_transit_permission_conditions(user):
 
     return f"(`tabInward Outward Transit`.`receiver_branch` IN ({escaped_values}) OR `tabInward Outward Transit`.`sender_branch` IN ({escaped_values}))"
 
-
 @frappe.whitelist()
 def create_transit_records(docs, target_branch):
     """
@@ -142,12 +141,19 @@ def create_transit_records(docs, target_branch):
             frappe.msgprint(_("Outward document {0} is already in transit. Skipping.").format(outward_doc.name))
             continue
 
-        # Create Transit Document
+        # Create Transit Document with mapped fields
         transit_doc = frappe.get_doc({
             "doctype": "Inward Outward Transit",
             "outward_reference": outward_doc.name,
-            "sender_branch": sender_branch or getattr(outward_doc, "maa_branch", ""),
+            "sender_branch": sender_branch or getattr(outward_doc, "maa_branch", None),
             "receiver_branch": target_branch,
+            "sender": frappe.session.user,  # Sender is the user who sends it
+            "date_of_sending": frappe.utils.today(),
+            "maaudaan_code": getattr(outward_doc, "maa_code", None),
+            "mediumpostage": getattr(outward_doc, "meduium", getattr(outward_doc, "medium", None)),
+            "concern_person_name": getattr(outward_doc, "concern_person", None),
+            "student_name": getattr(outward_doc, "student_name", None),
+            "subject": getattr(outward_doc, "subject", None),
             "status": "In Transit"
         })
         transit_doc.insert(ignore_permissions=True)
@@ -160,13 +166,11 @@ def create_transit_records(docs, target_branch):
 
     return created_transit_records
 
-
-import frappe
-
 @frappe.whitelist()
 def receive_transit_to_inward(transit_names):
     """
-    Converts 'Inward Outward Transit' records into 'Inward Document' records.
+    Converts 'Inward Outward Transit' records into 'Inward Document' records
+    and updates receiver info on the Transit record.
     """
     if isinstance(transit_names, str):
         transit_names = frappe.parse_json(transit_names) if transit_names.startswith("[") else [transit_names]
@@ -196,23 +200,26 @@ def receive_transit_to_inward(transit_names):
             "date": frappe.utils.today(),
             "subject": outward.subject,
             "project": getattr(outward, "project", ""),
-            "medium": getattr(outward, "medium", getattr(outward, "meduium", "Courier")),
+            "medium": getattr(outward, "meduium", getattr(outward, "medium", "Courier")),
             "place": getattr(outward, "place", ""),
             "district": getattr(outward, "district", ""),
             "taluka": getattr(outward, "taluka", ""),
             "state": getattr(outward, "state", ""),
             "pincode": getattr(outward, "pincode", ""),
-            "sender": outward.to,
+            "student_name": getattr(outward, "student_name", ""),
+            "maa_code": getattr(outward, "maa_code", ""),
+            "sender": getattr(outward, "entry_by", getattr(outward, "owner", "")),
             "application_status": "Pending",
-            "entry_by": frappe.session.user,
-            "maa_branch": emp_info.get("branch") or getattr(outward, "maa_branch", ""),
-            "concern_person": emp_info.get("employee_name") or "",
-            "remarks": getattr(outward, "remarks", "")
+            "entry_by": frappe.session.user,  # Receiver user entering the record
+            "maa_branch": emp_info.get("branch") or getattr(transit_doc, "receiver_branch", ""),
+            "concern_person": emp_info.get("employee_name") or frappe.session.user,
+            "remarks": getattr(outward, "remarks", getattr(transit_doc, "remark", ""))
         })
         inward_doc.insert(ignore_permissions=True)
 
-        # Update Transit Record
+        # Update Transit Record with Receiving date and link to created Inward Document
         transit_doc.inward_reference = inward_doc.name
+        transit_doc.date_of_receiving = frappe.utils.today()
         transit_doc.status = "Received"
         transit_doc.save(ignore_permissions=True)
 
@@ -222,7 +229,7 @@ def receive_transit_to_inward(transit_names):
         created_inwards.append(inward_doc.name)
 
     return created_inwards
-
+    
 @frappe.whitelist()
 def force_bulk_delete_pos(po_names):
     if isinstance(po_names, str):
