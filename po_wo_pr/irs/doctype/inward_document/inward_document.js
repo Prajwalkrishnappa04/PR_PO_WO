@@ -943,10 +943,10 @@ frappe.ui.form.on("Inward Document", {
                 args: {
                     doctype: "Employee",
                     filters: { user_id: frappe.session.user },
-                    fieldname: ["branch"]
+                    fieldname: ["custom_maa_branch"]
                 },
                 callback(r) {
-                    let employee_branch = r.message?.branch;
+                    let employee_branch = r.message?.custom_maa_branch;
 
                     let d = new frappe.ui.Dialog({
                         title: "Add Interview Details",
@@ -985,7 +985,7 @@ frappe.ui.form.on("Inward Document", {
                                     interview_place: values.interview_place,
                                     maa_branch: values.maa_branch,
                                     application_receive_date: frm.doc.date,
-                                    place: frm.doc.place,
+                                    townvillage: frm.doc.place,
                                     taluka: frm.doc.taluka,
                                     mob_no: frm.doc.mob_no,
                                     district: frm.doc.district,
