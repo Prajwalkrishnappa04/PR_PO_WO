@@ -1,7 +1,7 @@
 {
  "charts": [],
  "content": "[{\"id\":\"irs_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>IRS</b></span>\",\"col\":12}},{\"id\":\"irs_sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Document\",\"col\":4}},{\"id\":\"irs_sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outward Documents\",\"col\":4}},{\"id\":\"irs_sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IRS Project\",\"col\":4}}]",
- "creation": "2026-06-23 10:00:00.000000",
+ "creation": "2026-06-23 10:00:00",
  "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
@@ -12,7 +12,6 @@
  "indicator_color": "green",
  "is_hidden": 0,
  "label": "IRS",
- "title": "IRS",
  "links": [
   {
    "dependencies": "",
@@ -48,7 +47,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-06-23 10:00:00.000000",
+ "modified": "2026-09-25 10:59:19.046536",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "IRS",
@@ -58,7 +57,7 @@
  "public": 1,
  "quick_lists": [],
  "roles": [],
- "sequence_id": 2.0,
+ "sequence_id": 3.0,
  "shortcuts": [
   {
    "color": "Blue",
@@ -79,5 +78,5 @@
    "type": "DocType"
   }
  ],
- "states": []
+ "title": "IRS"
 }
