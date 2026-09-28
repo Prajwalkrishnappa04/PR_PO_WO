@@ -151,7 +151,7 @@ class OutwardDocuments(Document):
 		return frappe.db.get_value("Employee", self.concern_person, "personal_email")
 
 	def notify_concern_person(self):
-		"""Email the Concern Person the Name / Subject / Remaks of this document.
+		"""Email the Concern Person the Name / Subject / Remarks of this document.
 
 		Rendered from the "Outward Document Concern Person Notification" Email Template so
 		the wording can be changed from the UI without touching code. Silently skips when
@@ -178,7 +178,7 @@ class OutwardDocuments(Document):
 			"doc": self,
 			"name": self.name,
 			"subject": self.subject,
-			"remaks": self.remaks,
+			"remarks": self.remarks,
 			"employee_name": frappe.db.get_value("Employee", self.concern_person, "employee_name")
 			if self.concern_person
 			else None,

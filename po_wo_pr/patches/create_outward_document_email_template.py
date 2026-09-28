@@ -9,7 +9,7 @@ import frappe
 
 from po_wo_pr.irs.doctype.outward_documents.outward_documents import CONCERN_PERSON_EMAIL_TEMPLATE
 
-# Only the document name goes here -- Subject and Remaks belong in the body only.
+# Only the document name goes here -- Subject and Remarks belong in the body only.
 SUBJECT = "Outward Document Notification - {{ doc.name }}"
 
 RESPONSE = """<p>Dear {{ employee_name or "Sir/Madam" }},</p>
@@ -19,7 +19,7 @@ RESPONSE = """<p>Dear {{ employee_name or "Sir/Madam" }},</p>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
 	<tr><td><b>Name</b></td><td>{{ name or "-" }}</td></tr>
 	<tr><td><b>Subject</b></td><td>{{ subject or "-" }}</td></tr>
-	<tr><td><b>Remaks</b></td><td>{{ remaks or "-" }}</td></tr>
+	<tr><td><b>Remarks</b></td><td>{{ remarks or "-" }}</td></tr>
 </table>
 
 <p>Regards,<br>MAA Foundation</p>
