@@ -148,7 +148,7 @@ def get_latest_medium(maa_code, udaan=0):
     return rows[0].medium if rows else None
 
 @frappe.whitelist()
-def create_student_and_set_maa_code(student_name, gender, interview_place, application_receive_date, townvillage, taluka, district, state, maa_branch=None):
+def create_student_and_set_maa_code(parent_doc, student_name, gender, interview_place, application_receive_date, townvillage, taluka, district, state, maa_branch=None):
 	student = frappe.get_doc({
 		"doctype": "Student",
 		"student_name": student_name,
@@ -162,7 +162,11 @@ def create_student_and_set_maa_code(student_name, gender, interview_place, appli
 		"state":state
 	})
 	student.insert(ignore_permissions=True)
-	return student.name
+
+	if parent_doc:
+		frappe.db.set_value("Inward Document",parent_doc,"maa_code",student.name)
+
+	return
 
 
 class InwardDocument(Document):
