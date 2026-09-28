@@ -989,6 +989,7 @@ frappe.ui.form.on("Inward Document", {
                                     taluka: frm.doc.taluka,
                                     mob_no: frm.doc.mob_no,
                                     district: frm.doc.district,
+                                    state: frm.doc.state,
                                     parent_doc: frm.doc.name
                                 },
 
