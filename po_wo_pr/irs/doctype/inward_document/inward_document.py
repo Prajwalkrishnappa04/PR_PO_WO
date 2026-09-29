@@ -166,7 +166,7 @@ def create_student_and_set_maa_code(parent_doc, student_name, gender, interview_
 	if parent_doc:
 		frappe.db.set_value("Inward Document",parent_doc,"maa_code",student.name)
 
-	return
+	return student.name
 
 
 class InwardDocument(Document):

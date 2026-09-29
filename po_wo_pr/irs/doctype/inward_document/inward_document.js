@@ -937,6 +937,7 @@ frappe.ui.form.on("Inward Document", {
         // 2. Otherwise, check criteria to render Add Student Entry button
         if (frm.is_new() || frm.doc.application_status !== "Accept" || frm.is_dirty()) return;
 
+        if (!frm.doc.maa_code){
         frm.add_custom_button("Add Student Entry", () => {
             frappe.call({
                 method: "frappe.client.get_value",
@@ -977,6 +978,7 @@ frappe.ui.form.on("Inward Document", {
                         primary_action_label: "Submit",
 
                         primary_action(values) {
+                            d.hide()
                             frappe.call({
                                 method: "po_wo_pr.irs.doctype.inward_document.inward_document.create_student_and_set_maa_code",
                                 args: {
@@ -992,18 +994,11 @@ frappe.ui.form.on("Inward Document", {
                                     state: frm.doc.state,
                                     parent_doc: frm.doc.name
                                 },
-
+                                freeze:true,
                                 callback(res) {
                                     if (!res.exc && res.message) {
-                                        let student_id = res.message;
-                                        d.hide();
-
-                                        // Set student_entry in UI and save
-                                        frm.set_value("student_entry", student_id);
-                                        frm.save().then(() => {
-                                            frm.trigger("refresh");
-                                            frappe.msgprint(__("Student Entry Created: " + student_id));
-                                        });
+                                        frm.reload_doc();
+                                        frappe.msgprint(__("Student Entry Created: " + res.message));
                                     }
                                 }
                             });
@@ -1018,5 +1013,6 @@ frappe.ui.form.on("Inward Document", {
                 }
             });
         });
+      }
     }
 });
