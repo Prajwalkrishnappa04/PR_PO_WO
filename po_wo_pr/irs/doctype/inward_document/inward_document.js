@@ -937,16 +937,17 @@ frappe.ui.form.on("Inward Document", {
         // 2. Otherwise, check criteria to render Add Student Entry button
         if (frm.is_new() || frm.doc.application_status !== "Accept" || frm.is_dirty()) return;
 
+        if (!frm.doc.maa_code){
         frm.add_custom_button("Add Student Entry", () => {
             frappe.call({
                 method: "frappe.client.get_value",
                 args: {
                     doctype: "Employee",
                     filters: { user_id: frappe.session.user },
-                    fieldname: ["branch"]
+                    fieldname: ["custom_maa_branch"]
                 },
                 callback(r) {
-                    let employee_branch = r.message?.branch;
+                    let employee_branch = r.message?.custom_maa_branch;
 
                     let d = new frappe.ui.Dialog({
                         title: "Add Interview Details",
@@ -977,6 +978,7 @@ frappe.ui.form.on("Inward Document", {
                         primary_action_label: "Submit",
 
                         primary_action(values) {
+                            d.hide()
                             frappe.call({
                                 method: "po_wo_pr.irs.doctype.inward_document.inward_document.create_student_and_set_maa_code",
                                 args: {
@@ -985,25 +987,18 @@ frappe.ui.form.on("Inward Document", {
                                     interview_place: values.interview_place,
                                     maa_branch: values.maa_branch,
                                     application_receive_date: frm.doc.date,
-                                    place: frm.doc.place,
+                                    townvillage: frm.doc.place,
                                     taluka: frm.doc.taluka,
                                     mob_no: frm.doc.mob_no,
                                     district: frm.doc.district,
                                     state: frm.doc.state,
                                     parent_doc: frm.doc.name
                                 },
-
+                                freeze:true,
                                 callback(res) {
                                     if (!res.exc && res.message) {
-                                        let student_id = res.message;
-                                        d.hide();
-
-                                        // Set student_entry in UI and save
-                                        frm.set_value("student_entry", student_id);
-                                        frm.save().then(() => {
-                                            frm.trigger("refresh");
-                                            frappe.msgprint(__("Student Entry Created: " + student_id));
-                                        });
+                                        frm.reload_doc();
+                                        frappe.msgprint(__("Student Entry Created: " + res.message));
                                     }
                                 }
                             });
@@ -1018,5 +1013,6 @@ frappe.ui.form.on("Inward Document", {
                 }
             });
         });
+      }
     }
 });
