@@ -158,9 +158,22 @@ def create_student_and_set_maa_code(
     taluka=None,
     mob_no=None,
     district=None,
-    state=None,  # Added state parameter
+    state=None,
     parent_doc=None
 ):
+    # Fallback to fetching directly from parent_doc if 'place' isn't sent
+    if not place and parent_doc:
+        place = frappe.db.get_value("Inward Document", parent_doc, "place")
+
+    if not taluka and parent_doc:
+        taluka = frappe.db.get_value("Inward Document", parent_doc, "taluka")
+
+    if not district and parent_doc:
+        district = frappe.db.get_value("Inward Document", parent_doc, "district")
+
+    if not state and parent_doc:
+        state = frappe.db.get_value("Inward Document", parent_doc, "state")
+
     student = frappe.get_doc({
         "doctype": "Student",
         "student_name": student_name,
@@ -168,11 +181,11 @@ def create_student_and_set_maa_code(
         "interview_place": interview_place,
         "maa_branch": maa_branch,
         "application_receive_date": application_receive_date,
-        "place": place,
+        "townvillage": place,  # Links to Town Village ID
         "taluka": taluka,
-        "phone_no": mob_no,  # Check fieldname on Student DocType (e.g., mob_no or mobile_number)
+        "phone_no": mob_no,
         "district": district,
-        "state": state  # Added state field mapping
+        "state": state,
     })
     student.insert(ignore_permissions=True)
 
@@ -180,7 +193,6 @@ def create_student_and_set_maa_code(
         frappe.db.set_value("Inward Document", parent_doc, "student_entry", student.name)
     
     return student.name
-
 
 class InwardDocument(Document):
 	#to save entry by user
