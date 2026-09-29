@@ -259,7 +259,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-29 13:01:49.604024",
+ "modified": "2026-09-29 17:42:51.155294",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
@@ -282,5 +282,6 @@
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }
