@@ -35,7 +35,9 @@
   "section_break_plnu",
   "document_records",
   "section_break_duyy",
-  "maa_branch"
+  "maa_branch",
+  "column_break_bulq",
+  "student_entry"
  ],
  "fields": [
   {
@@ -241,12 +243,23 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Maa Series"
+  },
+  {
+   "fieldname": "column_break_bulq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "student_entry",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Student Entry",
+   "options": "Student"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-23 12:50:31.779163",
+ "modified": "2026-09-29 13:01:49.604024",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Document",
