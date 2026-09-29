@@ -170,11 +170,14 @@ def create_student_and_set_maa_code(
         "application_receive_date": application_receive_date,
         "place": place,
         "taluka": taluka,
-        "mobile_number": mob_no,  # Check fieldname on Student DocType (e.g., mob_no or mobile_number)
+        "phone_no": mob_no,  # Check fieldname on Student DocType (e.g., mob_no or mobile_number)
         "district": district,
         "state": state  # Added state field mapping
     })
     student.insert(ignore_permissions=True)
+
+    if parent_doc:
+        frappe.db.set_value("Inward Document", parent_doc, "student_entry", student.name)
     
     return student.name
 
