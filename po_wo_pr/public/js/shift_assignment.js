@@ -3,10 +3,16 @@ frappe.ui.form.on("Shift Assignment", {
         frm.toggle_display("custom_holiday", false);
 
         if (frm.doc.docstatus === 1) {
-            frm.add_custom_button(__('Manage Locations'), function () {
-                open_manage_locations_dialog(frm);
-            }, __('Add Locations'));
-        }
+    let locations_btn = frm.add_custom_button(__('Manage Locations'), function () {
+        open_manage_locations_dialog(frm);
+    });
+
+    locations_btn.css({
+        "background-color": "#1a73e8",
+        "color": "#ffffff",
+        "border-color": "#1a73e8"
+    });
+}
     }
 });
 
