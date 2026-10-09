@@ -3,7 +3,7 @@ frappe.ui.form.on("Supplier Quotation", {
         hide_supplier_quotation_item_gst_fields(frm);
         set_default_branch(frm);
 
-        frm.set_query("terms", "custom_term_selection", () => {
+        frm.set_query("custom_term_selection", () => {
             return {
                 filters: {
                     disabled: 0
@@ -36,15 +36,15 @@ frappe.ui.form.on("Supplier Quotation", {
             frm.doc.__user_changed_terms = true;
         }
     },
-    // custom_term_selection(frm) {
-    //     set_terms_from_selection(frm);
-    // },
-    // tc_name(frm) {
-    //     // Term Selection wins over the single Terms Template
-    //     if (get_selected_terms(frm).length) {
-    //         setTimeout(() => set_terms_from_selection(frm), 300);
-    //     }
-    // },
+    custom_term_selection(frm) {
+        set_terms_from_selection(frm);
+    },
+    tc_name(frm) {
+        // Term Selection wins over the single Terms Template
+        if (get_selected_terms(frm).length) {
+            setTimeout(() => set_terms_from_selection(frm), 300);
+        }
+    },
     custom_payment_terms_template(frm) {
         if (frm.doc.custom_payment_terms_template) {
             frappe.call({

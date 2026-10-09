@@ -361,7 +361,7 @@ frappe.ui.form.on("Purchase Order", {
     onload(frm) {
         set_default_branch(frm);
 
-        frm.set_query("terms", "custom_term_selection", () => {
+        frm.set_query("custom_term_selection", () => {
             return {
                 filters: {
                     disabled: 0
