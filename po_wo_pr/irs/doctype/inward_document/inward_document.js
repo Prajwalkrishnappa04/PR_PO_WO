@@ -774,13 +774,6 @@ frappe.ui.form.on("Inward Document", {
         watch_row_wise_tab(frm);
     },
 
-    refresh: function (frm) {
-        toggle_document_records(frm);
-    },
-    project: function (frm) {
-        toggle_document_records(frm);
-    },
-
     onload: async function (frm) {
         const res = await frappe.db.get_value(
             "Employee",
@@ -863,6 +856,7 @@ frappe.ui.form.on("Inward Document", {
     },
 
     project(frm) {
+        toggle_document_records(frm);
         frm.set_value("subject", "");
         load_project_subjects(frm);
     },
@@ -924,6 +918,7 @@ frappe.ui.form.on("Inward Document", {
     },
 
     refresh(frm) {
+        toggle_document_records(frm);
         setTimeout(() => set_row_wise_tab(frm), 300);
         watch_row_wise_tab(frm);
         load_project_subjects(frm);
