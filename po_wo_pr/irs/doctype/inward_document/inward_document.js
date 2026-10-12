@@ -747,10 +747,38 @@ function watch_row_wise_tab(frm) {
     frm.__row_wise_tab_node = layout;
 }
 
+function toggle_document_records(frm) {
+    if (!frm.doc.project) {
+        frm.toggle_display('document_records', false);
+        return;
+    }
+
+    frappe.db.get_value('IRS Project', { name: frm.doc.project }, 'project_name', function (r) {
+        if (r && r.project_name) {
+            let p_name = r.project_name.trim();
+
+            if (p_name === "Udaan" || p_name === "Vidhya" || p_name === "Vidhaya") {
+                frm.toggle_display('document_records', true);
+            } else {
+                frm.toggle_display('document_records', false);
+            }
+        } else {
+            frm.toggle_display('document_records', false);
+        }
+    });
+}
+
 frappe.ui.form.on("Inward Document", {
     onload_post_render(frm) {
         setTimeout(() => set_row_wise_tab(frm), 300);
         watch_row_wise_tab(frm);
+    },
+
+    refresh: function (frm) {
+        toggle_document_records(frm);
+    },
+    project: function (frm) {
+        toggle_document_records(frm);
     },
 
     onload: async function (frm) {
@@ -937,82 +965,82 @@ frappe.ui.form.on("Inward Document", {
         // 2. Otherwise, check criteria to render Add Student Entry button
         if (frm.is_new() || frm.doc.application_status !== "Accept" || frm.is_dirty()) return;
 
-        if (!frm.doc.maa_code){
-        frm.add_custom_button("Add Student Entry", () => {
-            frappe.call({
-                method: "frappe.client.get_value",
-                args: {
-                    doctype: "Employee",
-                    filters: { user_id: frappe.session.user },
-                    fieldname: ["custom_maa_branch"]
-                },
-                callback(r) {
-                    let employee_branch = r.message?.custom_maa_branch;
+        if (!frm.doc.maa_code) {
+            frm.add_custom_button("Add Student Entry", () => {
+                frappe.call({
+                    method: "frappe.client.get_value",
+                    args: {
+                        doctype: "Employee",
+                        filters: { user_id: frappe.session.user },
+                        fieldname: ["custom_maa_branch"]
+                    },
+                    callback(r) {
+                        let employee_branch = r.message?.custom_maa_branch;
 
-                    let d = new frappe.ui.Dialog({
-                        title: "Add Interview Details",
-                        fields: [
-                            {
-                                fieldname: "maa_branch",
-                                label: "Maa Branch",
-                                fieldtype: "Link",
-                                options: "Maa Branches",
-                                reqd: 1
-                            },
-                            {
-                                fieldname: "gender",
-                                label: "Gender",
-                                fieldtype: "Select",
-                                options: ["Male", "Female", "Other"],
-                                reqd: 1
-                            },
-                            {
-                                fieldname: "interview_place",
-                                label: "Interview Place",
-                                fieldtype: "Link",
-                                options: "Interview Place",
-                                reqd: 1
-                            }
-                        ],
-
-                        primary_action_label: "Submit",
-
-                        primary_action(values) {
-                            d.hide()
-                            frappe.call({
-                                method: "po_wo_pr.irs.doctype.inward_document.inward_document.create_student_and_set_maa_code",
-                                args: {
-                                    student_name: frm.doc.sender,
-                                    gender: values.gender,
-                                    interview_place: values.interview_place,
-                                    maa_branch: values.maa_branch,
-                                    application_receive_date: frm.doc.date,
-                                    townvillage: frm.doc.place,
-                                    taluka: frm.doc.taluka,
-                                    mob_no: frm.doc.mob_no,
-                                    district: frm.doc.district,
-                                    state: frm.doc.state,
-                                    parent_doc: frm.doc.name
+                        let d = new frappe.ui.Dialog({
+                            title: "Add Interview Details",
+                            fields: [
+                                {
+                                    fieldname: "maa_branch",
+                                    label: "Maa Branch",
+                                    fieldtype: "Link",
+                                    options: "Maa Branches",
+                                    reqd: 1
                                 },
-                                freeze:true,
-                                callback(res) {
-                                    if (!res.exc && res.message) {
-                                        frm.reload_doc();
-                                        frappe.msgprint(__("Student Entry Created: " + res.message));
-                                    }
+                                {
+                                    fieldname: "gender",
+                                    label: "Gender",
+                                    fieldtype: "Select",
+                                    options: ["Male", "Female", "Other"],
+                                    reqd: 1
+                                },
+                                {
+                                    fieldname: "interview_place",
+                                    label: "Interview Place",
+                                    fieldtype: "Link",
+                                    options: "Interview Place",
+                                    reqd: 1
                                 }
-                            });
+                            ],
+
+                            primary_action_label: "Submit",
+
+                            primary_action(values) {
+                                d.hide()
+                                frappe.call({
+                                    method: "po_wo_pr.irs.doctype.inward_document.inward_document.create_student_and_set_maa_code",
+                                    args: {
+                                        student_name: frm.doc.sender,
+                                        gender: values.gender,
+                                        interview_place: values.interview_place,
+                                        maa_branch: values.maa_branch,
+                                        application_receive_date: frm.doc.date,
+                                        townvillage: frm.doc.place,
+                                        taluka: frm.doc.taluka,
+                                        mob_no: frm.doc.mob_no,
+                                        district: frm.doc.district,
+                                        state: frm.doc.state,
+                                        parent_doc: frm.doc.name
+                                    },
+                                    freeze: true,
+                                    callback(res) {
+                                        if (!res.exc && res.message) {
+                                            frm.reload_doc();
+                                            frappe.msgprint(__("Student Entry Created: " + res.message));
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                        d.show();
+
+                        if (employee_branch) {
+                            d.set_value("maa_branch", employee_branch);
                         }
-                    });
-
-                    d.show();
-
-                    if (employee_branch) {
-                        d.set_value("maa_branch", employee_branch);
                     }
-                }
+                });
             });
-        });
-      }
+        }
     }
 });
