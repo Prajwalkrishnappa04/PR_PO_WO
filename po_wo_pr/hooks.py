@@ -54,7 +54,8 @@ doctype_list_js = {
     "Purchase Order": "public/js/purchase_order_list.js",
     "Supplier Quotation": "public/js/supplier_quotation_list.js",
     "Outward Documents": "public/js/outward_list.js",
-    "Inward Outward Transit": "public/js/inward_outward_transit_list.js"
+    "Inward Outward Transit": "public/js/inward_outward_transit_list.js",
+    "Material Request": "public/js/material_request_list.js"
 }
 
 # include js in doctype views

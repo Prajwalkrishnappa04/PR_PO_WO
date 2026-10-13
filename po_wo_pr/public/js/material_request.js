@@ -2,9 +2,34 @@ frappe.ui.form.on("Material Request", {
     refresh(frm) {
         update_all_stock_balances(frm);
         update_contact_numbers(frm);
+
+        frm.add_custom_button(__('Delete Selected Items'), () => {
+            let grid = frm.fields_dict['items'].grid;
+            let selected_rows = grid.get_selected(); // Returns an array of row names/IDs
+
+            if (!selected_rows.length) {
+                frappe.msgprint(__('Please select at least one row from the items table first using the checkboxes.'));
+                return;
+            }
+
+            frappe.confirm(__('Are you sure you want to delete {0} selected item(s)?', [selected_rows.length]), () => {
+                // Filter out the selected rows from the items array
+                let updated_items = (frm.doc.items || []).filter(row => !selected_rows.includes(row.name));
+
+                // Update the table field and refresh the grid
+                frm.set_value('items', updated_items);
+                frm.refresh_field('items');
+
+                frappe.show_alert({
+                    message: __('Selected items removed successfully'),
+                    indicator: 'green'
+                });
+            });
+        }, __('Actions'));
     },
 
     onload(frm) {
+        // Filter disabled term selections
         frm.set_query("custom_term_selection", () => {
             return {
                 filters: {
@@ -27,9 +52,21 @@ frappe.ui.form.on("Material Request", {
     },
 
     tc_name(frm) {
-        // Term Selection wins over the single Terms Template
+        // If custom term selections exist, let them take priority
         if (get_selected_terms(frm).length) {
             setTimeout(() => set_terms_from_selection(frm), 300);
+            return;
+        }
+
+        // Standard tc_name fallback without calling broken ERPNext API
+        if (frm.doc.tc_name) {
+            frappe.db.get_value("Terms and Conditions", frm.doc.tc_name, "terms", (r) => {
+                if (r && r.terms) {
+                    frm.set_value("terms", r.terms);
+                }
+            });
+        } else {
+            frm.set_value("terms", "");
         }
     },
 
@@ -38,22 +75,40 @@ frappe.ui.form.on("Material Request", {
     }
 });
 
+frappe.ui.form.on("Material Request Item", {
+    item_code(frm, cdt, cdn) {
+        update_stock_balance(frm, cdt, cdn);
+    },
+
+    warehouse(frm, cdt, cdn) {
+        update_stock_balance(frm, cdt, cdn);
+    },
+
+    from_warehouse(frm, cdt, cdn) {
+        update_stock_balance(frm, cdt, cdn);
+    }
+});
+
+// Helper: Extract unique terms from custom_term_selection table
 function get_selected_terms(frm) {
     const selected = (frm.doc.custom_term_selection || [])
-        .map(row => row.terms)
+        // Replace 'terms' with the actual link fieldname in your child doctype
+        .map(row => row.terms || row.terms_and_conditions || row.tc_name)
         .filter(Boolean);
 
-    // keep the order of selection, drop duplicates
     return [...new Set(selected)];
 }
 
+// Helper: Set terms content based on selected term templates
 function set_terms_from_selection(frm) {
     const templates = get_selected_terms(frm);
 
     if (!templates.length) {
         if (frm.doc.tc_name) {
-            // fall back to the single Terms Template, if one is set
-            frm.trigger("tc_name");
+            // Fetch single tc_name terms directly from DB to avoid 404
+            frappe.db.get_value("Terms and Conditions", frm.doc.tc_name, "terms", (r) => {
+                frm.set_value("terms", r ? r.terms || "" : "");
+            });
         } else {
             frm.set_value("terms", "");
         }
@@ -71,20 +126,6 @@ function set_terms_from_selection(frm) {
         }
     });
 }
-
-frappe.ui.form.on("Material Request Item", {
-    item_code: function(frm, cdt, cdn) {
-        update_stock_balance(frm, cdt, cdn);
-    },
-
-    warehouse: function(frm, cdt, cdn) {
-        update_stock_balance(frm, cdt, cdn);
-    },
-
-    from_warehouse: function(frm, cdt, cdn) {
-        update_stock_balance(frm, cdt, cdn);
-    }
-});
 
 function update_all_stock_balances(frm) {
     (frm.doc.items || []).forEach(row => {
@@ -137,8 +178,7 @@ function update_contact_numbers(frm) {
             filters: [['name', 'in', names]],
             fields: ['name', 'name1', 'custom_contact_number']
         },
-        callback: function(r) {
-            console.log('Contact person fetch result:', r.message);
+        callback(r) {
             if (r.message) {
                 let lines = r.message.map(
                     d => `${d.name1}: ${d.custom_contact_number || '—'}`

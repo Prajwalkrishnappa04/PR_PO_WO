@@ -4,6 +4,7 @@ from frappe import _
 import frappe
 import math
 import re
+import json
 
 @frappe.whitelist()
 def bulk_inward_to_outward(docnames,extra_data=None):
@@ -460,11 +461,49 @@ def calculate_checkin_distance(doc, method=None):
         as_dict=True
     )
 
-    if shift_coords and shift_coords.get("latitude") and shift_coords.get("longitude"):
-        distance = haversine_distance(
-            doc.latitude,
-            doc.longitude,
-            shift_coords.latitude,
-            shift_coords.longitude
-        )
-        doc.custom_distance_to_shift_location = distance
+    # if shift_coords and shift_coords.get("latitude") and shift_coords.get("longitude"):
+    #     distance = haversine_distance(
+    #         doc.latitude,
+    #         doc.longitude,
+    #         shift_coords.latitude,
+    #         shift_coords.longitude
+    #     )
+    #     doc.custom_distance_to_shift_location = distance
+
+
+@frappe.whitelist()
+def cancel_and_delete_docs(doctype, items):
+    """
+    Automatically cancels submitted documents and deletes them along with drafts.
+    """
+    if isinstance(items, str):
+        items = json.loads(items)
+        
+    success_count = 0
+    failed_items = []
+    
+    for name in items:
+        try:
+            doc = frappe.get_doc(doctype, name)
+            
+            # Check if user has permission to delete this document
+            doc.check_permission("delete")
+            
+            # If the document is submitted (docstatus == 1), cancel it first
+            if doc.docstatus == 1:
+                doc.cancel()
+                
+            # Delete the document (handles Draft=0 and Cancelled=2)
+            doc.delete()
+            success_count += 1
+            
+        except Exception as e:
+            frappe.log_error(title=f"Failed to delete {doctype} {name}", message=str(e))
+            failed_items.append({"name": name, "error": str(e)})
+            
+    frappe.db.commit()
+    
+    return {
+        "success_count": success_count,
+        "failed_items": failed_items
+    }
