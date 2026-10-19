@@ -12,7 +12,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": null,
- "modified": "2026-08-21 14:42:19.499328",
+ "modified": "2026-10-14 16:54:15.740508",
  "modified_by": "Administrator",
  "module": "Maa Foundation Hr Customization",
  "name": "Maa Attendance",
@@ -30,9 +30,6 @@
   },
   {
    "role": "HR Manager"
-  },
-  {
-   "role": "Employee"
   }
  ],
  "snapshot_report": 0,

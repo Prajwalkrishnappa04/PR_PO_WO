@@ -115,7 +115,7 @@ def get_data(filters):
             if rec:
                 punch_in[key] = format_time(rec.custom_exact_in_time)
                 punch_out[key] = format_time(rec.custom_exact_out_time)
-                hours[key] = format_hours(rec.custom_work_hours)
+                hours[key] = format_time(rec.custom_work_hours)
                 status[key] = rec.status or "--"
 
                 if rec.status in ("Present", "Work From Home", "Half Day"):
@@ -168,8 +168,8 @@ def get_employees(filters):
         conditions["branch"] = filters.branch
     return frappe.get_all(
         "Employee", filters=conditions,
-        fields=["name", "employee_name", "branch"],
-        order_by="employee_name asc"
+        fields=["name", "employee_name", "branch", "date_of_joining"],
+        order_by="date_of_joining asc, employee_name asc"
     )
 
 
