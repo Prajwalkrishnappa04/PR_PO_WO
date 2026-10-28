@@ -36,6 +36,8 @@
   "tracking_url",
   "date",
   "column_break_doc2",
+  "check_date",
+  "check_number",
   "entry_by",
   "mail_sent",
   "amended_from",
@@ -50,7 +52,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Series",
-   "options": "OUTB-.#####.-.YYYY."
+   "options": "OUTB-.#####.-.YYYY.\nOUTV-.#####.-.YYYY."
   },
   {
    "fieldname": "section_break_basic",
@@ -274,14 +276,24 @@
    "fieldtype": "Link",
    "label": "Maa Branch",
    "options": "Branch"
+  },
+  {
+   "fieldname": "check_date",
+   "fieldtype": "Date",
+   "label": "Cheque Date"
+  },
+  {
+   "fieldname": "check_number",
+   "fieldtype": "Data",
+   "label": "Cheque Number"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 17:43:07.866996",
- "modified_by": "Administrator",
+ "modified": "2026-10-28 15:23:11.177692",
+ "modified_by": "siddhant@mail.hybrowlabs.com",
  "module": "IRS",
  "name": "Outward Documents",
  "naming_rule": "By \"Naming Series\" field",
