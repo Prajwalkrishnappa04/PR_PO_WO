@@ -179,7 +179,10 @@ def create_transit_records(docs, target_branch):
             "concern_person_name": concern_person_name,  # Stores full name (e.g. "Viraj Shukla")
             "student_name": getattr(outward_doc, "student_name", None),
             "subject": subject_val,
-            "status": "In Transit"
+            "status": "In Transit",
+            "project": getattr(outward_doc, "project", ""),
+            "subject": getattr(outward_doc, "subject", ""),
+            "doc_no": getattr(outward_doc, "doc_no", "")
         })
         transit_doc.insert(ignore_permissions=True)
         
