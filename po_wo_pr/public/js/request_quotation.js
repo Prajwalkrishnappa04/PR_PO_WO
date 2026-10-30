@@ -65,11 +65,11 @@ frappe.ui.form.on("Request for Quotation", {
         frappe.call({
             method: "po_wo_pr.api.request_for_quotation_data.get_any_supplier_qs",
             args: { rfq_name: frm.doc.name },
-            callback: function(r) {
+            callback: function (r) {
                 let has_sq = r.message && r.message != 0 ? true : false;
                 console.log("has_sq:", has_sq);
 
-                setTimeout(function() {
+                setTimeout(function () {
                     // Exact selector based on your DOM structure
                     let $tab = $(frm.wrapper)
                         .find('button.nav-link[data-fieldname="custom_tab_2"]')
@@ -85,9 +85,49 @@ frappe.ui.form.on("Request for Quotation", {
                 }, 500);
             }
         });
-    }
 
+        let $field = frm.fields_dict['custom_quotation_required_by'].$input;
+        let observer = null;
+
+        $field.on('focus click', function () {
+            // Watch the DOM for changes when the datepicker opens or changes months
+            if (observer) observer.disconnect();
+
+            observer = new MutationObserver(() => {
+                disablePastCells();
+            });
+
+            // Observe the document body for dynamic datepicker injections
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+
+        // Clean up observer when leaving the form or closing
+        frm.on('unload', () => {
+            if (observer) observer.disconnect();
+        });
+    }
 });
+
+function disablePastCells() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    document.querySelectorAll('.datepicker--cell.datepicker--cell-day').forEach(cell => {
+        let year = parseInt(cell.getAttribute('data-year'));
+        let month = parseInt(cell.getAttribute('data-month'));
+        let day = parseInt(cell.getAttribute('data-date'));
+
+        if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+            let cellDate = new Date(year, month, day);
+
+            if (cellDate < today) {
+                if (!cell.classList.contains('-disabled-')) {
+                    cell.classList.add('-disabled-');
+                }
+            }
+        }
+    });
+}
 
 frappe.ui.form.on("Request for Quotation Supplier", {
     send_email(frm) {
