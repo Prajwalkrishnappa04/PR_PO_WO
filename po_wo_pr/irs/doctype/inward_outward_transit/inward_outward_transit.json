@@ -17,10 +17,12 @@
   "maaudaan_code",
   "remark",
   "mediumpostage",
+  "doc_no",
   "column_break_gnpc",
   "concern_person_name",
   "date_of_receiving",
   "student_name",
+  "project",
   "subject",
   "section_break_visz",
   "status",
@@ -133,13 +135,24 @@
    "fieldname": "subject",
    "fieldtype": "Data",
    "label": "Subject"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "IRS Project"
+  },
+  {
+   "fieldname": "doc_no",
+   "fieldtype": "Data",
+   "label": "Doc No."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 12:26:22.863127",
+ "modified": "2026-10-23 16:28:21.890735",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "Inward Outward Transit",

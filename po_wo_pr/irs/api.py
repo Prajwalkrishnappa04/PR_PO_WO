@@ -179,7 +179,10 @@ def create_transit_records(docs, target_branch):
             "concern_person_name": concern_person_name,  # Stores full name (e.g. "Viraj Shukla")
             "student_name": getattr(outward_doc, "student_name", None),
             "subject": subject_val,
-            "status": "In Transit"
+            "status": "In Transit",
+            "project": getattr(outward_doc, "project", ""),
+            "subject": getattr(outward_doc, "subject", ""),
+            "doc_no": getattr(outward_doc, "doc_no", "")
         })
         transit_doc.insert(ignore_permissions=True)
         
@@ -191,7 +194,7 @@ def create_transit_records(docs, target_branch):
     return created_transit_records
 
 @frappe.whitelist()
-def receive_transit_to_inward(transit_names):
+def receive_transit_to_inward(transit_names,receiving_date):
     """
     Converts 'Inward Outward Transit' records into 'Inward Document' records
     and updates receiver info on the Transit record.
@@ -220,7 +223,7 @@ def receive_transit_to_inward(transit_names):
         # Create Inward Document
         inward_doc = frappe.get_doc({
             "doctype": "Inward Document",
-            "received_date": frappe.utils.today(),
+            "received_date": receiving_date,
             "date": frappe.utils.today(),
             "subject": outward.subject,
             "project": getattr(outward, "project", ""),
@@ -243,7 +246,7 @@ def receive_transit_to_inward(transit_names):
 
         # Update Transit Record with Receiving date and link to created Inward Document
         transit_doc.inward_reference = inward_doc.name
-        transit_doc.date_of_receiving = frappe.utils.today()
+        transit_doc.date_of_receiving = receiving_date
         transit_doc.status = "Received"
         transit_doc.save(ignore_permissions=True)
 
