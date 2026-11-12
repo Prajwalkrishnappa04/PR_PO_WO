@@ -2,6 +2,8 @@ import frappe
 
 
 def execute(filters=None):
+
+    branch = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "branch")
     data = frappe.db.sql("""
         SELECT
             pi.name,
@@ -26,10 +28,11 @@ def execute(filters=None):
         LEFT JOIN `tabDistrict` d
             ON pi.district = d.name
         WHERE ci.received = 0
+            AND (%(branch)s IS NULL OR pi.maa_branch = %(branch)s)
             AND application_status = 'Pending'
             AND pi.project IN ('IRS-PROJ-0001', 'IRS-PROJ-0002')
         ORDER BY pi.name
-    """, as_dict=True)
+    """, {"branch": branch}, as_dict=True)
 
     rows = []
 
