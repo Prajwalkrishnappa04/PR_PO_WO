@@ -1,0 +1,26 @@
+{
+ "content": null,
+ "creation": "2026-11-13 16:31:16.159383",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-11-14 11:17:56.282654",
+ "modified_by": "Administrator",
+ "module": "Maa Foundation Hr Customization",
+ "name": "vehicle-management",
+ "owner": "Administrator",
+ "page_name": "vehicle-management",
+ "roles": [
+  {
+   "role": "Administrator"
+  },
+  {
+   "role": "Vehicle Page User"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Vehicle Management"
+}
