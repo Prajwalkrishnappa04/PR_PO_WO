@@ -298,6 +298,9 @@ override_whitelisted_methods = {
 # override_doctype_dashboards = {
 # 	"Task": "po_wo_pr.task.get_dashboard_data"
 # }
+override_doctype_dashboards = {
+	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.get_dashboard_data"
+}
 
 # exempt linked doctypes from being automatically cancelled
 #
@@ -376,6 +379,8 @@ fixtures = [
             "Request for Quotation Supplier-send_email-default",
             "Request for Quotation-main-default_print_format",
             "Supplier Quotation-transaction_date-label",
+            "Request for Quotation-transaction_date-default",
+            "Request for Quotation Item-schedule_date-default",
             ]]
         }
     },
@@ -412,7 +417,10 @@ fixtures = [
             "Supplier Quotation-custom_term_selection",
             "Purchase Receipt-custom_term_selection",
             "Purchase Invoice-custom_term_selection",
-            "Purchase Order Item-custom_no_of_service"
+            "Purchase Order Item-custom_no_of_service",
+            "Material Request-custom_branch",
+            "Supplier Quotation-custom_tab_compare",
+            "Supplier Quotation-custom_compare"
 
             ]
             ]
@@ -444,6 +452,7 @@ fixtures = [
         "filters": [["name", "in", [
             "Supplier Quotation Approval",
             "Purchase Order Approval",
+            "Material request WF",
         ]]]
     },
 
