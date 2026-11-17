@@ -140,6 +140,7 @@ class VehicleGrid {
         { fieldname: "project", fieldtype: "Link", options: "Maa Project", label: "Project" },
         { fieldname: "team", fieldtype: "Data", label: "Team" },
         { fieldname: "total_passengers", fieldtype: "Int", label: "Total Passengers" },
+        { fieldname: "destination", fieldtype: "Data", label: "Destination" },
       ],
       primary_action_label: "Book",
       primary_action: (v) => {
@@ -163,6 +164,7 @@ class VehicleGrid {
         { fieldname: "project", fieldtype: "Link", options: "Maa Project", label: "Project", default: b.project },
         { fieldname: "team", fieldtype: "Data", label: "Team", default: b.team },
         { fieldname: "total_passengers", fieldtype: "Int", label: "Total Passengers", default: b.total_passengers },
+        { fieldname: "destination", fieldtype: "Data", label: "Destination", default: b.destination },
       ],
       primary_action_label: "Save",
       primary_action: (v) => {
@@ -190,7 +192,8 @@ class VehicleGrid {
           <b>Booked by:</b> ${e(b.employee_name || b.employee)}<br>
           <b>Project:</b> ${e(b.project_name || b.project || "-")}<br>
           <b>Team:</b> ${e(b.team || "-")}<br>
-          <b>Passengers:</b> ${b.total_passengers || "-"}</p>`
+          <b>Passengers:</b> ${b.total_passengers || "-"}<br>
+          <b>Destination:</b>${b.destination || "-"}</p>`
     );
 
     if (b.is_mine) {

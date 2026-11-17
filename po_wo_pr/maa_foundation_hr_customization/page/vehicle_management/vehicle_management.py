@@ -22,7 +22,7 @@ def get_day_data(date):
         "Maa Driver Allocation",
         filters={"allocation_date": date},
         fields=["name", "vehicle", "driver", "employee",
-                "start", "end", "team", "project", "total_passengers"],
+                "start", "end", "team", "project", "total_passengers", "destination"],
     )
 
     my_emp = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "name")
@@ -51,7 +51,7 @@ def get_day_data(date):
 
 @frappe.whitelist()
 def book(vehicle, driver, allocation_date, start, end,
-         team=None, project=None, total_passengers=None):
+         team=None, project=None, total_passengers=None, destination=None):
     doc = frappe.get_doc({
         "doctype": "Maa Driver Allocation",
         "employee": get_my_employee(),
@@ -63,6 +63,7 @@ def book(vehicle, driver, allocation_date, start, end,
         "team": team,
         "project": project,
         "total_passengers": total_passengers,
+        "destination": destination
     })
     doc.insert()
     return doc.name
@@ -89,7 +90,7 @@ def transfer(name, new_employee):
 
 
 @frappe.whitelist()
-def edit_booking(name, start, end, driver, team=None, project=None, total_passengers=None):
+def edit_booking(name, start, end, driver, team=None, project=None, total_passengers=None, destination=None):
     doc = frappe.get_doc("Maa Driver Allocation", name)
     if doc.employee != get_my_employee():
         frappe.throw(_("Only the creator can edit this booking"))
@@ -99,5 +100,6 @@ def edit_booking(name, start, end, driver, team=None, project=None, total_passen
     doc.team = team
     doc.project = project
     doc.total_passengers = total_passengers
+    doc.destination = destination
     doc.flags.ignore_permissions = True
     doc.save()  # runs validate() -> overlap check

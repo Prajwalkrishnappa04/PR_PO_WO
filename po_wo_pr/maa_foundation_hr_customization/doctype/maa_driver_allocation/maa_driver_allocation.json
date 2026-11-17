@@ -14,6 +14,7 @@
   "project",
   "team",
   "total_passengers",
+  "destination",
   "allocation_date"
  ],
  "fields": [
@@ -65,12 +66,17 @@
    "fieldname": "total_passengers",
    "fieldtype": "Int",
    "label": "Total Passengers"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-17 12:28:04.567618",
+ "modified": "2026-11-17 14:22:45.585523",
  "modified_by": "Administrator",
  "module": "Maa Foundation Hr Customization",
  "name": "Maa Driver Allocation",
