@@ -238,7 +238,12 @@ doc_events = {
 	},
 	"Request for Quotation": {
 		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
-	}
+	},
+	"Outward Documents": {
+		"validate": "po_wo_pr.irs.api.validate_inter_office_target",
+		"after_insert": "po_wo_pr.irs.api.create_inter_office_transit",
+		"on_update": "po_wo_pr.irs.api.create_inter_office_transit",
+	},
 }
 
 # Scheduled Tasks
@@ -381,6 +386,8 @@ fixtures = [
             "Supplier Quotation-transaction_date-label",
             "Request for Quotation-transaction_date-default",
             "Request for Quotation Item-schedule_date-default",
+            "Purchase Order Item-discount_and_margin_section-hidden",
+            "Supplier Quotation Item-discount_and_margin_section-hidden",
             ]]
         }
     },

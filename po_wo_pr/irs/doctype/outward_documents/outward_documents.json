@@ -43,7 +43,11 @@
   "amended_from",
   "remarks",
   "section_break_xqwz",
-  "maa_branch"
+  "maa_branch",
+  "section_break_transit",
+  "transit_status",
+  "column_break_transit",
+  "transit_record"
  ],
  "fields": [
   {
@@ -286,6 +290,34 @@
    "fieldname": "check_number",
    "fieldtype": "Data",
    "label": "Cheque Number"
+  },
+  {
+   "depends_on": "eval:doc.transit_record",
+   "fieldname": "section_break_transit",
+   "fieldtype": "Section Break",
+   "label": "Transit"
+  },
+  {
+   "fieldname": "transit_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Transit Status",
+   "no_copy": 1,
+   "options": "\nIn Transit\nReceived\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_transit",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transit_record",
+   "fieldtype": "Link",
+   "label": "Transit Record",
+   "no_copy": 1,
+   "options": "Inward Outward Transit",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

@@ -36,6 +36,15 @@ frappe.ui.form.on("Supplier Quotation", {
             frm.doc.__user_changed_terms = true;
         }
     },
+    valid_till(frm) {
+        // ERPNext auto-fills Valid Till = Quotation Date + 1 month on new docs, at a point in
+        // the form load we cannot time reliably. Clear exactly that value, whenever it lands,
+        // until the user touches the field.
+        if (!frm.is_new() || frm.doc.__valid_till_touched || !frm.doc.valid_till) return;
+        if (frm.doc.valid_till === frappe.datetime.add_months(frm.doc.transaction_date, 1)) {
+            frm.set_value("valid_till", "");
+        }
+    },
     custom_term_selection(frm) {
         set_terms_from_selection(frm);
     },
@@ -83,14 +92,11 @@ frappe.ui.form.on("Supplier Quotation", {
             hide_supplier_quotation_item_gst_fields(frm);
         }, 500);
 
-        // ERPNext auto-fills Valid Till = Quotation Date + 1 month on new docs; keep it blank
-        if (frm.is_new()) {
-            setTimeout(() => {
-                const auto = frappe.datetime.add_months(frm.doc.transaction_date, 1);
-                if (frm.is_new() && frm.doc.valid_till === auto) {
-                    frm.set_value("valid_till", "");
-                }
-            }, 300);
+        // Valid Till: once the user focuses the field it is theirs, never auto-clear it
+        if (frm.is_new() && frm.fields_dict.valid_till) {
+            frm.fields_dict.valid_till.$input
+                .off("focus.keep_blank")
+                .on("focus.keep_blank", () => { frm.doc.__valid_till_touched = true; });
         }
 
         render_rfq_comparison(frm);
