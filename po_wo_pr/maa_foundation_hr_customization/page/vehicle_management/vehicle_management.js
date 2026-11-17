@@ -1,11 +1,13 @@
 const API = "po_wo_pr.maa_foundation_hr_customization.page.vehicle_management.vehicle_management.";
-const START_HOUR = 6, END_HOUR = 20, STEP = 30; // 6 AM to 8 PM, minutes per cell
+const START_HOUR = 6, END_HOUR = 21, STEP = 30; // 6 AM to 9 PM, minutes per cell
 
 // Look and size, change here only
 const CELL_W = 56, CELL_H = 56;            // px
-const VEHICLE_COL_W = 150;
+const VEHICLE_COL_W = 220;
 
-const HEAD_BG = "#1e293b", HEAD_FG = "#f8fafc";   // slate header
+const HEAD_BG = "#1e293b", HEAD_FG = "#f8fafc";   // dark slate header
+const VEH_BG = "#e0e7ff", VEH_FG = "#1e1b4b";     // light indigo vehicle column
+const VEH_ACCENT = "#6366f1";                     // accent bar on the vehicle column
 const LINE = "#e2e8f0", HOUR_LINE = "#94a3b8";    // soft lines, stronger on the hour
 const ROW_A = "#ffffff", ROW_B = "#f1f5f9";       // zebra rows
 const HOVER_BG = "#dbeafe";
@@ -31,6 +33,7 @@ class VehicleGrid {
   constructor(page) {
     this.page = page;
     this.bookings = [];
+    this.vehicle_names = {};
     this.date_field = page.add_field({
       fieldname: "date", label: "Date", fieldtype: "Date",
       default: frappe.datetime.get_today(),
@@ -71,6 +74,7 @@ class VehicleGrid {
 
   render({ vehicles, bookings }) {
     this.bookings = bookings;
+    this.vehicle_names = Object.fromEntries(vehicles.map((v) => [v.name, v.model || v.name]));
     const e = frappe.utils.escape_html;
     const slots = [];
     for (let m = START_HOUR * 60; m < END_HOUR * 60; m += STEP) slots.push(m);
@@ -89,7 +93,7 @@ class VehicleGrid {
     vehicles.forEach((v, i) => {
       const rows = bookings.filter((b) => b.vehicle === v.name);
       const rowBg = i % 2 ? ROW_B : ROW_A;
-      html += `<tr><td class="vg-sticky" style="background:${HEAD_BG};color:${HEAD_FG};font-size:14px;font-weight:600;padding:0 14px;height:${CELL_H}px;border-bottom:1px solid #334155">${e(v.license_plate)}</td>`;
+      html += `<tr><td class="vg-sticky" title="${e(v.model || v.name)}" style="background:${VEH_BG};color:${VEH_FG};padding:0 14px;height:${CELL_H}px;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid #c7d2fe;box-shadow:inset 5px 0 0 ${VEH_ACCENT}">${e(v.model || v.name)}</td>`;
 
       let idx = 0;
       while (idx < slots.length) {
@@ -101,10 +105,18 @@ class VehicleGrid {
           let span = 1;                                      // merge consecutive covered slots
           while (idx + span < slots.length && covers(b, slots[idx + span])) span++;
           const bg = b.is_mine ? MINE_BG : OTHER_BG;
+          const driver = b.driver_name || b.driver;
+          const project = b.project_name || b.project || "";
+          const team = b.team || "";
+          const sub = [project, team].filter(Boolean).join(" - ");   // "ABC - Test Team"
+          const line = "overflow:hidden;text-overflow:ellipsis;white-space:nowrap;";
+
           html += `<td class="vg-booked" colspan="${span}" data-booking="${b.name}"
-            title="${e(b.driver_name || b.driver)} | ${e(b.team || "")} | ${b.start} - ${b.end}"
-            style="background:${bg};color:#fff;cursor:pointer;height:${CELL_H}px;padding:4px 8px;border:1px solid #fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12px;line-height:1.3">
-            <b>${e(b.driver_name || b.driver)}</b><br>${e(b.team || "")}</td>`;
+            title="${e(driver)} | ${e(sub)} | ${b.start} - ${b.end}"
+            style="background:${bg};color:#fff;cursor:pointer;height:${CELL_H}px;padding:4px 8px;border:1px solid #fff;overflow:hidden;line-height:1.3">
+            <div style="${line}font-size:12px;font-weight:700">${e(driver)}</div>
+            ${sub ? `<div style="${line}font-size:11px">${e(sub)}</div>` : ""}
+            </td>`;
           idx += span;
         } else {
           html += `<td class="vg-free" data-vehicle="${v.name}" data-min="${m}"
@@ -120,19 +132,43 @@ class VehicleGrid {
 
   book_dialog(vehicle, min) {
     const d = new frappe.ui.Dialog({
-      title: `Book ${vehicle}`,
+      title: `Book ${this.vehicle_names[vehicle] || vehicle}`,
       fields: [
         { fieldname: "start", fieldtype: "Time", label: "Start", reqd: 1, default: this.min_to_time(min) },
         { fieldname: "end", fieldtype: "Time", label: "End", reqd: 1, default: this.min_to_time(min + STEP) },
         { fieldname: "driver", fieldtype: "Link", options: "Driver", label: "Driver", reqd: 1 },
+        { fieldname: "project", fieldtype: "Link", options: "Maa Project", label: "Project" },
         { fieldname: "team", fieldtype: "Data", label: "Team" },
-        { fieldname: "project", fieldtype: "Data", label: "Project" },
+        { fieldname: "total_passengers", fieldtype: "Int", label: "Total Passengers" },
       ],
       primary_action_label: "Book",
       primary_action: (v) => {
         frappe.call({
           method: API + "book",
           args: { vehicle, allocation_date: this.date_field.get_value(), ...v },
+          callback: () => { d.hide(); this.load(); },
+        });
+      },
+    });
+    d.show();
+  }
+
+  edit_dialog(b) {
+    const d = new frappe.ui.Dialog({
+      title: `Edit ${this.vehicle_names[b.vehicle] || b.vehicle}`,
+      fields: [
+        { fieldname: "start", fieldtype: "Time", label: "Start", reqd: 1, default: b.start },
+        { fieldname: "end", fieldtype: "Time", label: "End", reqd: 1, default: b.end },
+        { fieldname: "driver", fieldtype: "Link", options: "Driver", label: "Driver", reqd: 1, default: b.driver },
+        { fieldname: "project", fieldtype: "Link", options: "Maa Project", label: "Project", default: b.project },
+        { fieldname: "team", fieldtype: "Data", label: "Team", default: b.team },
+        { fieldname: "total_passengers", fieldtype: "Int", label: "Total Passengers", default: b.total_passengers },
+      ],
+      primary_action_label: "Save",
+      primary_action: (v) => {
+        frappe.call({
+          method: API + "edit_booking",
+          args: { name: b.name, ...v },
           callback: () => { d.hide(); this.load(); },
         });
       },
@@ -148,11 +184,13 @@ class VehicleGrid {
       fields: [{ fieldtype: "HTML", fieldname: "info" }],
     });
     d.fields_dict.info.$wrapper.html(
-      `<p><b>Vehicle:</b> ${e(b.vehicle)}<br>
+      `<p><b>Vehicle:</b> ${e(this.vehicle_names[b.vehicle] || b.vehicle)}<br>
           <b>Driver:</b> ${e(b.driver_name || b.driver)}<br>
           <b>Time:</b> ${b.start} - ${b.end}<br>
           <b>Booked by:</b> ${e(b.employee_name || b.employee)}<br>
-          <b>Team:</b> ${e(b.team || "-")} | <b>Project:</b> ${e(b.project || "-")}</p>`
+          <b>Project:</b> ${e(b.project_name || b.project || "-")}<br>
+          <b>Team:</b> ${e(b.team || "-")}<br>
+          <b>Passengers:</b> ${b.total_passengers || "-"}</p>`
     );
 
     if (b.is_mine) {
@@ -178,6 +216,10 @@ class VehicleGrid {
           },
           "Transfer booking", "Transfer"
         );
+      });
+      d.add_custom_action("Edit", () => {
+        d.hide();
+        this.edit_dialog(b);
       });
     }
     d.show();
