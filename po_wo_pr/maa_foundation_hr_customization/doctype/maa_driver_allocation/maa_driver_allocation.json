@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:{project}-{allocation_date}-{####}",
  "creation": "2026-11-14 09:41:51.979314",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,8 +11,9 @@
   "end",
   "driver",
   "vehicle",
-  "team",
   "project",
+  "team",
+  "total_passengers",
   "allocation_date"
  ],
  "fields": [
@@ -50,22 +52,29 @@
   },
   {
    "fieldname": "project",
-   "fieldtype": "Data",
-   "label": "Project"
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Maa Project"
   },
   {
    "fieldname": "allocation_date",
    "fieldtype": "Date",
    "label": "Allocation Date"
+  },
+  {
+   "fieldname": "total_passengers",
+   "fieldtype": "Int",
+   "label": "Total Passengers"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-14 10:37:36.898396",
+ "modified": "2026-11-17 12:28:04.567618",
  "modified_by": "Administrator",
  "module": "Maa Foundation Hr Customization",
  "name": "Maa Driver Allocation",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

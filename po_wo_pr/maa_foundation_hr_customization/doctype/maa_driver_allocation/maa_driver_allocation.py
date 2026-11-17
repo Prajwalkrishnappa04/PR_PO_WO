@@ -1,23 +1,51 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import get_time
+from frappe.utils import get_time, getdate, nowdate
+from datetime import time
 
+
+OPEN_TIME = time(6, 0)
+CLOSE_TIME = time(21, 0)
+
+def fmt_time(t):
+    return get_time(t).strftime("%I:%M %p").lstrip("0")   # 06:00:00 -> 6:00 AM
 
 class MaaDriverAllocation(Document):
     def validate(self):
+        self.check_not_past()
         self.check_times()
         self.check_overlap("vehicle")
         self.check_overlap("driver")
 
     def check_times(self):
-        if get_time(self.start) >= get_time(self.end):
+        start, end = get_time(self.start), get_time(self.end)
+        if start >= end:
             frappe.throw(_("End time must be after start time"))
+        if start < OPEN_TIME or end > CLOSE_TIME:
+            frappe.throw(_("Bookings are only allowed between 6:00 AM and 9:00 PM"))
+
+    def check_not_past(self):
+        today = getdate(nowdate())
+
+        if self.is_new():
+            if getdate(self.allocation_date) < today:
+                frappe.throw(_("Cannot book on a past date"))
+            return
+
+        old = self.get_doc_before_save()   # the saved version, not the edited one
+        if old and getdate(old.allocation_date) < today:
+            frappe.throw(_("Past bookings cannot be modified"))
+
+    def on_trash(self):
+        if getdate(self.allocation_date) < getdate(nowdate()):
+            frappe.throw(_("Past bookings cannot be deleted"))
 
     def check_overlap(self, field):
         value = self.get(field)
         if not value:
             return
+
         clash = frappe.get_all(
             "Maa Driver Allocation",
             filters={
@@ -27,13 +55,24 @@ class MaaDriverAllocation(Document):
                 "start": ["<", self.end],
                 "end": [">", self.start],
             },
-            fields=["name", "start", "end"],
+            fields=["start", "end", "employee"],
             limit=1,
         )
-        if clash:
-            c = clash[0]
-            frappe.throw(
-                _("{0} {1} is already booked {2} to {3} ({4})").format(
-                    field.title(), value, c.start, c.end, c.name
-                )
-            )
+        if not clash:
+            return
+        c = clash[0]
+
+        if field == "driver":
+            what = _("driver")
+            who = frappe.db.get_value("Driver", value, "full_name") or value
+        else:
+            what = _("vehicle")
+            who = frappe.db.get_value("Vehicle", value, "model") or value
+        booker = frappe.db.get_value("Employee", c.employee, "employee_name") or c.employee
+
+        frappe.throw(
+            _("{0} is already booked from {1} to {2} by {3}. Please choose a different time or a different {4}.").format(
+                who, fmt_time(c.start), fmt_time(c.end), booker, what
+            ),
+            title=_("Slot not available"),
+        )
