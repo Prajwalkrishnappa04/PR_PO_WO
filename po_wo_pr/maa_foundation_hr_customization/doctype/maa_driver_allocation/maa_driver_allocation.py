@@ -1,7 +1,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import get_time, getdate, nowdate
+from frappe.utils import get_time, getdate, nowdate, today, add_days
 from datetime import time
 
 
@@ -17,6 +17,7 @@ class MaaDriverAllocation(Document):
         self.check_times()
         self.check_overlap("vehicle")
         self.check_overlap("driver")
+        self.check_future()
 
     def check_times(self):
         start, end = get_time(self.start), get_time(self.end)
@@ -24,6 +25,14 @@ class MaaDriverAllocation(Document):
             frappe.throw(_("End time must be after start time"))
         if start < OPEN_TIME or end > CLOSE_TIME:
             frappe.throw(_("Bookings are only allowed between 6:00 AM and 9:00 PM"))
+
+    def check_future(self):
+        booking_date = getdate(self.allocation_date)
+        today_date = getdate(today())
+        last_allowed_date = add_days(today_date, 2)
+
+        if booking_date > last_allowed_date:
+            frappe.throw(_("Bookings are allowed only for the next 3 days, including today"))
 
     def check_not_past(self):
         today = getdate(nowdate())
