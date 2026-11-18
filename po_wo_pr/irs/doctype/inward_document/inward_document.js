@@ -772,11 +772,11 @@ function toggle_office_note(frm) {
 	frappe.db.get_value(
 		"Employee",
 		{ user_id: frappe.session.user },
-		"custom_maa_branch",
+		"branch",
 		(r) => {
-			const branch = (r && r.custom_maa_branch) || "";
+			const branch = (r && r.branch) || "";
 			const is_vapi = branch.toLowerCase().includes("vapi");
-			frm.toggle_display("office_note", is_vapi);
+			frm.toggle_display("office_note_form", is_vapi);
 		}
 	);
 }

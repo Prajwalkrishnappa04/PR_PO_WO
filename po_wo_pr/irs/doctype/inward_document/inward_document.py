@@ -214,7 +214,7 @@ class InwardDocument(Document):
 		self.maa_branch = branch
 
 	def set_office_note_total_family_income(self):
-		if not self.office_note:
+		if not self.office_note_form:
 			return
 		self.office_note_total_family_income = (
 			(self.office_note_father_yearly_income or 0)
