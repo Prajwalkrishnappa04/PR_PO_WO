@@ -112,9 +112,13 @@ def get_transit_permission_conditions(user):
     return f"(`tabInward Outward Transit`.`receiver_branch` IN ({escaped_values}) OR `tabInward Outward Transit`.`sender_branch` IN ({escaped_values}))"
 
 def validate_inter_office_target(doc, method=None):
-    """An inter-office Outward Document needs a branch to receive its transit record."""
-    if doc.inter_office and not doc.to_branch:
-        frappe.throw(_("Select To (Branch) before saving an Inter Office Outward Document."))
+	"""An inter-office Outward Document needs a branch and Doc No before transit is created."""
+	if not doc.inter_office:
+		return
+	if not doc.to_branch:
+		frappe.throw(_("Select To (Branch) before saving an Inter Office Outward Document."))
+	if not doc.doc_no:
+		frappe.throw(_("Enter Doc No before saving an Inter Office Outward Document."))
 
 
 def create_inter_office_transit(doc, method=None):

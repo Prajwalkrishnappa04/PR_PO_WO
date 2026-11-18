@@ -384,7 +384,6 @@ fixtures = [
             "Request for Quotation Supplier-send_email-default",
             "Request for Quotation-main-default_print_format",
             "Supplier Quotation-transaction_date-label",
-            "Request for Quotation-transaction_date-default",
             "Request for Quotation Item-schedule_date-default",
             "Purchase Order Item-discount_and_margin_section-hidden",
             "Supplier Quotation Item-discount_and_margin_section-hidden",

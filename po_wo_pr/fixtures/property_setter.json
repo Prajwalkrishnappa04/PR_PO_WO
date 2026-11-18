@@ -1409,22 +1409,6 @@
  },
  {
   "default_value": null,
-  "doc_type": "Request for Quotation",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocField",
-  "field_name": "transaction_date",
-  "is_system_generated": 1,
-  "modified": "2026-11-16 12:31:14.453655",
-  "module": null,
-  "name": "Request for Quotation-transaction_date-default",
-  "property": "default",
-  "property_type": "Text",
-  "row_name": null,
-  "value": ""
- },
- {
-  "default_value": null,
   "doc_type": "Request for Quotation Item",
   "docstatus": 0,
   "doctype": "Property Setter",
