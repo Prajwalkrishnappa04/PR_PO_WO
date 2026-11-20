@@ -1,6 +1,6 @@
 import frappe
 from frappe import _
-from frappe.utils import escape_html, get_link_to_form
+from frappe.utils import escape_html
 
 
 def _clean(value):
@@ -9,7 +9,7 @@ def _clean(value):
 
 def _employee_bank_details(doc):
 	return {
-		"bank_name": _clean(doc.get("bank_name")),
+		"custom_bank": _clean(doc.get("custom_bank")),
 		"bank_ac_no": _clean(doc.get("bank_ac_no")),
 		"ifsc_code": _clean(doc.get("ifsc_code")),
 	}
@@ -17,7 +17,7 @@ def _employee_bank_details(doc):
 
 def _missing_labels(details):
 	labels = {
-		"bank_name": _("Bank Name"),
+		"custom_bank": _("Bank's Name"),
 		"bank_ac_no": _("Bank A/C No."),
 		"ifsc_code": _("IFSC Code"),
 	}
@@ -42,10 +42,6 @@ def _bank_exists(bank_name):
 	return frappe.db.get_value("Bank", bank_name, "name") == bank_name
 
 
-def _can_read_bank_account(name):
-	return bool(name) and frappe.has_permission("Bank Account", "read", doc=name)
-
-
 def create_bank_account_on_employee_update(doc, method=None):
 	"""Employee on_update (runs for insert and update): create a Bank Account from the
 	Employee bank details when none exists yet. Never creates a Bank, never modifies or
@@ -56,14 +52,14 @@ def create_bank_account_on_employee_update(doc, method=None):
 	if _missing_labels(details) or not employee_name:
 		return
 
-	bank_name, account_no, ifsc_code = details["bank_name"], details["bank_ac_no"], details["ifsc_code"]
+	bank_name, account_no, ifsc_code = details["custom_bank"], details["bank_ac_no"], details["ifsc_code"]
 
 	try:
 		if not _bank_exists(bank_name):
 			frappe.msgprint(
 				_(
 					"Bank Account was not created: Bank {0} does not exist in the Bank master. "
-					"Create the Bank first (or correct the Bank Name) and save the Employee again."
+					"Select a valid Bank's Name and save the Employee again."
 				).format(frappe.bold(escape_html(bank_name))),
 				title=_("Bank Account Not Created"),
 				indicator="orange",
@@ -126,13 +122,7 @@ def create_bank_account_on_employee_update(doc, method=None):
 			frappe.db.rollback(save_point=savepoint)
 			raise
 
-		frappe.msgprint(
-			_("Bank Account {0} created for {1}.").format(
-				get_link_to_form("Bank Account", bank_account.name), frappe.bold(escape_html(employee_name))
-			),
-			indicator="green",
-			alert=True,
-		)
+		frappe.msgprint(_("Account created"), indicator="green", alert=True)
 	except Exception:
 		frappe.log_error(
 			title=f"Employee Bank Account creation failed: {doc.name}",
@@ -149,51 +139,5 @@ def create_bank_account_on_employee_update(doc, method=None):
 
 
 def _notify_exists(bank_account):
-	if _can_read_bank_account(bank_account):
-		message = _("Bank Account {0} already exists.").format(get_link_to_form("Bank Account", bank_account))
-	else:
-		message = _("A Bank Account for these bank details already exists.")
-	frappe.msgprint(message, indicator="blue", alert=True)
+	frappe.msgprint(_("Account already exists"), indicator="blue", alert=True)
 
-
-@frappe.whitelist()
-def get_employee_bank_account_status(employee):
-	"""Status of the Bank Account matching the *saved* bank details of an Employee.
-
-	Requires read permission on the Employee. The Bank Account name is only returned
-	when the user may read that Bank Account."""
-	if not employee or not isinstance(employee, str):
-		frappe.throw(_("Employee is required"))
-
-	frappe.has_permission("Employee", "read", doc=employee, throw=True)
-
-	values = frappe.db.get_value(
-		"Employee",
-		employee,
-		["bank_name", "bank_ac_no", "ifsc_code"],
-		as_dict=True,
-	)
-	if not values:
-		frappe.throw(_("Employee {0} not found").format(escape_html(employee)), frappe.DoesNotExistError)
-
-	details = _employee_bank_details(values)
-	result = {"employee": employee, "saved": details, "state": None, "bank_account": None, "missing": []}
-
-	missing = _missing_labels(details)
-	if missing:
-		result.update(state="incomplete", missing=missing)
-		return result
-
-	existing = _find_bank_account(details["bank_name"], details["bank_ac_no"])
-	if existing:
-		result["state"] = "exists"
-		if _can_read_bank_account(existing):
-			result["bank_account"] = existing
-		return result
-
-	if not _bank_exists(details["bank_name"]):
-		result["state"] = "bank_missing"
-		return result
-
-	result["state"] = "not_created"
-	return result

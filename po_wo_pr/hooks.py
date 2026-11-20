@@ -398,6 +398,7 @@ fixtures = [
         "filters": [
             ["name", "in", [
                 "Item-custom_project",
+                "Employee-custom_bank",
                 "Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
                 "Expense Claim-custom_maa_project","Attendance-custom_work_hours",
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
