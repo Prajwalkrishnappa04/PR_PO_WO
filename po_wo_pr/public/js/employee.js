@@ -5,6 +5,7 @@ frappe.ui.form.on('Employee', {
     },
     refresh(frm) {
                 apply_exit_tab_visibility(frm);
+                refresh_employee_bank_status(frm);
 
                 let today = frappe.datetime.get_today();
                 let updated = false;
@@ -38,6 +39,10 @@ frappe.ui.form.on('Employee', {
             });
         }
     },
+    bank_name: refresh_employee_bank_status,
+    bank_ac_no: refresh_employee_bank_status,
+    ifsc_code: refresh_employee_bank_status,
+    employee_name: refresh_employee_bank_status,
     custom_same_as_current(frm){
         if(frm.doc.custom_same_as_current){
             frm.set_value("permanent_address",frm.doc.current_address)
@@ -57,6 +62,76 @@ frappe.ui.form.on('Employee', {
         calculate_experience(frm);
     }
 });
+
+function refresh_employee_bank_status(frm) {
+    const details = () => ({
+        bank_name: (frm.doc.bank_name || '').trim(),
+        bank_ac_no: (frm.doc.bank_ac_no || '').trim(),
+        ifsc_code: (frm.doc.ifsc_code || '').trim()
+    });
+    const identity = () => JSON.stringify([frm.doc.name, frm.doc.employee_name, details()]);
+    const requested_identity = identity();
+    const request = (frm.__bank_status_request || 0) + 1;
+    frm.__bank_status_request = request;
+    const is_current = () => frm.__bank_status_request === request && identity() === requested_identity;
+    const render = (message, account) => {
+        // Use the existing Bank Details section, not a persisted custom field.
+        const section = frm.fields_dict.bank_details_section;
+        if (!section || !section.wrapper) return;
+        const wrapper = $(section.wrapper);
+        wrapper.find('.employee-bank-account-status').remove();
+        const status = $('<div class="employee-bank-account-status small text-muted mb-3" role="status"></div>');
+        status.text(message);
+        if (account) {
+            status.append(' ');
+            $('<a></a>')
+                .text(__('View Bank Account'))
+                .attr('href', frappe.utils.get_form_link('Bank Account', account))
+                .appendTo(status);
+        }
+        const body = wrapper.find('.section-body').first();
+        status.insertBefore(body.length ? body : wrapper.children().first());
+    };
+    if (Object.values(details()).some(value => !value)) {
+        render(__('Bank Account: fill Bank Name, Bank A/C No. and IFSC Code to create on save.'));
+        return;
+    }
+    if (frm.is_new()) {
+        render(__('Bank Account: save this Employee to create or find the account.'));
+        return;
+    }
+    render(__('Bank Account: checking saved bank details…'));
+    frappe.call({
+        method: 'po_wo_pr.api.employee_bank_account.get_employee_bank_account_status',
+        args: {employee: frm.doc.name},
+        callback(r) {
+            if (!is_current()) return;
+            const status = r.message;
+            if (!status) {
+                render(__('Bank Account: status unavailable.'));
+                return;
+            }
+            if (status.employee !== frm.doc.name || Object.entries(details()).some(([key, value]) => status.saved[key] !== value)) {
+                render(__('Bank Account: bank details changed; save to create or find the matching account.'));
+                return;
+            }
+            if (status.state === 'exists') {
+                render(status.bank_account
+                    ? __('Bank Account: already exists for these bank details.')
+                    : __('Bank Account: already exists; you do not have access to view it.'), status.bank_account);
+            } else if (status.state === 'bank_missing') {
+                render(__('Bank Account: Bank Name must exactly match an existing Bank master. No account created.'));
+            } else if (status.state === 'incomplete') {
+                render(__('Bank Account: complete the bank details and save.'));
+            } else {
+                render(__('Bank Account: not created. Save with Bank Account create permission, or ask an authorized user.'));
+            }
+        },
+        error() {
+            if (is_current()) render(__('Bank Account: unable to read status. Check your access and refresh.'));
+        }
+    });
+}
 
 function calculate_experience(frm) {
     if (frm.doc.date_of_joining) {

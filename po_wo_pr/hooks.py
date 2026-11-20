@@ -177,6 +177,9 @@ override_doctype_class = {
 # ---------------
 
 doc_events = {
+	"Employee": {
+		"on_update": "po_wo_pr.api.employee_bank_account.create_bank_account_on_employee_update"
+	},
 	"Request for Quotation": {
 		"before_print": "po_wo_pr.api.request_for_quotation_data.set_supplier_for_print"
 	},
@@ -394,6 +397,7 @@ fixtures = [
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
+                "Item-custom_project",
                 "Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
                 "Expense Claim-custom_maa_project","Attendance-custom_work_hours",
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
