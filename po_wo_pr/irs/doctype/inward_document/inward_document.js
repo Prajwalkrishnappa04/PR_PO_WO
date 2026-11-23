@@ -768,6 +768,20 @@ function toggle_document_records(frm) {
     });
 }
 
+function toggle_office_note(frm) {
+	frappe.db.get_value(
+		"Employee",
+		{ user_id: frappe.session.user },
+		"branch",
+		(r) => {
+			const branch = (r && r.branch) || "";
+			const is_vapi = branch.toLowerCase().includes("vapi");
+			frm.toggle_display("office_note_form", is_vapi);
+		}
+	);
+}
+
+
 frappe.ui.form.on("Inward Document", {
     onload_post_render(frm) {
         setTimeout(() => set_row_wise_tab(frm), 300);
@@ -918,7 +932,8 @@ frappe.ui.form.on("Inward Document", {
     },
 
     refresh(frm) {
-        toggle_document_records(frm);
+		toggle_document_records(frm);
+		toggle_office_note(frm);
         setTimeout(() => set_row_wise_tab(frm), 300);
         watch_row_wise_tab(frm);
         load_project_subjects(frm);

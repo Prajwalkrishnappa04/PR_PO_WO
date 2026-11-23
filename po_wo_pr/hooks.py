@@ -177,6 +177,9 @@ override_doctype_class = {
 # ---------------
 
 doc_events = {
+	"Employee": {
+		"on_update": "po_wo_pr.api.employee_bank_account.create_bank_account_on_employee_update"
+	},
 	"Request for Quotation": {
 		"before_print": "po_wo_pr.api.request_for_quotation_data.set_supplier_for_print"
 	},
@@ -238,7 +241,12 @@ doc_events = {
 	},
 	"Request for Quotation": {
 		"validate": "po_wo_pr.overrides.enquiry_ref.set_ref_enquiry_no"
-	}
+	},
+	"Outward Documents": {
+		"validate": "po_wo_pr.irs.api.validate_inter_office_target",
+		"after_insert": "po_wo_pr.irs.api.create_inter_office_transit",
+		"on_update": "po_wo_pr.irs.api.create_inter_office_transit",
+	},
 }
 
 # Scheduled Tasks
@@ -298,6 +306,9 @@ override_whitelisted_methods = {
 # override_doctype_dashboards = {
 # 	"Task": "po_wo_pr.task.get_dashboard_data"
 # }
+override_doctype_dashboards = {
+	"Request for Quotation": "po_wo_pr.overrides.request_for_quotation.get_dashboard_data"
+}
 
 # exempt linked doctypes from being automatically cancelled
 #
@@ -376,6 +387,9 @@ fixtures = [
             "Request for Quotation Supplier-send_email-default",
             "Request for Quotation-main-default_print_format",
             "Supplier Quotation-transaction_date-label",
+            "Request for Quotation Item-schedule_date-default",
+            "Purchase Order Item-discount_and_margin_section-hidden",
+            "Supplier Quotation Item-discount_and_margin_section-hidden",
             ]]
         }
     },
@@ -383,6 +397,8 @@ fixtures = [
         "dt": "Custom Field",
         "filters": [
             ["name", "in", [
+                "Item-custom_project",
+                "Employee-custom_bank",
                 "Request for Quotation-custom_tab_2","Request for Quotation-custom_compare","Attendance-custom_half_day_type",
                 "Expense Claim-custom_maa_project","Attendance-custom_work_hours",
                 "Employee Checkin-custom_exact_time","Employee Checkin-custom_exact_date","Employee Checkin-custom_branch","Attendance-custom_branch","Attendance-custom_exact_out_time",
@@ -412,7 +428,10 @@ fixtures = [
             "Supplier Quotation-custom_term_selection",
             "Purchase Receipt-custom_term_selection",
             "Purchase Invoice-custom_term_selection",
-            "Purchase Order Item-custom_no_of_service"
+            "Purchase Order Item-custom_no_of_service",
+            "Material Request-custom_branch",
+            "Supplier Quotation-custom_tab_compare",
+            "Supplier Quotation-custom_compare"
 
             ]
             ]
@@ -444,6 +463,7 @@ fixtures = [
         "filters": [["name", "in", [
             "Supplier Quotation Approval",
             "Purchase Order Approval",
+            "Material request WF",
         ]]]
     },
 

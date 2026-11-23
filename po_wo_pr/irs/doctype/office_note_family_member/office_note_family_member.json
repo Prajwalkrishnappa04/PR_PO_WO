@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "creation": "2026-11-17 16:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "relation",
+  "details"
+ ],
+ "fields": [
+  {
+   "fieldname": "relation",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Relation",
+   "options": "\nBrother\nSister\nOther"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Education / Details"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-17 16:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "IRS",
+ "name": "Office Note Family Member",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
