@@ -1024,7 +1024,7 @@ frappe.ui.form.on("Inward Document", {
                                         gender: values.gender,
                                         interview_place: values.interview_place,
                                         maa_branch: values.maa_branch,
-                                        application_receive_date: frm.doc.date,
+                                        application_receive_date: frm.doc.received_date,
                                         townvillage: frm.doc.place,
                                         taluka: frm.doc.taluka,
                                         mob_no: frm.doc.mob_no,
