@@ -310,7 +310,7 @@ function set_default_branch(frm) {
         });
 }
 
-// Pulls contact persons and contact numbers text from the Request for
+// Pulls contact persons from the Request for
 // Quotation the first item row came from. Runs once per RFQ -- the guard
 // keeps repeated items_add events from re-fetching the same values.
 function fetch_contact_details(frm) {
@@ -343,13 +343,6 @@ function fetch_contact_details(frm) {
             }
         }
     });
-
-    frappe.db.get_value("Request for Quotation", rfq_name, "custom_contact_numbers")
-        .then(r => {
-            if (r.message && r.message.custom_contact_numbers) {
-                frm.set_value("custom_contact_numbers", r.message.custom_contact_numbers);
-            }
-        });
 }
 
 // Supplier Quotation Comparison tab: same layout as the one on Request for Quotation
