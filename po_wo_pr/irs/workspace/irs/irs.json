@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"irs_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>IRS</b></span>\",\"col\":12}},{\"id\":\"irs_sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Document\",\"col\":4}},{\"id\":\"irs_sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outward Documents\",\"col\":4}},{\"id\":\"irs_sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IRS Project\",\"col\":4}}]",
+ "content": "[{\"id\":\"irs_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>IRS</b></span>\",\"col\":12}},{\"id\":\"irs_sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Document\",\"col\":4}},{\"id\":\"irs_sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outward Documents\",\"col\":4}},{\"id\":\"irs_sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IRS Project\",\"col\":4}},{\"id\":\"C-szQebc1R\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending Inward Documents\",\"col\":3}}]",
  "creation": "2026-06-23 10:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -47,7 +47,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-09-25 10:59:19.046536",
+ "modified": "2026-11-23 10:11:51.480181",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "IRS",
@@ -59,6 +59,14 @@
  "roles": [],
  "sequence_id": 3.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Pending Inward Documents",
+   "link_to": "Pending Inward Documents",
+   "report_ref_doctype": "Inward Document",
+   "type": "Report"
+  },
   {
    "color": "Blue",
    "label": "Inward Document",
