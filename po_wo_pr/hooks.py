@@ -455,6 +455,10 @@ fixtures = [
     {
         "dt": "Workflow Action Master",
         "filters": [["name", "in", ["Send for Approval"]]]
+    },
+    {
+        "dt": "Custom HTML Block",
+        "filters":[["name", "in", ["IRS Report","IRS Inter-Branch","IRS Project","IRS Entries"]]]
     }
 
 ]
