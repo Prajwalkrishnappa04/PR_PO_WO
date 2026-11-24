@@ -11,7 +11,8 @@ def execute(filters=None):
             tv.townvillage,
             t.taluka,
             d.district,
-            pi.maa_code,
+            pi.maa_code AS student_id,
+            stu.maa_code AS maa_code,
             pi.udaan_maa_code,
             pi.sender,
             p.project_name as project,
@@ -27,6 +28,8 @@ def execute(filters=None):
             ON pi.taluka = t.name
         LEFT JOIN `tabDistrict` d
             ON pi.district = d.name
+        LEFT JOIN `tabStudent` stu
+            ON pi.maa_code = stu.name
         WHERE ci.received = 0
             AND (%(branch)s IS NULL OR pi.maa_branch = %(branch)s)
             AND application_status = 'Pending'
@@ -54,6 +57,7 @@ def execute(filters=None):
                     "townvillage": row["townvillage"],
                     "taluka": row["taluka"],
                     "district": row["district"],
+                    "student_id": row["student_id"],
                     "maa_code": row["maa_code"],
                     "udaan_maa_code": row["udaan_maa_code"],
                     "sender": row["sender"],
@@ -76,7 +80,7 @@ def execute(filters=None):
             "label": "Sender",
             "fieldname": "sender",
             "fieldtype": "Data",
-            "width": 150
+            "width": 300
         },
         {
             "label": "Mobile No",
@@ -106,14 +110,14 @@ def execute(filters=None):
             "label": "Maa Code",
             "fieldname": "maa_code",
             "fieldtype": "Link",
-            "options":"Student",
+            "options": "Student",
             "width": 100
         },
         {
             "label": "Udaan Maa Code",
             "fieldname": "udaan_maa_code",
             "fieldtype": "Link",
-            "options":"Udaan Student",
+            "options": "Udaan Student",
             "width": 100
         },
         {
@@ -126,7 +130,7 @@ def execute(filters=None):
             "label": "Pending Documents",
             "fieldname": "pending_doc_str",
             "fieldtype": "Data",
-            "width": 250
+            "width": 350
         },
         {
             "label": "WhatsApp",
@@ -147,7 +151,7 @@ def execute(filters=None):
             "townvillage": row["townvillage"],
             "taluka": row["taluka"],
             "district": row["district"],
-            "maa_code": row["maa_code"],
+            "maa_code": row["maa_code"] or row["student_id"],
             "udaan_maa_code": row["udaan_maa_code"],
             "sender": row["sender"],
             "project": row["project"],
@@ -177,5 +181,4 @@ def execute(filters=None):
         }
     ]
 
-    
     return columns, data, None, None, report_summary
