@@ -1,7 +1,7 @@
 frappe.listview_settings['Outward Documents'] = {
     onload: function (listview) {
         // Adds button to the top toolbar
-        listview.page.add_inner_button(__('Send Bulk to Transit'), function () {
+        const bulk_btn = listview.page.add_inner_button(__('Send Bulk to Transit'), function () {
             let selected_docs = listview.get_checked_items();
 
             if (selected_docs.length === 0) {
@@ -10,6 +10,11 @@ frappe.listview_settings['Outward Documents'] = {
             }
 
             open_target_branch_dialog(listview, selected_docs);
+        });
+        bulk_btn.removeClass('btn-default').css({
+            'background-color': '#2490ef',
+            'border-color': '#2490ef',
+            'color': '#fff'
         });
 
         // Adds item inside the 'Actions' dropdown when checkboxes are selected

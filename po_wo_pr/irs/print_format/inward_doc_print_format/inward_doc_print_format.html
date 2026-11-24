@@ -1,0 +1,369 @@
+<style>
+	.office-note-print {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		color: #000;
+		line-height: 1.35;
+	}
+	.office-note-print * {
+		box-sizing: border-box;
+	}
+	.office-note-print .title {
+		text-align: center;
+		font-weight: 700;
+		font-size: 15px;
+		margin: 0 0 8px 0;
+	}
+	.office-note-print table {
+		width: 100%;
+		border-collapse: collapse;
+		table-layout: fixed;
+		margin: 0;
+	}
+	.office-note-print td {
+		border: 1px solid #000;
+		padding: 5px 6px;
+		vertical-align: middle;
+		word-break: break-word;
+		overflow-wrap: anywhere;
+	}
+	.office-note-print .lbl {
+		font-weight: 700;
+	}
+	.office-note-print .section {
+		font-weight: 700;
+		background: #f3f3f3;
+		text-align: left;
+	}
+	.office-note-print .note-box {
+		min-height: 72px;
+		vertical-align: top;
+	}
+	.office-note-print .sig td {
+		height: 52px;
+		vertical-align: top;
+	}
+	.office-note-print .yes {
+		font-weight: 700;
+	}
+	.office-note-print .opt {
+		white-space: nowrap;
+		display: inline-block;
+		margin-right: 14px;
+	}
+	.office-note-print .stack {
+		margin-top: -1px;
+	}
+</style>
+
+{%- macro money(v) -%}
+{%- if v -%}{{ "{:,.0f}".format(v|float) }}/-{%- endif -%}
+{%- endmacro -%}
+
+{%- macro money_monthly(v) -%}
+{%- if v -%}{{ "{:,.0f}".format(v|float) }}/- ( {{ "{:,.0f}".format((v|float) / 12) }}/- Monthly ){%- endif -%}
+{%- endmacro -%}
+
+{%- macro course_name(name) -%}
+{%- if name -%}{{ frappe.db.get_value("Course Master", name, "course") or name }}{%- endif -%}
+{%- endmacro -%}
+
+{%- macro category_name(name) -%}
+{%- if name -%}{{ frappe.db.get_value("Category", name, "category") or name }}{%- endif -%}
+{%- endmacro -%}
+
+{%- macro user_name(name) -%}
+{%- if name -%}{{ frappe.db.get_value("User", name, "full_name") or name }}{%- endif -%}
+{%- endmacro -%}
+
+{%- macro link_title(doctype, name, field) -%}
+{%- if name -%}{{ frappe.db.get_value(doctype, name, field) or name }}{%- endif -%}
+{%- endmacro -%}
+
+{%- macro yes_no(flag) -%}
+{%- if flag -%}<span class="yes">Yes</span>{%- endif -%}
+{%- endmacro -%}
+
+{%- set cat = category_name(doc.office_note_category) -%}
+
+<div class="office-note-print">
+	<div class="title">Office note - New Application for Scholarship ({{ doc.name }})</div>
+
+	<table>
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:12%">
+			<col style="width:14%">
+			<col style="width:12%">
+			<col style="width:12%">
+			<col style="width:36%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Date:</td>
+			<td>{{ frappe.utils.formatdate(doc.date) if doc.date else "" }}</td>
+			<td class="lbl">Application No.</td>
+			<td>{{ doc.office_note_application_no or "" }}</td>
+			<td class="lbl">Reference:</td>
+			<td>{{ link_title("Reference", doc.refered_by, "referee_by") }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:86%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Case:</td>
+			<td>
+				<span class="opt">General {{ yes_no(doc.office_note_case_general) }}</span>
+				<span class="opt">Girls Scholarship {{ yes_no(doc.office_note_girls_scholarship) }}</span>
+				<span class="opt">Widow {{ yes_no(doc.office_note_widow) }}</span>
+				<span class="opt">Orphan {{ yes_no(doc.office_note_orphan) }}</span>
+				<span class="opt">Single {{ yes_no(doc.office_note_single) }}</span>
+			</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:36%">
+			<col style="width:14%">
+			<col style="width:36%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Category:</td>
+			<td>{{ cat }}</td>
+			<td class="lbl">Community:</td>
+			<td>{{ doc.office_note_community or "" }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:36%">
+			<col style="width:14%">
+			<col style="width:14%">
+			<col style="width:10%">
+			<col style="width:12%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Student name:</td>
+			<td>{{ doc.office_note_student_name or "" }}</td>
+			<td class="lbl">City / Village:</td>
+			<td>{{ link_title("Town Village", doc.place, "townvillage") or doc.place or "" }}</td>
+			<td class="lbl">Taluka:</td>
+			<td>{{ link_title("Taluka", doc.taluka, "taluka") or doc.taluka or "" }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:86%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Contact No:</td>
+			<td>{{ doc.mob_no or "" }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<tr><td class="section">Admission Details</td></tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:42%">
+			<col style="width:14%">
+			<col style="width:26%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Previous year Course:</td>
+			<td>{{ course_name(doc.office_note_previous_course) }}</td>
+			<td class="lbl">Previous %:</td>
+			<td>
+				{%- if doc.office_note_previous_percentage -%}
+				{{ "%.2f"|format(doc.office_note_previous_percentage|float) }}
+				{%- endif -%}
+			</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:82%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Present Course:</td>
+			<td>{{ course_name(doc.office_note_present_course) }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:82%">
+		</colgroup>
+		<tr>
+			<td class="lbl">College/School name:</td>
+			<td>{{ doc.office_note_college_school or "" }}</td>
+		</tr>
+		<tr>
+			<td class="lbl">School/College fees:</td>
+			<td>
+				<span class="opt">College Fees_{{ money(doc.office_note_college_fees) }}</span>
+				<span class="opt">Hostel Fees_{{ money(doc.office_note_hostel_fees) }}</span>
+				<span class="opt">Food Expenss_{{ money(doc.office_note_food_expenses) }}</span>
+			</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<tr><td class="section">Family details</td></tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:32%">
+			<col style="width:14%">
+			<col style="width:36%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Father Occupation:</td>
+			<td>{{ doc.office_note_father_occupation or "" }}</td>
+			<td class="lbl">Yearly Income:</td>
+			<td>{{ money_monthly(doc.office_note_father_yearly_income) }}</td>
+		</tr>
+		<tr>
+			<td class="lbl">Mother Occupation:</td>
+			<td>{{ doc.office_note_mother_occupation or "" }}</td>
+			<td class="lbl">Yearly Income:</td>
+			<td>{{ money_monthly(doc.office_note_mother_yearly_income) }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:14%">
+			<col style="width:16%">
+			<col style="width:14%">
+			<col style="width:20%">
+			<col style="width:18%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Total Family members:</td>
+			<td>{{ doc.office_note_total_family_members if doc.office_note_total_family_members is not none else "" }}</td>
+			<td class="lbl">No of children:</td>
+			<td>{{ doc.office_note_no_of_children if doc.office_note_no_of_children is not none else "" }}</td>
+			<td class="lbl">No of Earning members:</td>
+			<td>{{ doc.office_note_no_of_earning_members if doc.office_note_no_of_earning_members is not none else "" }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:82%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Total Family Income:</td>
+			<td>{{ money_monthly(doc.office_note_total_family_income) }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:18%">
+			<col style="width:82%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Other Family Members:</td>
+			<td>
+				{%- if doc.office_note_family_members -%}
+					{%- for row in doc.office_note_family_members -%}
+						<span class="opt">{{ row.relation or "" }}{% if row.details %}_{{ row.details }}{% endif %}</span>
+					{%- endfor -%}
+				{%- endif -%}
+			</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:16%">
+			<col style="width:20%">
+			<col style="width:10%">
+			<col style="width:20%">
+			<col style="width:10%">
+			<col style="width:24%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Agricultural land:</td>
+			<td>{{ doc.office_note_agricultural_land or "" }}</td>
+			<td class="lbl">Crops:</td>
+			<td>{{ doc.office_note_crops or "" }}</td>
+			<td class="lbl">Income:</td>
+			<td>{{ money(doc.office_note_agri_income) }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:86%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Office note:</td>
+			<td class="note-box">{{ doc.office_note_text or "" }}</td>
+		</tr>
+	</table>
+
+	<table class="stack">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:12%">
+			<col style="width:10%">
+			<col style="width:10%">
+			<col style="width:12%">
+			<col style="width:10%">
+			<col style="width:10%">
+			<col style="width:22%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Application No.</td>
+			<td>{{ doc.office_note_application_no or "" }}</td>
+			<td class="lbl">Approved</td>
+			<td>{% if doc.office_note_decision == "Approved" %}<span class="yes">Yes</span>{% endif %}</td>
+			<td class="lbl">Not Approved</td>
+			<td>{% if doc.office_note_decision == "Not Approved" %}<span class="yes">Yes</span>{% endif %}</td>
+			<td class="lbl">Reason</td>
+			<td>{{ doc.office_note_decision_reason or "" }}</td>
+		</tr>
+	</table>
+
+	<table class="stack sig">
+		<colgroup>
+			<col style="width:14%">
+			<col style="width:20%">
+			<col style="width:12%">
+			<col style="width:20%">
+			<col style="width:12%">
+			<col style="width:22%">
+		</colgroup>
+		<tr>
+			<td class="lbl">Prepared by:</td>
+			<td>{{ user_name(doc.office_note_prepared_by) }}</td>
+			<td class="lbl">Checked by:</td>
+			<td>{{ user_name(doc.office_note_checked_by) }}</td>
+			<td class="lbl">Approved by:</td>
+			<td>{{ user_name(doc.office_note_approved_by) }}</td>
+		</tr>
+	</table>
+</div>

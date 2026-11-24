@@ -36,6 +36,15 @@ frappe.ui.form.on("Supplier Quotation", {
             frm.doc.__user_changed_terms = true;
         }
     },
+    valid_till(frm) {
+        // ERPNext auto-fills Valid Till = Quotation Date + 1 month on new docs, at a point in
+        // the form load we cannot time reliably. Clear exactly that value, whenever it lands,
+        // until the user touches the field.
+        if (!frm.is_new() || frm.doc.__valid_till_touched || !frm.doc.valid_till) return;
+        if (frm.doc.valid_till === frappe.datetime.add_months(frm.doc.transaction_date, 1)) {
+            frm.set_value("valid_till", "");
+        }
+    },
     custom_term_selection(frm) {
         set_terms_from_selection(frm);
     },
@@ -82,6 +91,15 @@ frappe.ui.form.on("Supplier Quotation", {
             $(frm.wrapper).find('[data-label="Quotation"]').hide();
             hide_supplier_quotation_item_gst_fields(frm);
         }, 500);
+
+        // Valid Till: once the user focuses the field it is theirs, never auto-clear it
+        if (frm.is_new() && frm.fields_dict.valid_till) {
+            frm.fields_dict.valid_till.$input
+                .off("focus.keep_blank")
+                .on("focus.keep_blank", () => { frm.doc.__valid_till_touched = true; });
+        }
+
+        render_rfq_comparison(frm);
     },
     items_add(frm) {
         hide_supplier_quotation_item_gst_fields(frm);
@@ -292,7 +310,7 @@ function set_default_branch(frm) {
         });
 }
 
-// Pulls contact persons and contact numbers text from the Request for
+// Pulls contact persons from the Request for
 // Quotation the first item row came from. Runs once per RFQ -- the guard
 // keeps repeated items_add events from re-fetching the same values.
 function fetch_contact_details(frm) {
@@ -325,11 +343,136 @@ function fetch_contact_details(frm) {
             }
         }
     });
+}
 
-    frappe.db.get_value("Request for Quotation", rfq_name, "custom_contact_numbers")
-        .then(r => {
-            if (r.message && r.message.custom_contact_numbers) {
-                frm.set_value("custom_contact_numbers", r.message.custom_contact_numbers);
+// Supplier Quotation Comparison tab: same layout as the one on Request for Quotation
+function render_rfq_comparison(frm) {
+    const field = frm.fields_dict.custom_compare;
+    if (!field) return;
+
+    const $tab = $(frm.wrapper)
+        .find('button.nav-link[data-fieldname="custom_tab_compare"]')
+        .closest("li.nav-item");
+
+    // No RFQ behind this quotation: nothing to compare, hide the tab
+    const has_rfq = (frm.doc.items || []).some(row => row.request_for_quotation);
+    if (!has_rfq || frm.is_new()) {
+        $tab.hide();
+        return;
+    }
+
+    frappe.call({
+        method: "po_wo_pr.api.supplier_quotation_data.get_rfq_comparison_for_supplier_quotation",
+        args: { sq_name: frm.doc.name },
+        callback(r) {
+            const blocks = r.message || [];
+            if (!blocks.length) {
+                $tab.hide();
+                return;
             }
+            $tab.show();
+            field.$wrapper.html(build_rfq_comparison_html(blocks));
+        }
+    });
+}
+
+function build_rfq_comparison_html(blocks) {
+    const esc = frappe.utils.escape_html;
+    const currency = v => frappe.format(v, { fieldtype: "Currency" });
+
+    let html = `
+        <style>
+            .sqc-container { margin-top: 15px; overflow-x: auto; }
+            .sqc-table { width: 100%; border-collapse: collapse; min-width: 820px; font-size: 13px; }
+            .sqc-table th, .sqc-table td { border: 1px solid #d1d8dd; padding: 8px 10px; text-align: left; white-space: nowrap; vertical-align: middle; }
+            .sqc-table th { background: #f7f7f7; font-weight: 600; color: #36414c; text-align: center; }
+            .sqc-table td.item-cell { font-weight: 500; color: #1f272e; }
+            .sqc-table td.uom-cell, .sqc-table td.qty-cell, .sqc-table td.no-cell { text-align: center; color: #36414c; }
+            .sqc-table td.rate-cell, .sqc-table td.discount-cell, .sqc-table td.amount-cell { text-align: right; }
+            .sqc-table tbody tr:nth-child(even) { background: #fafbfc; }
+            .sqc-table tbody tr:hover { background: #f0f4f7; }
+            .sqc-table .no-quote { color: #999; font-style: italic; text-align: center !important; }
+            .sqc-header { display: flex; align-items: center; margin-bottom: 10px; }
+            .sqc-header h5 { margin: 0; color: #36414c; }
+            .sqc-count { margin-left: 10px; font-size: 12px; color: #6c7680; }
+            .sqc-item-start td { border-top: 2px solid #c7d0d9; }
+            .sqc-best-rate { background: #d4edda !important; font-weight: bold; color: #155724; }
+        </style>
+    `;
+
+    blocks.forEach(block => {
+        const suppliers = block.suppliers || [];
+        const itemKeys = Object.keys(block.items || {});
+
+        html += `
+            <div class="sqc-container">
+                <div class="sqc-header">
+                    <h5>Supplier Quotation Comparison - ${esc(block.rfq)}</h5>
+                    <span class="sqc-count">(${suppliers.length} Supplier)</span>
+                </div>
+        `;
+
+        if (!itemKeys.length || !suppliers.length) {
+            html += `<p class="text-muted">No items or suppliers found in ${esc(block.rfq)}.</p></div>`;
+            return;
+        }
+
+        html += `
+            <table class="sqc-table">
+                <thead>
+                    <tr>
+                        <th style="width: 55px;">No.</th>
+                        <th style="text-align:left; min-width: 220px;">Item Name</th>
+                        <th style="width: 80px;">Qty</th>
+                        <th style="width: 90px;">UOM</th>
+                        <th style="text-align:left; min-width: 180px;">Supplier</th>
+                        <th style="width: 120px;">Rate</th>
+                        <th style="width: 110px;">Discount</th>
+                        <th style="width: 130px;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        itemKeys.forEach((key, itemIndex) => {
+            const item = block.items[key];
+            const rates = suppliers
+                .map(s => Number((item.suppliers[s] || {}).rate || 0))
+                .filter(r => r > 0);
+            const bestRate = rates.length ? Math.min(...rates) : null;
+
+            suppliers.forEach((supplier, idx) => {
+                const d = item.suppliers[supplier] || {};
+                const rate = Number(d.rate || 0);
+                const amount = Number(d.amount || 0);
+                const pct = Number(d.discount_percentage || 0);
+                const disc = Number(d.discount_amount || 0);
+                const discountDisplay = pct > 0 ? `${pct}%` : disc > 0 ? currency(disc) : "-";
+
+                const classes = [];
+                if (idx === 0) classes.push("sqc-item-start");
+                if (rate > 0 && bestRate !== null && rate === bestRate) classes.push("sqc-best-rate");
+
+                html += `<tr class="${classes.join(" ")}">`;
+                if (idx === 0) {
+                    html += `
+                        <td class="no-cell" rowspan="${suppliers.length}">${itemIndex + 1}</td>
+                        <td class="item-cell" rowspan="${suppliers.length}">${esc(item.item_name || item.item_code || key)}</td>
+                        <td class="qty-cell" rowspan="${suppliers.length}">${item.qty || "-"}</td>
+                        <td class="uom-cell" rowspan="${suppliers.length}">${esc(item.uom || "-")}</td>
+                    `;
+                }
+                html += `
+                    <td class="supplier-cell">${esc(supplier)}</td>
+                    <td class="${rate ? "rate-cell" : "no-quote"}">${rate ? currency(rate) : "-"}</td>
+                    <td class="${discountDisplay !== "-" ? "discount-cell" : "no-quote"}">${discountDisplay}</td>
+                    <td class="${amount ? "amount-cell" : "no-quote"}">${amount ? currency(amount) : "-"}</td>
+                </tr>`;
+            });
         });
+
+        html += `</tbody></table></div>`;
+    });
+
+    return html;
 }

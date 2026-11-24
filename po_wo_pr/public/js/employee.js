@@ -58,6 +58,7 @@ frappe.ui.form.on('Employee', {
     }
 });
 
+
 function calculate_experience(frm) {
     if (frm.doc.date_of_joining) {
         let doj = moment(frm.doc.date_of_joining);

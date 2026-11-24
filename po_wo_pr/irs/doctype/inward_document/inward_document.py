@@ -213,11 +213,21 @@ class InwardDocument(Document):
 		branch = frappe.db.get_value("Employee", {"user_id":current_user}, "branch")
 		self.maa_branch = branch
 
+	def set_office_note_total_family_income(self):
+		if not self.office_note_form:
+			return
+		self.office_note_total_family_income = (
+			(self.office_note_father_yearly_income or 0)
+			+ (self.office_note_mother_yearly_income or 0)
+			+ (self.office_note_agri_income or 0)
+		)
+
 	#before save hook
 	def before_save(self):
 		self.save_entry_By()
 		self.set_receiving_dates()
 		self.add_branch()
+		self.set_office_note_total_family_income()
 
 	def autoname(self):
 		employee = frappe.db.get_value(

@@ -12,3 +12,5 @@ po_wo_pr.patches.migrate_contact_person_fields #2026-07-16 --008
 po_wo_pr.patches.backfill_outward_concern_person_contact #2026-07-24 --009
 po_wo_pr.patches.create_outward_document_email_template #2026-07-28 --010
 po_wo_pr.patches.remove_legacy_enquiry_contact_fields #2026-08-02 --011
+po_wo_pr.patches.backfill_outward_transit_status #2026-11-17 --012
+po_wo_pr.patches.cleanup_office_note_extra_doctypes #2026-11-17 --013
