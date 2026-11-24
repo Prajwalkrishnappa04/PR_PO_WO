@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "naming_series:",
  "creation": "2025-11-04 11:46:49.448241",
  "doctype": "DocType",
@@ -13,7 +14,6 @@
   "district",
   "state",
   "inter_office",
-  "office_note_form",
   "sender",
   "from_branch",
   "mob_no",
@@ -35,50 +35,6 @@
   "date",
   "section_break_plnu",
   "document_records",
-  "section_break_office_note",
-  "office_note_heading_application",
-  "office_note_application_no",
-  "office_note_heading_scholarship",
-  "office_note_case_general",
-  "office_note_girls_scholarship",
-  "office_note_widow",
-  "office_note_orphan",
-  "office_note_single",
-  "office_note_category",
-  "office_note_heading_student",
-  "office_note_student_name",
-  "office_note_community",
-  "office_note_heading_admission",
-  "office_note_previous_course",
-  "office_note_previous_percentage",
-  "office_note_present_course",
-  "office_note_college_school",
-  "office_note_college_fees",
-  "office_note_hostel_fees",
-  "office_note_food_expenses",
-  "column_break_office_note",
-  "office_note_heading_family",
-  "office_note_father_occupation",
-  "office_note_father_yearly_income",
-  "office_note_mother_occupation",
-  "office_note_mother_yearly_income",
-  "office_note_total_family_members",
-  "office_note_no_of_children",
-  "office_note_no_of_earning_members",
-  "office_note_total_family_income",
-  "office_note_heading_other_family",
-  "office_note_family_members",
-  "office_note_heading_agriculture",
-  "office_note_agricultural_land",
-  "office_note_crops",
-  "office_note_agri_income",
-  "office_note_text",
-  "office_note_heading_approval",
-  "office_note_decision",
-  "office_note_decision_reason",
-  "office_note_prepared_by",
-  "office_note_checked_by",
-  "office_note_approved_by",
   "section_break_duyy",
   "maa_branch",
   "column_break_bulq",
@@ -133,12 +89,6 @@
    "fieldname": "inter_office",
    "fieldtype": "Check",
    "label": "Inter Office"
-  },
-  {
-   "default": "0",
-   "fieldname": "office_note_form",
-   "fieldtype": "Check",
-   "label": "Office Note Form"
   },
   {
    "fieldname": "sender",
@@ -273,287 +223,6 @@
    "options": "Inward Details"
   },
   {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "section_break_office_note",
-   "fieldtype": "Section Break",
-   "label": "Office Note"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_application",
-   "fieldtype": "Heading",
-   "label": "Application Details"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_application_no",
-   "fieldtype": "Data",
-   "label": "Application No."
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_scholarship",
-   "fieldtype": "Heading",
-   "label": "Scholarship Information"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_case_general",
-   "fieldtype": "Check",
-   "label": "General"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_girls_scholarship",
-   "fieldtype": "Check",
-   "label": "Girls Scholarship"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_widow",
-   "fieldtype": "Check",
-   "label": "Widow"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_orphan",
-   "fieldtype": "Check",
-   "label": "Orphan"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_single",
-   "fieldtype": "Check",
-   "label": "Single"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_category",
-   "fieldtype": "Link",
-   "label": "Category",
-   "options": "Category"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_student",
-   "fieldtype": "Heading",
-   "label": "Student Details"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fetch_from": "maa_code.student_name",
-   "fetch_if_empty": 1,
-   "fieldname": "office_note_student_name",
-   "fieldtype": "Data",
-   "label": "Student Name"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_community",
-   "fieldtype": "Data",
-   "label": "Community"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_admission",
-   "fieldtype": "Heading",
-   "label": "Admission Details"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_previous_course",
-   "fieldtype": "Link",
-   "label": "Previous Year Course",
-   "options": "Course Master"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_previous_percentage",
-   "fieldtype": "Percent",
-   "label": "Previous Percentage"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_present_course",
-   "fieldtype": "Link",
-   "label": "Present Course",
-   "options": "Course Master"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_college_school",
-   "fieldtype": "Data",
-   "label": "College / School Name"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_college_fees",
-   "fieldtype": "Currency",
-   "label": "College Fees"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_hostel_fees",
-   "fieldtype": "Currency",
-   "label": "Hostel Fees"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_food_expenses",
-   "fieldtype": "Currency",
-   "label": "Food Expenses"
-  },
-  {
-   "fieldname": "column_break_office_note",
-   "fieldtype": "Column Break"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_family",
-   "fieldtype": "Heading",
-   "label": "Family & Income Details"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_father_occupation",
-   "fieldtype": "Data",
-   "label": "Father Occupation"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_father_yearly_income",
-   "fieldtype": "Currency",
-   "label": "Father Yearly Income"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_mother_occupation",
-   "fieldtype": "Data",
-   "label": "Mother Occupation"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_mother_yearly_income",
-   "fieldtype": "Currency",
-   "label": "Mother Yearly Income"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_total_family_members",
-   "fieldtype": "Int",
-   "label": "Total Family Members"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_no_of_children",
-   "fieldtype": "Int",
-   "label": "No of Children"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_no_of_earning_members",
-   "fieldtype": "Int",
-   "label": "No of Earning Members"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_total_family_income",
-   "fieldtype": "Currency",
-   "label": "Total Family Income",
-   "read_only": 1
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_other_family",
-   "fieldtype": "Heading",
-   "label": "Other Family Members"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_family_members",
-   "fieldtype": "Table",
-   "label": "Family Members",
-   "options": "Office Note Family Member"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_agriculture",
-   "fieldtype": "Heading",
-   "label": "Agricultural Details"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_agricultural_land",
-   "fieldtype": "Data",
-   "label": "Agricultural Land"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_crops",
-   "fieldtype": "Data",
-   "label": "Crops"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_agri_income",
-   "fieldtype": "Currency",
-   "label": "Agricultural Income"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_text",
-   "fieldtype": "Small Text",
-   "label": "Office Note"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_heading_approval",
-   "fieldtype": "Heading",
-   "label": "Approval Details"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_decision",
-   "fieldtype": "Select",
-   "label": "Application Status",
-   "options": "\nPending\nApproved\nNot Approved"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_decision_reason",
-   "fieldtype": "Small Text",
-   "label": "Reason"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_prepared_by",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Prepared By",
-   "options": "User"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_checked_by",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Checked By",
-   "options": "User"
-  },
-  {
-   "depends_on": "eval:doc.office_note_form",
-   "fieldname": "office_note_approved_by",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Approved By",
-   "options": "User"
-  },
-  {
    "fieldname": "received_date",
    "fieldtype": "Date",
    "label": "Received Date",
@@ -591,8 +260,8 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-29 17:42:51.155294",
- "modified_by": "Administrator",
+ "modified": "2026-11-24 16:15:02.638609",
+ "modified_by": "aman101chaudhary@gmail.com",
  "module": "IRS",
  "name": "Inward Document",
  "naming_rule": "By \"Naming Series\" field",
