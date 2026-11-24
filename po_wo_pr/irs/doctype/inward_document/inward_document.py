@@ -174,6 +174,15 @@ def create_student_and_set_maa_code(
     if not state and parent_doc:
         state = frappe.db.get_value("Inward Document", parent_doc, "state")
 
+    # Carry over the reference only when the Inward Document is flagged as a reference case
+    reference = None
+    if parent_doc:
+        reference_case, refered_by = frappe.db.get_value(
+            "Inward Document", parent_doc, ["reference_case", "refered_by"]
+        )
+        if reference_case and refered_by:
+            reference = refered_by
+
     student = frappe.get_doc({
         "doctype": "Student",
         "student_name": student_name,
@@ -186,6 +195,7 @@ def create_student_and_set_maa_code(
         "phone_no": mob_no,
         "district": district,
         "state": state,
+        "reference": reference,
     })
     student.insert(ignore_permissions=True)
 
