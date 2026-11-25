@@ -478,8 +478,8 @@ fixtures = [
     },
     {
         "dt": "Custom HTML Block",
-        "filters":[["name", "in", ["IRS Report","IRS Inter-Branch","IRS Project","IRS Entries"]]]
-    }
+        "filters":[["name", "in", ["IRS Report","IRS Inter-Branch","IRS Masters","IRS Entries"]]]
+    },
 
 ]
 
