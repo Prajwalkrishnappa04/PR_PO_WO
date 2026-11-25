@@ -77,6 +77,13 @@ def execute(filters=None):
             "width": 150
         },
         {
+            "label": "Maa Code",
+            "fieldname": "maa_code",
+            "fieldtype": "Link",
+            "options": "Student",
+            "width": 100
+        },
+        {
             "label": "Sender",
             "fieldname": "sender",
             "fieldtype": "Data",
@@ -104,13 +111,6 @@ def execute(filters=None):
             "label": "District",
             "fieldname": "district",
             "fieldtype": "Data",
-            "width": 100
-        },
-        {
-            "label": "Maa Code",
-            "fieldname": "maa_code",
-            "fieldtype": "Link",
-            "options": "Student",
             "width": 100
         },
         {
