@@ -26,11 +26,13 @@ frappe.query_reports["Pending Inward Documents"] = {
                 mobile = "91" + mobile;
             }
 
-            let message =`Dear ${data.sender},
-			The following documents are pending:
-			${data.pending_doc_str}
-			Please submit the pending documents.
-			Maa Foundation, Bhavnagar`;
+            let message = [
+                `Dear ${data.sender},`,
+                `The following documents are pending:`,
+                `${data.pending_doc_str}`,
+                `Please submit the pending documents.`,
+                `Maa Foundation`
+            ].join("\n");
 
 			let url =
 				"https://wa.me/" +
