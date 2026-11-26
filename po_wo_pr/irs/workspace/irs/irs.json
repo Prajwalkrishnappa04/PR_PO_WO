@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"irs_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>IRS</b></span>\",\"col\":12}},{\"id\":\"Axulklp55O\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Entries\",\"col\":12}},{\"id\":\"irs_sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Document\",\"col\":3}},{\"id\":\"irs_sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outward Documents\",\"col\":3}},{\"id\":\"StYTqDYCKa\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Masters\",\"col\":12}},{\"id\":\"QoBR3GOhhx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"District\",\"col\":3}},{\"id\":\"YC3Cb-Dx0q\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Taluka\",\"col\":3}},{\"id\":\"Du0V_80SPD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Town/Village\",\"col\":3}},{\"id\":\"al2fWsf0Dn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IRS Projects\",\"col\":3}},{\"id\":\"TVXweF9n7Y\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Inter-Branch\",\"col\":12}},{\"id\":\"mkDL0JrNbI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward/Outward Transit\",\"col\":3}},{\"id\":\"4M6kUL-_gz\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Report\",\"col\":12}},{\"id\":\"C-szQebc1R\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending Inward Documents\",\"col\":3}},{\"id\":\"fLit37XgEK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Dashboard\",\"col\":3}}]",
+ "content": "[{\"id\":\"irs_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>IRS</b></span>\",\"col\":12}},{\"id\":\"Axulklp55O\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Entries\",\"col\":12}},{\"id\":\"irs_sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Document\",\"col\":3}},{\"id\":\"irs_sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outward Documents\",\"col\":3}},{\"id\":\"StYTqDYCKa\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Masters\",\"col\":12}},{\"id\":\"qL_RIIMnQS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"State\",\"col\":3}},{\"id\":\"QoBR3GOhhx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"District\",\"col\":3}},{\"id\":\"YC3Cb-Dx0q\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Taluka\",\"col\":3}},{\"id\":\"Du0V_80SPD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Town/Village\",\"col\":3}},{\"id\":\"al2fWsf0Dn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"IRS Projects\",\"col\":3}},{\"id\":\"Ievb3T2lOZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Type of Postage\",\"col\":3}},{\"id\":\"xpK2dueLuA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Reference\",\"col\":3}},{\"id\":\"3Qp4-Sj-cH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Branch\",\"col\":3}},{\"id\":\"96HMJRmGr6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Courier Services\",\"col\":3}},{\"id\":\"TVXweF9n7Y\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Inter-Branch\",\"col\":12}},{\"id\":\"mkDL0JrNbI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward/Outward Transit\",\"col\":3}},{\"id\":\"4M6kUL-_gz\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"IRS Report\",\"col\":12}},{\"id\":\"C-szQebc1R\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending Inward Documents\",\"col\":3}},{\"id\":\"fLit37XgEK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Inward Dashboard\",\"col\":3}}]",
  "creation": "2026-06-23 10:00:00",
  "custom_blocks": [
   {
@@ -64,7 +64,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-11-25 16:49:07.159733",
+ "modified": "2026-11-26 15:54:19.187115",
  "modified_by": "Administrator",
  "module": "IRS",
  "name": "IRS",
@@ -101,6 +101,22 @@
    "type": "DocType"
   },
   {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "State",
+   "link_to": "States",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Reference",
+   "link_to": "Reference",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
    "color": "Blue",
    "label": "Inward Document",
    "link_to": "Inward Document",
@@ -109,8 +125,32 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Courier Services",
+   "link_to": "URL Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Taluka",
    "link_to": "Taluka",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Type of Postage",
+   "link_to": "Type of Postage Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Branch",
+   "link_to": "Branch",
    "stats_filter": "[]",
    "type": "DocType"
   },
