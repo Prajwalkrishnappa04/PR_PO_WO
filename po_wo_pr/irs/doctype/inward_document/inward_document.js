@@ -627,6 +627,38 @@ function setup_received_all_button(frm) {
     $btn.removeClass("hidden").insertAfter(grid.wrapper.find(".grid-add-row"));
 }
 
+const DROPDOWN_ARROW_FIELDS = [
+    "place", "maa_code", "taluka", "project", "concern_person", "medium",
+    "handover_to", "from_branch", "subject", "district", "state",
+];
+
+function add_dropdown_arrows(frm) {
+    DROPDOWN_ARROW_FIELDS.forEach((fieldname) => {
+        const field = frm.fields_dict[fieldname];
+        if (!field || !field.$wrapper) return;
+
+        const wrapper = field.$wrapper.find(".control-input-wrapper");
+        if (!wrapper.length || wrapper.find(".link-arrow-icon").length) return;
+
+        wrapper.css({ position: "relative" });
+        wrapper.append(`
+            <span class="link-arrow-icon" style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 27px;
+                color: #6c757d;
+                pointer-events: none;
+            ">▾</span>
+        `);
+
+        if (field.$input) {
+            field.$input.css({ paddingRight: "28px" });
+        }
+    });
+}
+
 function validate_unique_document_records(frm) {
     const seen = {};
     const messages = [];
@@ -938,6 +970,8 @@ frappe.ui.form.on("Inward Document", {
         watch_row_wise_tab(frm);
         load_project_subjects(frm);
         setup_received_all_button(frm);
+        add_dropdown_arrows(frm);
+        setTimeout(() => add_dropdown_arrows(frm), 300);
 
         if (frm.doc.received_date) {
             (frm.doc.document_records || []).forEach(row => {

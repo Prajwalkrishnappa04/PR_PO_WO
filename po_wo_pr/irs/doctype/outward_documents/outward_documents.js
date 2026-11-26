@@ -112,6 +112,35 @@ function watch_row_wise_tab(frm) {
     frm.__row_wise_tab_node = layout;
 }
 
+const DROPDOWN_ARROW_FIELDS = ["place", "project", "to_branch", "subject", "url"];
+
+function add_dropdown_arrows(frm) {
+    DROPDOWN_ARROW_FIELDS.forEach((fieldname) => {
+        const field = frm.fields_dict[fieldname];
+        if (!field || !field.$wrapper) return;
+
+        const wrapper = field.$wrapper.find(".control-input-wrapper");
+        if (!wrapper.length || wrapper.find(".link-arrow-icon").length) return;
+
+        wrapper.css({ position: "relative" });
+        wrapper.append(`
+            <span class="link-arrow-icon" style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 27px;
+                color: #6c757d;
+                pointer-events: none;
+            ">▾</span>
+        `);
+
+        if (field.$input) {
+            field.$input.css({ paddingRight: "28px" });
+        }
+    });
+}
+
 frappe.ui.form.on("Outward Documents", {
     onload(frm) {
         if (frm.is_new()) {
@@ -201,6 +230,8 @@ frappe.ui.form.on("Outward Documents", {
         setTimeout(() => set_row_wise_tab(frm), 300);
         watch_row_wise_tab(frm);
         load_project_subjects(frm);
+        add_dropdown_arrows(frm);
+        setTimeout(() => add_dropdown_arrows(frm), 300);
 
         frm.set_query("concern_person", () => ({
             filters: frm.doc.to_branch ? { branch: frm.doc.to_branch } : {}
